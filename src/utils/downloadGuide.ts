@@ -87,6 +87,24 @@ export const generateFullGuideMarkdown = (): string => {
   content += `## Test Scenario vs Test Case\n\n`;
   content += testScenarioGuide.vsTestCase + "\n\n";
   
+  // Add Importance section
+  if ((testScenarioGuide as any).importance) {
+    content += `## Why Test Scenarios Are Important\n\n`;
+    (testScenarioGuide as any).importance.forEach((item: string) => {
+      content += `- ${item}\n`;
+    });
+    content += "\n";
+  }
+  
+  // Add How to Write section
+  if ((testScenarioGuide as any).howToWrite) {
+    content += `## How to Write Effective Test Scenarios\n\n`;
+    (testScenarioGuide as any).howToWrite.forEach((item: string, index: number) => {
+      content += `${index + 1}. ${item}\n`;
+    });
+    content += "\n";
+  }
+  
   content += `## Best Practices\n\n`;
   testScenarioGuide.bestPractices.forEach(practice => {
     content += `- ${practice}\n`;
@@ -94,35 +112,41 @@ export const generateFullGuideMarkdown = (): string => {
   content += "\n";
   
   content += `## Real-World Examples by Feature\n\n`;
+  content += `*The following examples provide detailed test scenarios across multiple application domains including E-commerce, Insurance, Banking, and Telecom. Each example includes business context, testing approach, and key risks to consider.*\n\n`;
+  
   testScenarioGuide.realExamples.forEach(example => {
     content += `### ${example.feature}\n\n`;
     
     // Add detailed explanation if available
     if ((example as any).detailedExplanation) {
-      content += `**Overview:** ${(example as any).detailedExplanation.overview}\n\n`;
+      const detail = (example as any).detailedExplanation;
       
-      if ((example as any).detailedExplanation.businessContext) {
-        content += `**Business Context:**\n${(example as any).detailedExplanation.businessContext}\n\n`;
+      if (detail.overview) {
+        content += `#### Overview\n\n${detail.overview}\n\n`;
       }
       
-      if ((example as any).detailedExplanation.testApproach) {
-        content += `**Testing Approach:**\n${(example as any).detailedExplanation.testApproach}\n\n`;
+      if (detail.businessContext) {
+        content += `#### Business Context\n\n${detail.businessContext}\n\n`;
       }
       
-      if ((example as any).detailedExplanation.keyRisks) {
-        content += `**Key Risks:**\n`;
-        (example as any).detailedExplanation.keyRisks.forEach((risk: string) => {
-          content += `- ${risk}\n`;
+      if (detail.testApproach) {
+        content += `#### Testing Approach\n\n${detail.testApproach}\n\n`;
+      }
+      
+      if (detail.keyRisks && detail.keyRisks.length > 0) {
+        content += `#### Key Risks to Test\n\n`;
+        detail.keyRisks.forEach((risk: string) => {
+          content += `- ⚠️ ${risk}\n`;
         });
         content += "\n";
       }
     }
     
-    content += `**Scenarios:**\n`;
+    content += `#### Test Scenarios\n\n`;
     example.scenarios.forEach((scenario, i) => {
       content += `${i + 1}. ${scenario}\n`;
     });
-    content += "\n";
+    content += "\n---\n\n";
   });
 
   // Generate Test Strategy Guide
