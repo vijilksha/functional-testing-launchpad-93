@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data/courseData";
 import { practiceProjects } from "@/data/practiceData";
+import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadGuide } from "@/utils/downloadGuide";
@@ -81,12 +82,13 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="course" className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-5 mx-auto">
+          <TabsList className="grid w-full max-w-3xl grid-cols-6 mx-auto">
             <TabsTrigger value="course">Course</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
             <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
             <TabsTrigger value="strategy">Strategy</TabsTrigger>
             <TabsTrigger value="practice">Practice</TabsTrigger>
+            <TabsTrigger value="ai-testing">AI Testing</TabsTrigger>
           </TabsList>
 
           {/* Course Tab */}
