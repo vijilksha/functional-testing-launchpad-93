@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -300,6 +300,48 @@ const Index = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Domain-Specific Strategies */}
+                <div>
+                  <h3 className="font-semibold mb-3">Domain-Specific Test Strategies</h3>
+                  <div className="grid gap-4">
+                    {testStrategyGuide.domainStrategies?.map((ds, i) => (
+                      <Card key={i} className="border-l-4 border-l-primary">
+                        <CardContent className="p-4 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold text-lg">{ds.domain}</h4>
+                            <Badge variant="secondary">{ds.focus}</Badge>
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm font-medium text-primary mb-2">Key Testing Areas</p>
+                              <ul className="text-sm space-y-1">
+                                {ds.keyAreas.map((area, j) => (
+                                  <li key={j} className="flex items-start gap-2">
+                                    <CheckCircle className="w-3 h-3 mt-1 text-success shrink-0" />
+                                    <span>{area}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-destructive mb-2">Risk Areas</p>
+                              <ul className="text-sm space-y-1">
+                                {ds.risks.map((risk, j) => (
+                                  <li key={j} className="flex items-start gap-2">
+                                    <AlertTriangle className="w-3 h-3 mt-1 text-warning shrink-0" />
+                                    <span>{risk}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
                   <h3 className="font-semibold mb-3">Strategy vs Plan</h3>
                   <div className="overflow-x-auto text-sm">
