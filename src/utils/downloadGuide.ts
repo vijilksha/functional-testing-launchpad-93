@@ -1,5 +1,6 @@
 import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data/courseData";
 import { practiceProjects } from "@/data/practiceData";
+import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 
 export const generateFullGuideMarkdown = (): string => {
   let content = `# Functional Testing Complete Guide
@@ -14,6 +15,7 @@ export const generateFullGuideMarkdown = (): string => {
 3. Test Scenario Guide
 4. Test Strategy Guide
 5. Practice Projects (Requirements → Test Cases)
+6. AI-Based Testing Materials (Pack 6)
 
 ---
 
@@ -312,8 +314,131 @@ export const generateFullGuideMarkdown = (): string => {
     });
   });
 
+  // PART 6: AI-BASED TESTING MATERIALS
+  content += `# PART 6: AI-BASED TESTING MATERIALS (PACK 6)\n\n`;
+  content += `*Comprehensive training bundle for AI-augmented testing*\n\n`;
+
+  // 6.1 AI Test Generation Tools
+  content += `## 6.1 AI Test Generation Tools\n\n`;
+  
+  aiTestGenTools.forEach((tool, idx) => {
+    content += `### ${idx + 1}. ${tool.name}\n\n`;
+    content += `**Description:** ${tool.description}\n\n`;
+    
+    content += `**Key Features:**\n`;
+    tool.keyFeatures.forEach(f => {
+      content += `- ${f}\n`;
+    });
+    content += "\n";
+    
+    content += `**How It Uses AI:**\n${tool.howItUsesAI}\n\n`;
+    
+    content += `**Real-Time Examples:**\n`;
+    tool.realTimeExamples.forEach(ex => {
+      content += `- ${ex}\n`;
+    });
+    content += "\n";
+    
+    content += `**Advantages:**\n`;
+    tool.advantages.forEach(a => {
+      content += `- ✓ ${a}\n`;
+    });
+    content += "\n";
+    
+    content += `**Limitations:**\n`;
+    tool.limitations.forEach(l => {
+      content += `- ⚠ ${l}\n`;
+    });
+    content += "\n";
+    
+    content += `**Best Use Cases:**\n`;
+    tool.bestUseCases.forEach(uc => {
+      content += `- ${uc}\n`;
+    });
+    content += "\n";
+    
+    content += `**Architecture/Workflow:**\n\`\`\`\n${tool.workflow}\n\`\`\`\n\n`;
+    content += "---\n\n";
+  });
+
+  // Tool Comparison Table
+  content += `### Tool Comparison Matrix\n\n`;
+  content += `| ${toolComparisonTable.headers.join(" | ")} |\n`;
+  content += `| ${toolComparisonTable.headers.map(() => "---").join(" | ")} |\n`;
+  toolComparisonTable.rows.forEach(row => {
+    content += `| ${row.join(" | ")} |\n`;
+  });
+  content += "\n";
+
+  // 6.2 Prompts Guide
+  content += `## 6.2 AI Prompt Engineering for QA\n\n`;
+  
+  promptsGuide.forEach(category => {
+    content += `### ${category.level}: ${category.title}\n\n`;
+    
+    category.prompts.forEach((p, i) => {
+      content += `#### ${i + 1}. ${p.purpose}\n\n`;
+      content += `**Prompt Template:**\n\`\`\`\n${p.prompt}\n\`\`\`\n\n`;
+      content += `**Example:**\n\`\`\`\n${p.example}\n\`\`\`\n\n`;
+    });
+  });
+
+  // 6.3 AI-Assisted Automation Examples
+  content += `## 6.3 AI-Assisted Automation Examples\n\n`;
+  
+  aiAutomationExamples.forEach((ex, idx) => {
+    content += `### ${idx + 1}. ${ex.title}\n\n`;
+    content += `**Scenario:** ${ex.scenario}\n\n`;
+    content += `**Sample Input:** ${ex.sampleInput}\n\n`;
+    content += `**Expected Output:** ${ex.expectedOutput}\n\n`;
+    content += `**Code Snippet (Java + Selenium):**\n\`\`\`java\n${ex.codeSnippet}\n\`\`\`\n\n`;
+    content += `**Explanation:** ${ex.explanation}\n\n`;
+    content += "---\n\n";
+  });
+
+  // 6.4 AI Bug Detection Guide
+  content += `## 6.4 AI Bug Detection Guide\n\n`;
+  
+  content += `### Types of Bugs AI Can Detect\n\n`;
+  content += `| Bug Type | Description | How AI Detects |\n`;
+  content += `| --- | --- | --- |\n`;
+  aiBugDetectionGuide.bugTypes.forEach(bug => {
+    content += `| ${bug.type} | ${bug.description} | ${bug.howAIDetects} |\n`;
+  });
+  content += "\n";
+
+  content += `### How AI Detects Bugs Internally\n\n`;
+  aiBugDetectionGuide.detectionMethods.forEach(method => {
+    content += `#### ${method.method}\n\n`;
+    content += `${method.description}\n\n`;
+    content += `**Examples:**\n`;
+    method.examples.forEach(ex => {
+      content += `- ${ex}\n`;
+    });
+    content += "\n";
+  });
+
+  content += `### Real-Time Bug Detection Examples\n\n`;
+  aiBugDetectionGuide.realTimeExamples.forEach((ex, i) => {
+    content += `#### ${i + 1}. ${ex.scenario}\n\n`;
+    content += `- **Description:** ${ex.description}\n`;
+    content += `- **AI Detection:** ${ex.aiDetection}\n`;
+    content += `- **Resolution:** ${ex.resolution}\n\n`;
+  });
+
+  content += `### How Testers Should Work With AI\n\n`;
+  aiBugDetectionGuide.testerGuidelines.forEach(guide => {
+    content += `#### ${guide.title}\n\n`;
+    content += `${guide.description}\n\n`;
+    content += `**Tips:**\n`;
+    guide.tips.forEach(tip => {
+      content += `- ${tip}\n`;
+    });
+    content += "\n";
+  });
+
   content += `\n---\n\n*Generated from Functional Testing Mastery Training Course*\n`;
-  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length}*\n`;
+  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length}*\n`;
 
   return content;
 };
