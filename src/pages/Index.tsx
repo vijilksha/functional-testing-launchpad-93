@@ -882,6 +882,347 @@ const Index = () => {
               );
             })()}
           </TabsContent>
+
+          {/* AI Testing Tab */}
+          <TabsContent value="ai-testing" className="space-y-6">
+            <Tabs defaultValue="tools" className="space-y-4">
+              <TabsList className="grid w-full max-w-2xl grid-cols-4 mx-auto">
+                <TabsTrigger value="tools" className="gap-1"><Bot className="w-4 h-4" /> AI Tools</TabsTrigger>
+                <TabsTrigger value="prompts" className="gap-1"><MessageSquare className="w-4 h-4" /> Prompts</TabsTrigger>
+                <TabsTrigger value="examples" className="gap-1"><Code className="w-4 h-4" /> Examples</TabsTrigger>
+                <TabsTrigger value="bugs" className="gap-1"><Bug className="w-4 h-4" /> Bug Detection</TabsTrigger>
+              </TabsList>
+
+              {/* AI Tools Section */}
+              <TabsContent value="tools" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Cpu className="w-5 h-5 text-primary" />
+                      AI Test Generation Tools
+                    </CardTitle>
+                    <p className="text-muted-foreground">Comprehensive guide to AI-powered testing tools with features, examples, and comparisons</p>
+                  </CardHeader>
+                </Card>
+
+                <ScrollArea className="h-[600px]">
+                  <div className="space-y-6">
+                    {aiTestGenTools.map((tool, idx) => (
+                      <Collapsible key={idx}>
+                        <Card className="border-l-4 border-l-primary">
+                          <CollapsibleTrigger asChild>
+                            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg">{tool.name}</CardTitle>
+                                <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                              </div>
+                              <p className="text-sm text-muted-foreground">{tool.description}</p>
+                            </CardHeader>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <CardContent className="space-y-4 pt-0">
+                              <div>
+                                <h4 className="font-semibold mb-2 flex items-center gap-2"><Zap className="w-4 h-4 text-warning" /> Key Features</h4>
+                                <ul className="grid md:grid-cols-2 gap-1">
+                                  {tool.keyFeatures.map((f, i) => (
+                                    <li key={i} className="flex items-center gap-2 text-sm"><CheckCircle className="w-3 h-3 text-success" /> {f}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div className="bg-primary/5 p-3 rounded-lg">
+                                <h4 className="font-semibold mb-1">How It Uses AI</h4>
+                                <p className="text-sm text-muted-foreground">{tool.howItUsesAI}</p>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold mb-2">Real-Time Examples</h4>
+                                <ul className="space-y-1">
+                                  {tool.realTimeExamples.map((ex, i) => (
+                                    <li key={i} className="text-sm flex items-start gap-2"><Target className="w-3 h-3 mt-1 text-primary shrink-0" /> {ex}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="font-semibold mb-2 text-success">Advantages</h4>
+                                  <ul className="space-y-1">
+                                    {tool.advantages.map((a, i) => (
+                                      <li key={i} className="text-sm flex items-center gap-2"><CheckCircle className="w-3 h-3 text-success" /> {a}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold mb-2 text-destructive">Limitations</h4>
+                                  <ul className="space-y-1">
+                                    {tool.limitations.map((l, i) => (
+                                      <li key={i} className="text-sm flex items-center gap-2"><AlertTriangle className="w-3 h-3 text-warning" /> {l}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold mb-2">Best Use Cases</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {tool.bestUseCases.map((uc, i) => (
+                                    <Badge key={i} variant="secondary">{uc}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="bg-muted/50 p-3 rounded-lg">
+                                <h4 className="font-semibold mb-2">Architecture/Workflow</h4>
+                                <pre className="text-xs overflow-x-auto whitespace-pre font-mono">{tool.workflow}</pre>
+                              </div>
+                            </CardContent>
+                          </CollapsibleContent>
+                        </Card>
+                      </Collapsible>
+                    ))}
+
+                    {/* Comparison Table */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Tool Comparison Matrix</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm border-collapse">
+                            <thead>
+                              <tr className="bg-muted">
+                                {toolComparisonTable.headers.map((h, i) => (
+                                  <th key={i} className="border border-border p-2 text-left font-medium">{h}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {toolComparisonTable.rows.map((row, i) => (
+                                <tr key={i} className="hover:bg-muted/50">
+                                  {row.map((cell, j) => (
+                                    <td key={j} className="border border-border p-2">{cell}</td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Prompts Guide Section */}
+              <TabsContent value="prompts" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Lightbulb className="w-5 h-5 text-warning" />
+                      AI Prompt Engineering for QA
+                    </CardTitle>
+                    <p className="text-muted-foreground">Complete prompts guide from basic to advanced with real project examples</p>
+                  </CardHeader>
+                </Card>
+
+                <ScrollArea className="h-[600px]">
+                  <div className="space-y-6">
+                    {promptsGuide.map((category, idx) => (
+                      <Card key={idx} className={`border-l-4 ${category.level === "Basic" ? "border-l-success" : category.level === "Intermediate" ? "border-l-warning" : category.level === "Advanced" ? "border-l-destructive" : "border-l-primary"}`}>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <Badge className={category.level === "Basic" ? "bg-success" : category.level === "Intermediate" ? "bg-warning text-warning-foreground" : category.level === "Advanced" ? "bg-destructive" : "bg-primary"}>{category.level}</Badge>
+                            <CardTitle className="text-lg">{category.title}</CardTitle>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {category.prompts.map((p, i) => (
+                            <Collapsible key={i}>
+                              <CollapsibleTrigger asChild>
+                                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+                                  <span className="font-medium">{p.purpose}</span>
+                                  <ChevronDown className="w-4 h-4" />
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-3 space-y-3 border-l-2 border-primary/30 ml-2 mt-2">
+                                  <div>
+                                    <h5 className="font-semibold text-sm mb-1">Prompt Template:</h5>
+                                    <div className="bg-muted p-2 rounded text-sm font-mono whitespace-pre-wrap">{p.prompt}</div>
+                                  </div>
+                                  <div>
+                                    <h5 className="font-semibold text-sm mb-1">Example:</h5>
+                                    <pre className="bg-background border border-border p-2 rounded text-xs overflow-x-auto whitespace-pre-wrap">{p.example}</pre>
+                                  </div>
+                                </div>
+                              </CollapsibleContent>
+                            </Collapsible>
+                          ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* AI Automation Examples Section */}
+              <TabsContent value="examples" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-primary" />
+                      AI-Assisted Automation Examples
+                    </CardTitle>
+                    <p className="text-muted-foreground">End-to-end real-time examples with code snippets (Java + Selenium)</p>
+                  </CardHeader>
+                </Card>
+
+                <ScrollArea className="h-[600px]">
+                  <div className="space-y-4">
+                    {aiAutomationExamples.map((ex, idx) => (
+                      <Collapsible key={idx}>
+                        <Card>
+                          <CollapsibleTrigger asChild>
+                            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-base">{ex.title}</CardTitle>
+                                <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                              </div>
+                              <p className="text-sm text-muted-foreground">{ex.scenario}</p>
+                            </CardHeader>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <CardContent className="space-y-4 pt-0">
+                              <div className="grid md:grid-cols-2 gap-4">
+                                <div className="bg-muted/50 p-3 rounded-lg">
+                                  <h4 className="font-semibold text-sm mb-1">Sample Input</h4>
+                                  <p className="text-sm">{ex.sampleInput}</p>
+                                </div>
+                                <div className="bg-success/10 p-3 rounded-lg">
+                                  <h4 className="font-semibold text-sm mb-1">Expected Output</h4>
+                                  <p className="text-sm">{ex.expectedOutput}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-sm mb-2">Code Snippet (Java + Selenium)</h4>
+                                <pre className="bg-background border border-border p-3 rounded text-xs overflow-x-auto"><code>{ex.codeSnippet}</code></pre>
+                              </div>
+                              <div className="bg-primary/5 p-3 rounded-lg">
+                                <h4 className="font-semibold text-sm mb-1">Explanation</h4>
+                                <p className="text-sm text-muted-foreground">{ex.explanation}</p>
+                              </div>
+                            </CardContent>
+                          </CollapsibleContent>
+                        </Card>
+                      </Collapsible>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Bug Detection Section */}
+              <TabsContent value="bugs" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bug className="w-5 h-5 text-destructive" />
+                      AI Bug Detection Guide
+                    </CardTitle>
+                    <p className="text-muted-foreground">How AI helps detect bugs faster with real-time examples</p>
+                  </CardHeader>
+                </Card>
+
+                <ScrollArea className="h-[600px]">
+                  <div className="space-y-6">
+                    {/* Bug Types */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Types of Bugs AI Can Detect</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {aiBugDetectionGuide.bugTypes.map((bug, i) => (
+                            <div key={i} className="p-3 border rounded-lg hover:shadow-soft transition-all">
+                              <h4 className="font-semibold text-sm mb-1">{bug.type}</h4>
+                              <p className="text-xs text-muted-foreground mb-2">{bug.description}</p>
+                              <p className="text-xs bg-primary/5 p-2 rounded"><span className="font-medium">AI Detection:</span> {bug.howAIDetects}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Detection Methods */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">How AI Detects Bugs Internally</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {aiBugDetectionGuide.detectionMethods.map((method, i) => (
+                          <div key={i} className="p-4 border-l-4 border-l-primary bg-muted/30 rounded-r-lg">
+                            <h4 className="font-semibold mb-1">{method.method}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{method.description}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {method.examples.map((ex, j) => (
+                                <Badge key={j} variant="outline" className="text-xs">{ex}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+
+                    {/* Real-Time Examples */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Real-Time Bug Detection Examples</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {aiBugDetectionGuide.realTimeExamples.map((ex, i) => (
+                          <Collapsible key={i}>
+                            <CollapsibleTrigger asChild>
+                              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+                                <span className="font-medium text-sm">{ex.scenario}</span>
+                                <ChevronDown className="w-4 h-4" />
+                              </div>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                              <div className="p-3 space-y-2 border-l-2 border-destructive/30 ml-2 mt-2">
+                                <p className="text-sm"><span className="font-medium">Description:</span> {ex.description}</p>
+                                <p className="text-sm bg-warning/10 p-2 rounded"><span className="font-medium">AI Detection:</span> {ex.aiDetection}</p>
+                                <p className="text-sm bg-success/10 p-2 rounded"><span className="font-medium">Resolution:</span> {ex.resolution}</p>
+                              </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        ))}
+                      </CardContent>
+                    </Card>
+
+                    {/* Tester Guidelines */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">How Testers Should Work With AI</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {aiBugDetectionGuide.testerGuidelines.map((guide, i) => (
+                            <div key={i} className="p-4 border rounded-lg">
+                              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-primary" />
+                                {guide.title}
+                              </h4>
+                              <p className="text-sm text-muted-foreground mb-2">{guide.description}</p>
+                              <ul className="space-y-1">
+                                {guide.tips.map((tip, j) => (
+                                  <li key={j} className="text-xs flex items-center gap-2"><CheckCircle className="w-3 h-3 text-success" /> {tip}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+            </Tabs>
+          </TabsContent>
         </Tabs>
       </main>
     </div>
