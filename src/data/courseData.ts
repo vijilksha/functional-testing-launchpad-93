@@ -964,7 +964,7 @@ export const testCases: TestCase[] = [
 ];
 
 export const testScenarioGuide = {
-  definition: "A Test Scenario is a high-level documentation of a test case that describes what functionality needs to be tested. It's a one-line statement that captures a testable condition.",
+  definition: "A Test Scenario is a high-level documentation of a test case that describes what functionality needs to be tested. It's a one-line statement that captures a testable condition. Test scenarios help testers understand WHAT to test without getting into the HOW. They serve as the foundation for writing detailed test cases.",
   vsTestCase: `
 | Aspect | Test Scenario | Test Case |
 |--------|---------------|-----------|
@@ -974,161 +974,312 @@ export const testScenarioGuide = {
 | Focus | What to test | How to test |
 | Example | "Verify user can login" | "Enter email, password, click login..." |
 `,
+  importance: [
+    "Provides complete test coverage of application features",
+    "Helps identify gaps in requirements early",
+    "Serves as a communication tool between stakeholders",
+    "Reduces redundancy in test case creation",
+    "Enables better test estimation and planning"
+  ],
+  howToWrite: [
+    "Read and understand requirements thoroughly",
+    "Identify all testable features and functionalities",
+    "Think from end-user perspective",
+    "Consider positive, negative, and edge cases",
+    "Keep scenarios independent and atomic",
+    "Use action verbs like Verify, Validate, Check, Ensure",
+    "Avoid implementation details in scenario description"
+  ],
   realExamples: [
     {
       feature: "User Authentication",
+      detailedExplanation: {
+        overview: "Authentication is the first line of defense for any application. Testing login functionality requires verifying security, usability, and proper session management.",
+        businessContext: "Failed authentication can lead to unauthorized access, data breaches, and compliance violations. Proper testing ensures user credentials are validated securely and sessions are managed correctly.",
+        testApproach: "Test all authentication methods (username/password, SSO, MFA), boundary conditions for credentials, session handling, and security aspects like brute force protection.",
+        keyRisks: [
+          "SQL injection through login fields",
+          "Session hijacking vulnerabilities",
+          "Weak password acceptance",
+          "Account enumeration through error messages"
+        ]
+      },
       scenarios: [
         "Verify user can login with valid credentials",
-        "Verify error message for invalid password",
-        "Verify account lockout after multiple failed attempts",
-        "Verify password reset email is sent",
-        "Verify session timeout after inactivity",
-        "Verify 'Remember Me' functionality persists login",
-        "Verify logout clears all session data",
-        "Verify concurrent login handling"
+        "Verify error message for invalid password (generic message to prevent enumeration)",
+        "Verify account lockout after multiple failed attempts (typically 3-5)",
+        "Verify password reset email is sent within acceptable time",
+        "Verify session timeout after inactivity (configurable per business rules)",
+        "Verify 'Remember Me' functionality persists login for specified duration",
+        "Verify logout clears all session data and tokens",
+        "Verify concurrent login handling per business policy"
       ]
     },
     {
       feature: "Shopping Cart",
+      detailedExplanation: {
+        overview: "The shopping cart is the core of any e-commerce platform. It directly impacts revenue, so testing must cover all scenarios from adding items to checkout.",
+        businessContext: "Cart abandonment costs businesses billions annually. A buggy cart leads to lost sales, customer frustration, and reputation damage. Accurate pricing and inventory management are critical.",
+        testApproach: "Test CRUD operations on cart items, price calculations with discounts/taxes, inventory sync, cross-device persistence, and integration with payment gateway.",
+        keyRisks: [
+          "Race conditions with inventory",
+          "Price calculation errors with discounts",
+          "Cart data loss during session timeout",
+          "Performance degradation with large carts"
+        ]
+      },
       scenarios: [
-        "Verify user can add product to cart",
-        "Verify cart total updates when quantity changes",
-        "Verify user can remove items from cart",
-        "Verify cart persists across sessions",
-        "Verify out-of-stock items cannot be added",
-        "Verify cart badge updates in real-time",
-        "Verify coupon code applies discount correctly",
-        "Verify shipping calculation based on location"
+        "Verify user can add product to cart with correct price",
+        "Verify cart total updates dynamically when quantity changes",
+        "Verify user can remove items and total recalculates",
+        "Verify cart persists across sessions for logged-in users",
+        "Verify out-of-stock items show appropriate message",
+        "Verify cart badge count updates in real-time across tabs",
+        "Verify coupon code validation and discount application",
+        "Verify shipping calculation based on weight/location"
       ]
     },
     {
       feature: "Search Functionality",
+      detailedExplanation: {
+        overview: "Search is often the primary navigation method for users. A well-functioning search helps users find what they need quickly, directly impacting user satisfaction and conversions.",
+        businessContext: "Poor search functionality leads to frustrated users who may leave the site. Accurate, fast search results are essential for user retention and sales.",
+        testApproach: "Test search accuracy, performance with large datasets, filter combinations, sort functionality, and special character handling.",
+        keyRisks: [
+          "SQL/NoSQL injection through search input",
+          "Performance issues with complex queries",
+          "Relevance ranking problems",
+          "Missing results due to indexing issues"
+        ]
+      },
       scenarios: [
-        "Verify search returns relevant results",
-        "Verify search with no results shows appropriate message",
-        "Verify search suggestions appear while typing",
-        "Verify search filters work correctly",
-        "Verify search results pagination",
-        "Verify search history is saved",
-        "Verify voice search functionality",
-        "Verify search works with special characters"
+        "Verify search returns relevant results ranked by relevance",
+        "Verify search with no results shows helpful suggestions",
+        "Verify auto-suggest appears within 300ms while typing",
+        "Verify search filters can be combined without conflicts",
+        "Verify search results pagination loads correctly",
+        "Verify search history saves for logged-in users",
+        "Verify voice search transcribes and searches accurately",
+        "Verify special characters are escaped and handled safely"
       ]
     },
     {
       feature: "Insurance - Policy Management",
+      detailedExplanation: {
+        overview: "Policy management is the backbone of any insurance application. It involves complex business rules for premium calculation, coverage terms, and regulatory compliance. Every policy lifecycle event must be accurately tracked and auditable.",
+        businessContext: "Insurance policies involve legal contracts and significant financial transactions. Errors in policy management can lead to claim disputes, regulatory penalties, and financial losses for both insurer and policyholder.",
+        testApproach: "Test policy creation workflows, premium calculation accuracy with various parameters, renewal automation, cancellation and refund logic, document generation, and regulatory compliance checks.",
+        keyRisks: [
+          "Incorrect premium calculations leading to financial loss",
+          "Policy gaps during renewal period",
+          "Regulatory non-compliance penalties",
+          "Data privacy violations with sensitive customer information",
+          "Audit trail gaps for compliance requirements"
+        ]
+      },
       scenarios: [
-        "Verify user can create a new insurance policy",
-        "Verify premium calculation based on age and coverage",
-        "Verify policy renewal before expiry date",
-        "Verify policy cancellation with refund calculation",
-        "Verify beneficiary addition and modification",
-        "Verify policy document download in PDF format",
-        "Verify grace period handling for late payments",
-        "Verify policy upgrade/downgrade options"
+        "Verify user can create a new insurance policy with all required details",
+        "Verify premium calculation accuracy based on age, coverage, and risk factors",
+        "Verify policy renewal reminder sent 30/15/7 days before expiry",
+        "Verify policy cancellation calculates pro-rata refund correctly",
+        "Verify beneficiary addition with relationship validation",
+        "Verify policy document download in PDF with digital signature",
+        "Verify grace period of 15-30 days for late premium payments",
+        "Verify policy upgrade requires medical check for coverage increase"
       ]
     },
     {
       feature: "Insurance - Claims Processing",
+      detailedExplanation: {
+        overview: "Claims processing is the moment of truth for insurance customers. It must be efficient, transparent, and fair. The system must validate claims against policy terms while providing smooth user experience.",
+        businessContext: "Claims processing directly impacts customer satisfaction and retention. Delayed or denied claims lead to complaints and regulatory scrutiny. Fraud detection must balance customer experience with financial protection.",
+        testApproach: "Test claim submission workflows, document upload and validation, claim status tracking, approval/rejection workflows, settlement calculations, and fraud detection rules.",
+        keyRisks: [
+          "Fraudulent claims slipping through detection",
+          "Legitimate claims wrongly rejected by automated rules",
+          "Calculation errors in settlement amounts",
+          "Data breaches with sensitive medical/financial documents",
+          "SLA violations in claim processing times"
+        ]
+      },
       scenarios: [
-        "Verify claim submission with required documents",
-        "Verify claim status tracking throughout lifecycle",
-        "Verify claim rejection for expired policy",
-        "Verify claim approval notification via email/SMS",
-        "Verify partial claim settlement",
-        "Verify claim resubmission after rejection",
-        "Verify claim amount calculation based on coverage",
-        "Verify fraud detection flags during claim review"
+        "Verify claim submission with document upload (max file size, supported formats)",
+        "Verify claim status updates at each lifecycle stage with notifications",
+        "Verify claim automatically rejected for lapsed/expired policy",
+        "Verify claim approval triggers payment within SLA (24-48 hours)",
+        "Verify partial settlement with clear breakdown of covered amounts",
+        "Verify claim resubmission workflow after initial rejection",
+        "Verify claim amount cannot exceed coverage limit",
+        "Verify fraud detection flags trigger manual review queue"
       ]
     },
     {
       feature: "Banking - Fund Transfer",
+      detailedExplanation: {
+        overview: "Fund transfer is a high-stakes functionality where accuracy and security are paramount. It involves real-time validation of accounts, balance checks, and transaction limits while ensuring regulatory compliance.",
+        businessContext: "Banking transfers involve real money and are subject to strict regulations (AML, KYC). Failed or incorrect transfers can cause significant customer distress and regulatory penalties. Security breaches can result in massive financial losses.",
+        testApproach: "Test all transfer modes (NEFT, RTGS, IMPS, UPI), validation rules, limit enforcement, OTP verification, transaction status tracking, and reversal mechanisms.",
+        keyRisks: [
+          "Double debit due to retry logic errors",
+          "Insufficient balance check race conditions",
+          "OTP bypass vulnerabilities",
+          "Money laundering through multiple small transfers",
+          "Cross-border transfer compliance violations"
+        ]
+      },
       scenarios: [
-        "Verify transfer between own accounts",
-        "Verify transfer to other bank accounts (NEFT/RTGS)",
-        "Verify transfer with insufficient balance",
-        "Verify scheduled/recurring transfers",
-        "Verify international wire transfer with currency conversion",
-        "Verify transfer limits per day/transaction",
-        "Verify beneficiary management (add/edit/delete)",
-        "Verify transfer confirmation via OTP"
+        "Verify transfer between own accounts reflects immediately",
+        "Verify NEFT/RTGS transfer with correct cut-off time handling",
+        "Verify transfer blocked when balance insufficient (including holds)",
+        "Verify scheduled transfers execute at specified time accurately",
+        "Verify international transfer shows exchange rate and total debit amount",
+        "Verify daily/monthly transfer limits enforced with clear error",
+        "Verify beneficiary IFSC and account validation before transfer",
+        "Verify OTP required for transfers above threshold amount"
       ]
     },
     {
       feature: "Banking - Account Management",
+      detailedExplanation: {
+        overview: "Account management encompasses all self-service banking operations. It must provide real-time accurate information while maintaining security and audit trails for all actions.",
+        businessContext: "Self-service banking reduces operational costs and improves customer convenience. However, it must be secure and reliable to prevent unauthorized access and maintain customer trust.",
+        testApproach: "Test balance inquiry accuracy, statement generation with date ranges, service requests workflow, card management operations, and profile update validations.",
+        keyRisks: [
+          "Stale balance display due to caching issues",
+          "Statement data exposure to unauthorized users",
+          "Card block bypass allowing fraudulent transactions",
+          "Unauthorized profile changes without verification"
+        ]
+      },
       scenarios: [
-        "Verify account balance inquiry",
-        "Verify mini statement generation",
-        "Verify full statement download with date filter",
-        "Verify cheque book request",
-        "Verify ATM card block/unblock",
-        "Verify PIN change functionality",
-        "Verify account closure request",
-        "Verify joint account holder management"
+        "Verify account balance shows real-time amount including pending transactions",
+        "Verify mini statement shows last 10 transactions with all details",
+        "Verify statement download in PDF/Excel for custom date range",
+        "Verify cheque book request tracks delivery status",
+        "Verify ATM card block reflects immediately across all channels",
+        "Verify PIN change requires OTP and old PIN verification",
+        "Verify account closure validates zero balance and no pending transactions",
+        "Verify joint account operations require consent from all holders"
       ]
     },
     {
       feature: "Banking - Loans & Deposits",
+      detailedExplanation: {
+        overview: "Loans and deposits are core banking products with complex interest calculations and regulatory requirements. Accuracy in calculations and clear communication of terms are essential.",
+        businessContext: "Incorrect loan EMI calculations or FD interest can lead to regulatory penalties and customer disputes. These products have long tenures, so errors compound over time.",
+        testApproach: "Test EMI calculators with various parameters, loan application workflows, FD/RD creation and maturity calculations, premature withdrawal penalties, and nomination management.",
+        keyRisks: [
+          "Interest calculation errors compounding over loan tenure",
+          "Regulatory non-compliance in loan terms disclosure",
+          "FD auto-renewal without customer consent",
+          "TDS calculation errors on interest earned"
+        ]
+      },
       scenarios: [
-        "Verify loan EMI calculator accuracy",
-        "Verify loan application submission",
-        "Verify fixed deposit creation with interest preview",
-        "Verify FD premature withdrawal penalty",
-        "Verify recurring deposit setup",
-        "Verify loan prepayment and foreclosure",
-        "Verify collateral document upload",
-        "Verify loan disbursement notification"
+        "Verify loan EMI calculator matches actual EMI on disbursement",
+        "Verify loan application captures all required documents and validates",
+        "Verify FD creation shows maturity amount with applicable TDS",
+        "Verify FD premature withdrawal calculates penalty and reduced interest",
+        "Verify RD setup allows flexible monthly amounts within limits",
+        "Verify loan prepayment shows principal reduction and interest saved",
+        "Verify collateral documents stored securely and accessible only to authorized users",
+        "Verify loan disbursement notification includes complete details"
       ]
     },
     {
       feature: "Telecom - Recharge & Billing",
+      detailedExplanation: {
+        overview: "Recharge and billing are revenue-critical functions for telecom operators. Real-time balance updates, accurate billing, and multiple payment options are essential for customer satisfaction.",
+        businessContext: "Telecom billing involves millions of micro-transactions. Even small errors multiply across the user base. Payment failures directly impact revenue and customer experience.",
+        testApproach: "Test recharge flows for all amounts, payment gateway integrations, bill generation accuracy, auto-pay scheduling, and payment failure handling with retry logic.",
+        keyRisks: [
+          "Recharge credited but balance not updated",
+          "Bill amount discrepancy with usage records",
+          "Auto-pay failure without notification",
+          "Payment gateway timeout handling"
+        ]
+      },
       scenarios: [
-        "Verify prepaid mobile recharge",
-        "Verify postpaid bill payment",
-        "Verify auto-pay setup and execution",
-        "Verify bill due date reminder notification",
-        "Verify recharge history display",
-        "Verify failed payment retry mechanism",
-        "Verify partial bill payment",
-        "Verify bill dispute submission"
+        "Verify prepaid recharge reflects balance within 30 seconds",
+        "Verify postpaid bill shows itemized usage details",
+        "Verify auto-pay setup validates payment method before confirmation",
+        "Verify bill due reminder sent 7 days, 3 days, and 1 day before due date",
+        "Verify recharge history shows last 6 months with all details",
+        "Verify failed payment retries automatically after 24 hours",
+        "Verify partial bill payment option with remaining amount tracking",
+        "Verify bill dispute submission triggers acknowledgment within 24 hours"
       ]
     },
     {
       feature: "Telecom - Plan & Services",
+      detailedExplanation: {
+        overview: "Plan management and value-added services are key differentiators for telecom operators. Real-time usage tracking and seamless service activation improve customer experience.",
+        businessContext: "Plan changes and add-ons are revenue opportunities. Accurate usage tracking prevents billing disputes. Service activation must be instant to meet customer expectations.",
+        testApproach: "Test usage tracking accuracy, plan change workflows, add-on activation, roaming activation, and service request fulfillment timelines.",
+        keyRisks: [
+          "Usage tracking lag causing bill shock",
+          "Plan change mid-cycle proration errors",
+          "Roaming charges applied incorrectly",
+          "Service activation delay causing customer complaints"
+        ]
+      },
       scenarios: [
-        "Verify data usage tracking in real-time",
-        "Verify plan upgrade/downgrade",
-        "Verify add-on data pack purchase",
-        "Verify international roaming activation",
-        "Verify number portability request",
-        "Verify SIM replacement/swap request",
-        "Verify caller tune activation",
-        "Verify DND (Do Not Disturb) activation"
+        "Verify data usage updates within 5 minutes of consumption",
+        "Verify plan upgrade activates immediately with prorated charges",
+        "Verify add-on data pack activates instantly and reflects in balance",
+        "Verify international roaming activation requires 24-hour advance request",
+        "Verify MNP request validates eligibility and shows timeline",
+        "Verify SIM replacement request validates identity documents",
+        "Verify caller tune preview plays before purchase confirmation",
+        "Verify DND activation effective within 24 hours as per regulations"
       ]
     },
     {
       feature: "Communication - Messaging",
+      detailedExplanation: {
+        overview: "Messaging is the core feature of communication apps. Reliability, speed, and feature richness determine user engagement. Message delivery must be guaranteed even in poor network conditions.",
+        businessContext: "Messaging apps compete on reliability and features. Failed message delivery or data loss severely impacts user trust. End-to-end encryption is now expected standard.",
+        testApproach: "Test message delivery under various network conditions, group messaging with large participants, media handling, search functionality, and offline message queuing.",
+        keyRisks: [
+          "Message delivery failure without user notification",
+          "Message ordering issues in poor network",
+          "Group chat performance with 100+ members",
+          "Encryption key exchange vulnerabilities"
+        ]
+      },
       scenarios: [
-        "Verify one-to-one text message delivery",
-        "Verify group chat creation and messaging",
-        "Verify message read receipts (double tick)",
-        "Verify message edit after sending",
-        "Verify message delete for everyone",
-        "Verify file/image attachment sending",
-        "Verify message search in chat history",
-        "Verify offline message queuing"
+        "Verify message delivered notification within 2 seconds on good network",
+        "Verify group chat supports 256 members with all features",
+        "Verify read receipt (blue tick) shows exact time of reading",
+        "Verify message edit shows 'edited' label with history access",
+        "Verify delete for everyone works within 1-hour window",
+        "Verify file attachment supports up to 100MB with progress indicator",
+        "Verify message search finds results across all chats instantly",
+        "Verify offline messages queue and send in order when online"
       ]
     },
     {
       feature: "Communication - Calls & Video",
+      detailedExplanation: {
+        overview: "Voice and video calling require real-time performance with minimal latency. Quality must be maintained across varying network conditions while providing essential call controls.",
+        businessContext: "Call quality directly impacts user satisfaction and app adoption. Poor audio/video quality or dropped calls push users to competitors. Enterprise users demand features like recording and screen sharing.",
+        testApproach: "Test call connection times, audio/video quality metrics, call controls responsiveness, multi-participant calls, and quality adaptation to network changes.",
+        keyRisks: [
+          "Call drops due to network transitions (WiFi to cellular)",
+          "Audio/video sync issues",
+          "High CPU/battery usage during calls",
+          "Echo and feedback in audio calls"
+        ]
+      },
       scenarios: [
-        "Verify voice call initiation and connection",
-        "Verify video call with camera toggle",
-        "Verify screen sharing during call",
-        "Verify call mute/unmute functionality",
-        "Verify call on hold and resume",
-        "Verify group video call with multiple participants",
-        "Verify call quality indicator display",
-        "Verify call recording (where permitted)"
+        "Verify voice call connects within 5 seconds with clear audio",
+        "Verify video call maintains 720p quality on stable connection",
+        "Verify screen share initiates without lag and supports annotations",
+        "Verify mute/unmute toggles audio within 1 second",
+        "Verify hold plays music and resumes call correctly",
+        "Verify group video call supports 8+ participants with grid view",
+        "Verify call quality indicator updates in real-time",
+        "Verify call recording saves with clear audio and proper consent"
       ]
     }
   ],
