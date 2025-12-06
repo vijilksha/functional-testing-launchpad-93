@@ -1537,19 +1537,241 @@ export const modules: Module[] = [
   {
     id: "testing-types",
     title: "Types of Testing",
-    description: "Explore different testing methodologies and when to use them",
+    description: "Explore all testing types with real-time scenarios across domains",
     icon: TestTube,
     color: "from-emerald-500 to-teal-500",
     lessons: [
       {
-        id: "smoke-sanity",
-        title: "Smoke vs Sanity Testing",
-        duration: "15 min",
+        id: "functional-testing",
+        title: "Functional Testing",
+        duration: "30 min",
         content: {
-          overview: "Understanding the difference between Smoke and Sanity testing is crucial for efficient test execution.",
+          overview: "Functional testing verifies that each function of the software works according to requirements. It focuses on WHAT the system does.",
           sections: [
             {
-              title: "Comparison",
+              title: "What is Functional Testing?",
+              type: "text",
+              content: "Functional testing validates that the application performs its intended functions correctly. It involves testing user interface, APIs, databases, security, and client/server applications. The tester provides input and verifies output against expected results."
+            },
+            {
+              title: "Types of Functional Testing",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Type", "Description", "When to Use"],
+                rows: [
+                  ["Unit Testing", "Test individual components/functions", "During development"],
+                  ["Integration Testing", "Test combined modules", "After unit testing"],
+                  ["System Testing", "Test complete system end-to-end", "Before UAT"],
+                  ["Smoke Testing", "Quick health check of build", "New build received"],
+                  ["Sanity Testing", "Verify specific fix/feature", "After bug fix"],
+                  ["Regression Testing", "Ensure no side effects", "After any change"],
+                  ["UAT", "Business validation by users", "Before production"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Shopping Cart",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Expected Behavior"],
+                rows: [
+                  ["Add to Cart", "Click add button, verify cart count", "Item added, count increases"],
+                  ["Update Quantity", "Change quantity, verify total", "Price recalculates correctly"],
+                  ["Apply Coupon", "Enter valid/invalid codes", "Discount applied or error shown"],
+                  ["Checkout Flow", "Complete purchase steps", "Order placed, confirmation received"],
+                  ["Cart Persistence", "Add items, close browser, return", "Cart items preserved"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Banking",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Expected Behavior"],
+                rows: [
+                  ["Fund Transfer", "Transfer between accounts", "Balance deducted/credited correctly"],
+                  ["Bill Payment", "Pay utility bill", "Payment processed, receipt generated"],
+                  ["Account Statement", "Download statement", "Transactions match, PDF downloads"],
+                  ["Beneficiary Add", "Add new payee", "Verification required, beneficiary saved"],
+                  ["Transaction Limit", "Exceed daily limit", "Transaction blocked with warning"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Telecom",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Expected Behavior"],
+                rows: [
+                  ["Prepaid Recharge", "Select plan, pay", "Balance updated, plan activated"],
+                  ["Data Usage", "Track real-time consumption", "Usage displayed accurately"],
+                  ["Plan Change", "Switch to new plan", "New benefits reflect immediately"],
+                  ["Bill Payment", "Pay postpaid bill", "Payment confirmed, due date updated"],
+                  ["SIM Activation", "Activate new SIM", "Services enabled within 2 hours"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Insurance",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Expected Behavior"],
+                rows: [
+                  ["Get Quote", "Enter details, generate quote", "Premium calculated based on inputs"],
+                  ["Buy Policy", "Complete purchase flow", "Policy issued, documents sent"],
+                  ["File Claim", "Submit claim with documents", "Claim registered, tracking ID provided"],
+                  ["Premium Payment", "Pay due premium", "Policy renewed, receipt generated"],
+                  ["Policy Download", "Download policy document", "PDF with all details available"]
+                ]
+              }
+            }
+          ],
+          keyTakeaways: [
+            "Functional testing answers: Does the feature work as expected?",
+            "Test positive, negative, and edge cases",
+            "Always validate against business requirements",
+            "Document test data and expected results clearly"
+          ],
+          quiz: [
+            {
+              question: "Which is NOT a type of functional testing?",
+              options: [
+                "Integration Testing",
+                "Performance Testing",
+                "Smoke Testing",
+                "Regression Testing"
+              ],
+              correctAnswer: 1,
+              explanation: "Performance testing is a type of non-functional testing that checks speed, scalability, and stability."
+            }
+          ]
+        }
+      },
+      {
+        id: "non-functional-testing",
+        title: "Non-Functional Testing",
+        duration: "30 min",
+        content: {
+          overview: "Non-functional testing validates HOW the system performs - speed, security, usability, and reliability. It's about quality attributes beyond features.",
+          sections: [
+            {
+              title: "What is Non-Functional Testing?",
+              type: "text",
+              content: "While functional testing checks WHAT the system does, non-functional testing checks HOW WELL it does it. This includes performance, security, usability, compatibility, and reliability testing."
+            },
+            {
+              title: "Types of Non-Functional Testing",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Type", "Focus Area", "Key Metrics"],
+                rows: [
+                  ["Performance Testing", "Speed and responsiveness", "Response time, throughput"],
+                  ["Load Testing", "Behavior under expected load", "Users handled, response degradation"],
+                  ["Stress Testing", "Breaking point of system", "Max capacity, recovery time"],
+                  ["Security Testing", "Protection against threats", "Vulnerabilities found, compliance"],
+                  ["Usability Testing", "User-friendliness", "Task completion rate, user satisfaction"],
+                  ["Compatibility Testing", "Cross-platform behavior", "Browser/device coverage"],
+                  ["Reliability Testing", "Consistent behavior over time", "MTBF, uptime percentage"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Shopping Cart (Performance)",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Acceptance Criteria"],
+                rows: [
+                  ["Page Load", "Measure homepage load time", "< 3 seconds on 4G network"],
+                  ["Flash Sale", "Simulate 10K concurrent users", "System handles without crash"],
+                  ["Add to Cart Speed", "Time from click to update", "< 500ms response time"],
+                  ["Checkout Timeout", "Complete checkout under load", "Transaction completes < 10 seconds"],
+                  ["Mobile Performance", "Test on low-end devices", "Smooth scrolling, no lag"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Banking (Security)",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Expected Security"],
+                rows: [
+                  ["SQL Injection", "Inject malicious SQL in inputs", "Input sanitized, no data leak"],
+                  ["Session Hijacking", "Attempt to steal session", "Session invalidated, user notified"],
+                  ["Brute Force Login", "Multiple failed login attempts", "Account locked after 3 attempts"],
+                  ["Data Encryption", "Capture network traffic", "All data encrypted (HTTPS/TLS)"],
+                  ["Password Policy", "Test weak passwords", "Strong password enforced"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Telecom (Load Testing)",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Acceptance Criteria"],
+                rows: [
+                  ["New Year Rush", "Simulate millions of SMS", "Queue handles, no message loss"],
+                  ["Bill Payment Day", "Peak concurrent payments", "95% success rate maintained"],
+                  ["App Launch Load", "Millions of app downloads", "Store handles traffic, no crash"],
+                  ["Real-time Balance", "Frequent balance checks", "Accurate balance within 2 seconds"],
+                  ["Network Failover", "Primary server failure", "Seamless switch to backup"]
+                ]
+              }
+            },
+            {
+              title: "Real-Time Scenarios - Insurance (Usability)",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Scenario", "Test Approach", "Success Metric"],
+                rows: [
+                  ["Quote Journey", "Time to get quote", "< 2 minutes for first-time user"],
+                  ["Claim Form", "Ease of filling claim form", "90% completion without help"],
+                  ["Mobile Experience", "Complete tasks on mobile", "All features accessible"],
+                  ["Error Messages", "Clarity of validation errors", "User understands and corrects easily"],
+                  ["Accessibility", "Screen reader compatibility", "WCAG 2.1 AA compliance"]
+                ]
+              }
+            }
+          ],
+          keyTakeaways: [
+            "Non-functional testing ensures quality beyond features",
+            "Performance issues can lose customers faster than bugs",
+            "Security testing is critical for financial applications",
+            "Usability impacts user adoption and satisfaction"
+          ],
+          quiz: [
+            {
+              question: "What does Load Testing primarily measure?",
+              options: [
+                "How many bugs exist in the system",
+                "How the system behaves under expected user load",
+                "How secure the system is",
+                "How easy the system is to use"
+              ],
+              correctAnswer: 1,
+              explanation: "Load testing measures system behavior under expected concurrent user load to ensure it handles normal traffic."
+            }
+          ]
+        }
+      },
+      {
+        id: "smoke-sanity",
+        title: "Smoke vs Sanity Testing",
+        duration: "20 min",
+        content: {
+          overview: "Smoke and Sanity testing are quick verification techniques. Smoke checks overall stability; Sanity verifies specific functionality.",
+          sections: [
+            {
+              title: "Comparison Overview",
               type: "table",
               content: "",
               tableData: {
@@ -1559,27 +1781,88 @@ export const modules: Module[] = [
                   ["Scope", "Broad, shallow", "Narrow, deep"],
                   ["When", "New build received", "After bug fix"],
                   ["Analogy", "Does the car start?", "Does the fixed brake work?"],
-                  ["Documentation", "Scripted", "Usually unscripted"]
+                  ["Documentation", "Scripted", "Usually unscripted"],
+                  ["Performed By", "QA or Dev", "Primarily QA"],
+                  ["Also Called", "Build Verification Test (BVT)", "Narrow Regression"]
+                ]
+              }
+            },
+            {
+              title: "Smoke Testing - Shopping Cart Example",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["#", "Smoke Test Case", "Pass Criteria"],
+                rows: [
+                  ["1", "Homepage loads", "Page renders in < 5s"],
+                  ["2", "User can login", "Dashboard appears after login"],
+                  ["3", "Products display", "Product grid shows items"],
+                  ["4", "Add to cart works", "Item added to cart"],
+                  ["5", "Checkout accessible", "Checkout page loads"]
+                ]
+              }
+            },
+            {
+              title: "Sanity Testing - Banking Fix Verification",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Bug Fixed", "Sanity Test", "Verification"],
+                rows: [
+                  ["Transfer amount decimal error", "Transfer $100.50", "Amount transferred correctly"],
+                  ["OTP not received", "Initiate OTP", "OTP received on mobile"],
+                  ["Statement date filter broken", "Apply date filter", "Correct transactions shown"],
+                  ["Beneficiary name truncated", "Add long name beneficiary", "Full name displayed"]
+                ]
+              }
+            },
+            {
+              title: "Telecom Smoke Tests",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["#", "Critical Function", "Check"],
+                rows: [
+                  ["1", "App launch", "Loads within 3 seconds"],
+                  ["2", "Login/OTP", "User authenticated"],
+                  ["3", "Balance display", "Current balance shown"],
+                  ["4", "Recharge page", "Plans displayed"],
+                  ["5", "Transaction history", "Previous transactions visible"]
+                ]
+              }
+            },
+            {
+              title: "Insurance Sanity Tests",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Feature Fixed", "Sanity Verification", "Expected"],
+                rows: [
+                  ["Premium calculator bug", "Calculate for age 35", "Correct premium shown"],
+                  ["Document upload failing", "Upload 5MB PDF", "Upload succeeds"],
+                  ["Claim status not updating", "Check recent claim", "Status reflects correctly"],
+                  ["Policy PDF download error", "Download active policy", "PDF downloads successfully"]
                 ]
               }
             }
           ],
           keyTakeaways: [
-            "Smoke = broad health check of new build",
-            "Sanity = focused check after specific change",
-            "Both are quick, surface-level tests"
+            "Smoke = Go/No-Go decision for further testing",
+            "Sanity = Quick verification of specific change",
+            "Both save time by early defect detection",
+            "Failed smoke test = build rejected immediately"
           ],
           quiz: [
             {
-              question: "When should you perform Smoke Testing?",
+              question: "After a developer fixes a login bug, which testing should be done first?",
               options: [
-                "After fixing a specific bug",
-                "When receiving a new build",
-                "Before release to production",
-                "During requirements analysis"
+                "Full regression testing",
+                "Sanity testing on login",
+                "Complete smoke testing",
+                "Performance testing"
               ],
               correctAnswer: 1,
-              explanation: "Smoke testing is done when a new build is received to check basic stability."
+              explanation: "Sanity testing verifies the specific fix before broader testing."
             }
           ]
         }
@@ -1587,17 +1870,17 @@ export const modules: Module[] = [
       {
         id: "regression-testing",
         title: "Regression Testing",
-        duration: "20 min",
+        duration: "25 min",
         content: {
-          overview: "Regression testing ensures that new changes haven't broken existing functionality.",
+          overview: "Regression testing ensures that new changes haven't broken existing functionality. It's the safety net that catches unintended side effects.",
           sections: [
             {
               title: "When to Perform Regression",
               type: "text",
-              content: "After bug fixes, new feature additions, configuration changes, or any code modifications that could impact existing features."
+              content: "After bug fixes, new feature additions, configuration changes, environment updates, or any code modifications that could impact existing features. The goal is to ensure stability while adding new functionality."
             },
             {
-              title: "Regression Test Selection",
+              title: "Regression Test Selection Strategies",
               type: "table",
               content: "",
               tableData: {
@@ -1609,21 +1892,95 @@ export const modules: Module[] = [
                   ["Risk-based", "Focus on high-risk areas", "Risk mitigation priority"]
                 ]
               }
+            },
+            {
+              title: "Shopping Cart - Regression Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Change Made", "Regression Area", "Test Cases"],
+                rows: [
+                  ["New payment gateway added", "Checkout flow", "All payment methods still work"],
+                  ["Cart UI redesign", "Cart functionality", "Add/remove/update quantity works"],
+                  ["Coupon logic updated", "Pricing calculation", "Existing coupons, stacking rules"],
+                  ["User profile changes", "Saved addresses", "Checkout pre-fills correctly"],
+                  ["Inventory integration", "Stock display", "Out-of-stock handling works"]
+                ]
+              }
+            },
+            {
+              title: "Banking - Regression Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Change Made", "Regression Area", "Critical Tests"],
+                rows: [
+                  ["New transfer limit", "All transfer types", "NEFT, RTGS, IMPS limits work"],
+                  ["OTP service change", "All OTP flows", "Login, transfer, password reset"],
+                  ["Statement format update", "Download features", "PDF, CSV, email statement"],
+                  ["Mobile app update", "Cross-platform", "Web and mobile sync correctly"],
+                  ["Security patch", "Authentication", "Login, session, 2FA intact"]
+                ]
+              }
+            },
+            {
+              title: "Telecom - Regression Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Change Made", "Regression Area", "Verification"],
+                rows: [
+                  ["New recharge plan", "Plan selection", "Old plans still visible and work"],
+                  ["Usage tracking update", "Data/voice meters", "Real-time tracking accurate"],
+                  ["Payment gateway change", "All payments", "Recharge, bill pay, auto-pay"],
+                  ["Notification service", "Alerts", "Low balance, bill due, offers"],
+                  ["Account linking", "Multi-number", "Switch between numbers works"]
+                ]
+              }
+            },
+            {
+              title: "Insurance - Regression Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Change Made", "Regression Area", "Test Focus"],
+                rows: [
+                  ["Premium calculation update", "All policy types", "Health, life, auto premiums correct"],
+                  ["Claim workflow change", "Claim lifecycle", "Submit, track, approve, settle"],
+                  ["Document upload module", "All uploads", "KYC, claim docs, policy docs"],
+                  ["Renewal reminder", "Notifications", "Email, SMS, push notifications"],
+                  ["Agent portal update", "Customer portal", "Both portals show same data"]
+                ]
+              }
             }
           ],
           keyTakeaways: [
             "Regression prevents 'fix one, break another' scenario",
-            "Choose strategy based on time and risk",
-            "Automation is ideal for regression"
+            "Automation is ideal for regression - saves time",
+            "Prioritize based on business impact and risk",
+            "Maintain a regression test suite for each release"
+          ],
+          quiz: [
+            {
+              question: "Which regression strategy is best when time is limited but impact area is known?",
+              options: [
+                "Retest All",
+                "Selective Regression",
+                "Risk-based",
+                "Random Selection"
+              ],
+              correctAnswer: 1,
+              explanation: "Selective regression focuses only on impacted areas when time is limited and impact is clear."
+            }
           ]
         }
       },
       {
         id: "integration-system",
         title: "Integration & System Testing",
-        duration: "25 min",
+        duration: "30 min",
         content: {
-          overview: "Integration testing verifies module interactions, while System testing validates the complete system.",
+          overview: "Integration testing verifies module interactions, while System testing validates the complete application as a whole.",
           sections: [
             {
               title: "Integration Testing Approaches",
@@ -1638,12 +1995,304 @@ export const modules: Module[] = [
                   ["Sandwich", "Combine top-down and bottom-up", "Test middle layer both ways"]
                 ]
               }
+            },
+            {
+              title: "Shopping Cart - Integration Points",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Integration", "Modules Involved", "Test Focus"],
+                rows: [
+                  ["Cart + Inventory", "Cart, Stock Management", "Stock decreases on add, restores on remove"],
+                  ["Cart + Pricing", "Cart, Discount Engine", "Coupons apply, totals calculate"],
+                  ["Checkout + Payment", "Order, Payment Gateway", "Payment status updates order"],
+                  ["Order + Notification", "Order, Email/SMS", "Confirmation sent after purchase"],
+                  ["User + Cart", "Auth, Cart", "Cart persists across login/logout"]
+                ]
+              }
+            },
+            {
+              title: "Banking - System Testing Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["End-to-End Flow", "Steps", "Validation"],
+                rows: [
+                  ["Salary Credit → Bill Pay", "Receive salary, pay bills", "Balance reflects both transactions"],
+                  ["Loan EMI Auto-Debit", "EMI due, account debited", "EMI paid, loan outstanding updated"],
+                  ["FD Maturity", "FD matures, credit principal+interest", "Account credited, FD closed"],
+                  ["International Transfer", "Initiate, convert currency, debit", "Exchange rate applied, receipt generated"],
+                  ["Cheque Deposit", "Deposit cheque, clearing", "Funds available after clearing period"]
+                ]
+              }
+            },
+            {
+              title: "Telecom - Integration Points",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Integration", "Systems", "Critical Test"],
+                rows: [
+                  ["Recharge + Balance", "Payment, Billing", "Balance updates in real-time"],
+                  ["Usage + Billing", "Network, Billing", "Usage reflected in bill accurately"],
+                  ["Plan + Benefits", "CRM, Service", "Plan benefits activated immediately"],
+                  ["App + Network", "Mobile App, Backend", "Real-time usage sync"],
+                  ["Customer + Support", "Profile, Ticket System", "History visible to support agent"]
+                ]
+              }
+            },
+            {
+              title: "Insurance - System Testing Flows",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["End-to-End Flow", "Journey", "Validations"],
+                rows: [
+                  ["Quote → Purchase → Policy", "Get quote, pay, receive policy", "Premium correct, policy document generated"],
+                  ["Claim → Review → Settlement", "File, upload docs, receive payment", "Claim amount matches coverage"],
+                  ["Renewal → Payment → Update", "Renewal reminder, pay, policy extended", "New validity reflects"],
+                  ["Add Family → Premium Recalc", "Add member, premium recalculated", "Coverage extended, premium updated"],
+                  ["Policy Cancellation → Refund", "Cancel, refund calculated", "Pro-rata refund processed"]
+                ]
+              }
             }
           ],
           keyTakeaways: [
-            "Integration finds interface defects",
-            "System testing validates end-to-end flows",
-            "Both are essential before UAT"
+            "Integration testing finds interface defects between modules",
+            "System testing validates complete business workflows",
+            "Both are essential before User Acceptance Testing",
+            "Focus on data flow and module communication"
+          ],
+          quiz: [
+            {
+              question: "What is the main focus of Integration Testing?",
+              options: [
+                "Testing individual functions",
+                "Testing how modules work together",
+                "Testing user interface design",
+                "Testing system performance"
+              ],
+              correctAnswer: 1,
+              explanation: "Integration testing focuses on verifying that different modules work correctly when combined."
+            }
+          ]
+        }
+      },
+      {
+        id: "uat-testing",
+        title: "User Acceptance Testing (UAT)",
+        duration: "25 min",
+        content: {
+          overview: "UAT is the final testing phase where actual users validate that the system meets their business requirements before go-live.",
+          sections: [
+            {
+              title: "What is UAT?",
+              type: "text",
+              content: "User Acceptance Testing (UAT) is performed by end users or business stakeholders to verify the system meets their needs. It's the final sign-off before production deployment. Unlike QA testing, UAT focuses on real-world business scenarios."
+            },
+            {
+              title: "UAT vs QA Testing",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Aspect", "QA Testing", "UAT"],
+                rows: [
+                  ["Performed By", "QA Team", "Business Users/Stakeholders"],
+                  ["Focus", "Functional correctness", "Business requirements"],
+                  ["Test Cases", "Detailed, technical", "Business scenarios"],
+                  ["Environment", "QA/Staging", "UAT (production-like)"],
+                  ["Outcome", "Bugs reported", "Acceptance or rejection"]
+                ]
+              }
+            },
+            {
+              title: "Shopping Cart - UAT Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Business Scenario", "User Action", "Acceptance Criteria"],
+                rows: [
+                  ["First-time buyer journey", "Browse → Add → Checkout → Pay", "Complete purchase in < 5 mins"],
+                  ["Return customer", "Login → Reorder previous", "Past orders accessible, one-click reorder"],
+                  ["Guest checkout", "Buy without account", "Purchase completes, order tracked"],
+                  ["Bulk order for business", "Add 100+ items", "Bulk pricing applied, order placed"],
+                  ["Mobile shopping", "Complete flow on mobile", "All features work on smartphone"]
+                ]
+              }
+            },
+            {
+              title: "Banking - UAT Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Business Scenario", "User Action", "Acceptance Criteria"],
+                rows: [
+                  ["Monthly bill payments", "Pay 5 different bills", "All payments successful, balance correct"],
+                  ["Family fund transfer", "Transfer to son's account", "Instant transfer, both accounts updated"],
+                  ["Loan application", "Apply for personal loan", "Application submitted, reference received"],
+                  ["Account statement for tax", "Download annual statement", "All transactions, proper format"],
+                  ["Block stolen card", "Report and block card", "Card blocked immediately, new card requested"]
+                ]
+              }
+            },
+            {
+              title: "Telecom - UAT Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Business Scenario", "User Action", "Acceptance Criteria"],
+                rows: [
+                  ["Monthly recharge", "Choose plan, pay", "Plan activated, validity correct"],
+                  ["International roaming", "Enable roaming for trip", "Roaming active, rates displayed"],
+                  ["Family plan management", "Add family member", "Shared data pool, individual usage tracked"],
+                  ["Port existing number", "Request number portability", "Request submitted, timeline provided"],
+                  ["Upgrade to 5G", "Switch to 5G plan", "5G enabled, speed improved"]
+                ]
+              }
+            },
+            {
+              title: "Insurance - UAT Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Business Scenario", "User Action", "Acceptance Criteria"],
+                rows: [
+                  ["New policy purchase", "Get quote → Compare → Buy", "Policy issued same day"],
+                  ["Hospital admission claim", "File cashless claim", "Pre-authorization received in 2 hours"],
+                  ["Add newborn to policy", "Update policy for new baby", "Coverage extended, premium adjusted"],
+                  ["Policy renewal", "Renew expiring policy", "No break in coverage, same benefits"],
+                  ["Nominee change", "Update beneficiary", "Change reflected, confirmation received"]
+                ]
+              }
+            }
+          ],
+          keyTakeaways: [
+            "UAT is business validation, not bug hunting",
+            "Real users test real business scenarios",
+            "Acceptance sign-off is required for go-live",
+            "UAT failures can delay production release"
+          ],
+          quiz: [
+            {
+              question: "Who primarily performs User Acceptance Testing?",
+              options: [
+                "QA Engineers",
+                "Developers",
+                "Business Users/Stakeholders",
+                "Project Managers"
+              ],
+              correctAnswer: 2,
+              explanation: "UAT is performed by business users or stakeholders who validate the system meets their actual needs."
+            }
+          ]
+        }
+      },
+      {
+        id: "exploratory-adhoc",
+        title: "Exploratory & Ad-hoc Testing",
+        duration: "20 min",
+        content: {
+          overview: "Exploratory testing is simultaneous learning, test design, and execution. Ad-hoc testing is unstructured testing without documentation.",
+          sections: [
+            {
+              title: "Exploratory vs Ad-hoc Testing",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Aspect", "Exploratory Testing", "Ad-hoc Testing"],
+                rows: [
+                  ["Planning", "Session-based, time-boxed", "No planning"],
+                  ["Documentation", "Charter and notes", "None"],
+                  ["Goal", "Learn and find defects", "Quick random testing"],
+                  ["Skill Required", "High domain knowledge", "Basic understanding"],
+                  ["When Used", "New features, limited docs", "Quick verification, monkey testing"]
+                ]
+              }
+            },
+            {
+              title: "Exploratory Testing Charter Template",
+              type: "text",
+              content: "EXPLORE [feature/area] WITH [resources/tools] TO DISCOVER [information/bugs]. Example: Explore the checkout flow with different payment methods to discover edge cases in payment processing."
+            },
+            {
+              title: "Shopping Cart - Exploratory Ideas",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Explore", "With", "To Discover"],
+                rows: [
+                  ["Cart abandonment", "Multiple browsers/tabs", "Session conflicts, data loss"],
+                  ["Price updates", "Items in cart during sale", "Price change handling"],
+                  ["Extreme quantities", "999999 items", "System limits, error handling"],
+                  ["Payment failures", "Declined cards", "Error messages, retry flows"],
+                  ["Slow network", "Network throttling", "Timeout handling, data integrity"]
+                ]
+              }
+            },
+            {
+              title: "Banking - Exploratory Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Explore", "With", "To Discover"],
+                rows: [
+                  ["Concurrent transactions", "Two devices same account", "Balance conflicts, locks"],
+                  ["Session handling", "Inactive for 30 mins", "Timeout behavior, data safety"],
+                  ["Transfer edge cases", "Same source and destination", "Self-transfer handling"],
+                  ["Special characters", "Account nicknames", "Input validation gaps"],
+                  ["Midnight transactions", "Test at 00:00", "Date handling, statement cutoff"]
+                ]
+              }
+            },
+            {
+              title: "Telecom - Ad-hoc Test Ideas",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Random Test", "Approach", "What to Watch"],
+                rows: [
+                  ["Rapid navigation", "Click around quickly", "App stability, memory leaks"],
+                  ["Network switch", "WiFi to mobile data mid-action", "Transaction continuity"],
+                  ["Airplane mode", "Toggle during recharge", "Payment and plan status"],
+                  ["Old app version", "Skip updates", "Backward compatibility"],
+                  ["Multiple logins", "Same account, different devices", "Session management"]
+                ]
+              }
+            },
+            {
+              title: "Insurance - Exploratory Scenarios",
+              type: "table",
+              content: "",
+              tableData: {
+                headers: ["Explore", "With", "To Discover"],
+                rows: [
+                  ["Quote manipulation", "Browser back button during quote", "Data consistency"],
+                  ["Document upload limits", "Very large or corrupt files", "Error handling, file validation"],
+                  ["Claim for expired policy", "Submit after expiry date", "Rejection handling"],
+                  ["Premium edge cases", "Age 100, high coverage", "Calculation boundaries"],
+                  ["Multi-language", "Switch language mid-flow", "Translation completeness"]
+                ]
+              }
+            }
+          ],
+          keyTakeaways: [
+            "Exploratory testing finds bugs scripted tests miss",
+            "Testers think like real users, not scripts",
+            "Document findings during or after session",
+            "Combines creativity with systematic approach"
+          ],
+          quiz: [
+            {
+              question: "What makes Exploratory testing different from Ad-hoc testing?",
+              options: [
+                "Exploratory is automated",
+                "Exploratory is planned and documented",
+                "Ad-hoc requires more skill",
+                "They are the same"
+              ],
+              correctAnswer: 1,
+              explanation: "Exploratory testing uses charters and documentation, while Ad-hoc is completely unstructured."
+            }
           ]
         }
       }
