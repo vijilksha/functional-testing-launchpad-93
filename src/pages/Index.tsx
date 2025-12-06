@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { downloadGuide } from "@/utils/downloadGuide";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Index = () => {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
@@ -16,7 +18,7 @@ const Index = () => {
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
-
+  const [expandedScenarios, setExpandedScenarios] = useState<string[]>([]);
   const currentModule = modules.find(m => m.id === selectedModule);
   const currentLesson = currentModule?.lessons.find(l => l.id === selectedLesson);
 
@@ -38,6 +40,13 @@ const Index = () => {
 
   const categories = [...new Set(testCases.map(tc => tc.category))];
 
+  const toggleScenarioExpand = (feature: string) => {
+    setExpandedScenarios(prev => 
+      prev.includes(feature) 
+        ? prev.filter(f => f !== feature)
+        : [...prev, feature]
+    );
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -59,11 +68,9 @@ const Index = () => {
                 <Progress value={progress} className="w-32 h-2" />
                 <span className="text-sm font-medium">{Math.round(progress)}%</span>
               </div>
-              <a href="/Pack2_Functional_Testing_Complete_Guide.md" download>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="w-4 h-4" /> Download Guide
-                </Button>
-              </a>
+              <Button variant="outline" size="sm" className="gap-2" onClick={downloadGuide}>
+                <Download className="w-4 h-4" /> Download Full Guide
+              </Button>
             </div>
           </div>
         </div>
@@ -249,30 +256,144 @@ const Index = () => {
           <TabsContent value="scenarios" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Test Scenario Guide</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-primary" />
+                  Test Scenario Guide
+                </CardTitle>
                 <p className="text-muted-foreground">{testScenarioGuide.definition}</p>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Why Test Scenarios are Important */}
+                <div className="bg-primary/5 rounded-lg p-4 border border-primary/20">
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-primary" />
+                    Why Test Scenarios Matter
+                  </h3>
+                  <ul className="grid md:grid-cols-2 gap-2">
+                    {testScenarioGuide.importance?.map((item, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-success shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* How to Write Test Scenarios */}
+                <div className="bg-accent/10 rounded-lg p-4">
+                  <h3 className="font-semibold mb-3">How to Write Effective Test Scenarios</h3>
+                  <ol className="grid md:grid-cols-2 gap-2">
+                    {testScenarioGuide.howToWrite?.map((step, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <span className="font-bold text-primary min-w-[20px]">{i + 1}.</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                {/* Best Practices */}
                 <div>
                   <h3 className="font-semibold mb-3">Best Practices</h3>
                   <ul className="grid md:grid-cols-2 gap-2">
                     {testScenarioGuide.bestPractices.map((bp, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-success" />{bp}</li>
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-success" />
+                        {bp}
+                      </li>
                     ))}
                   </ul>
                 </div>
+
+                {/* Real Examples with Detailed Explanations */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Real Examples by Feature</h3>
-                  {testScenarioGuide.realExamples.map((ex, i) => (
-                    <Card key={i} className="bg-muted/50">
-                      <CardHeader className="pb-2"><CardTitle className="text-base">{ex.feature}</CardTitle></CardHeader>
-                      <CardContent>
-                        <ul className="grid md:grid-cols-2 gap-1 text-sm">
-                          {ex.scenarios.map((s, j) => <li key={j} className="flex items-start gap-2"><span className="text-primary">•</span>{s}</li>)}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  ))}
+                  <h3 className="font-semibold text-lg">Real-World Examples by Domain</h3>
+                  <p className="text-sm text-muted-foreground">Click on each feature to see detailed explanation, business context, testing approach, and key risks.</p>
+                  
+                  {testScenarioGuide.realExamples.map((ex, i) => {
+                    const isExpanded = expandedScenarios.includes(ex.feature);
+                    const hasDetails = (ex as any).detailedExplanation;
+                    
+                    return (
+                      <Card key={i} className="border-l-4 border-l-primary overflow-hidden">
+                        <Collapsible open={isExpanded} onOpenChange={() => toggleScenarioExpand(ex.feature)}>
+                          <CollapsibleTrigger asChild>
+                            <CardHeader className="pb-2 cursor-pointer hover:bg-muted/50 transition-colors">
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-base flex items-center gap-2">
+                                  {ex.feature}
+                                  {hasDetails && <Badge variant="secondary" className="text-xs">Detailed</Badge>}
+                                </CardTitle>
+                                {isExpanded ? (
+                                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                                )}
+                              </div>
+                            </CardHeader>
+                          </CollapsibleTrigger>
+                          
+                          <CollapsibleContent>
+                            <CardContent className="space-y-4">
+                              {/* Detailed Explanation Section */}
+                              {hasDetails && (
+                                <div className="space-y-4 bg-muted/30 rounded-lg p-4">
+                                  <div>
+                                    <h4 className="font-medium text-sm text-primary mb-1">Overview</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                      {(ex as any).detailedExplanation.overview}
+                                    </p>
+                                  </div>
+                                  
+                                  <div>
+                                    <h4 className="font-medium text-sm text-primary mb-1">Business Context</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                      {(ex as any).detailedExplanation.businessContext}
+                                    </p>
+                                  </div>
+                                  
+                                  <div>
+                                    <h4 className="font-medium text-sm text-primary mb-1">Testing Approach</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                      {(ex as any).detailedExplanation.testApproach}
+                                    </p>
+                                  </div>
+                                  
+                                  <div>
+                                    <h4 className="font-medium text-sm text-destructive mb-2 flex items-center gap-1">
+                                      <Shield className="w-4 h-4" />
+                                      Key Risks to Test
+                                    </h4>
+                                    <ul className="grid gap-1">
+                                      {(ex as any).detailedExplanation.keyRisks.map((risk: string, j: number) => (
+                                        <li key={j} className="flex items-start gap-2 text-sm">
+                                          <AlertTriangle className="w-3 h-3 mt-1 text-warning shrink-0" />
+                                          <span>{risk}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Scenarios List */}
+                              <div>
+                                <h4 className="font-medium text-sm mb-2">Test Scenarios ({ex.scenarios.length})</h4>
+                                <ul className="grid md:grid-cols-2 gap-2">
+                                  {ex.scenarios.map((s, j) => (
+                                    <li key={j} className="flex items-start gap-2 text-sm bg-background p-2 rounded">
+                                      <span className="text-primary font-bold min-w-[20px]">{j + 1}.</span>
+                                      {s}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </CardContent>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </Card>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
