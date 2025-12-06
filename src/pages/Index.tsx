@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data/courseData";
+import { practiceProjects } from "@/data/practiceData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadGuide } from "@/utils/downloadGuide";
@@ -19,6 +20,8 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [expandedScenarios, setExpandedScenarios] = useState<string[]>([]);
+  const [selectedPracticeProject, setSelectedPracticeProject] = useState<number>(0);
+  const [practiceTab, setPracticeTab] = useState<string>("requirements");
   const currentModule = modules.find(m => m.id === selectedModule);
   const currentLesson = currentModule?.lessons.find(l => l.id === selectedLesson);
 
@@ -78,11 +81,12 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="course" className="space-y-6">
-          <TabsList className="grid w-full max-w-lg grid-cols-4 mx-auto">
+          <TabsList className="grid w-full max-w-2xl grid-cols-5 mx-auto">
             <TabsTrigger value="course">Course</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
             <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
             <TabsTrigger value="strategy">Strategy</TabsTrigger>
+            <TabsTrigger value="practice">Practice</TabsTrigger>
           </TabsList>
 
           {/* Course Tab */}
@@ -478,6 +482,403 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Practice Tab */}
+          <TabsContent value="practice" className="space-y-6">
+            {/* Domain Selector */}
+            <div className="flex flex-wrap gap-2 justify-center">
+              {practiceProjects.map((project, idx) => (
+                <Button
+                  key={idx}
+                  variant={selectedPracticeProject === idx ? "default" : "outline"}
+                  onClick={() => setSelectedPracticeProject(idx)}
+                  className="gap-2"
+                >
+                  <Layers className="w-4 h-4" />
+                  {project.requirementDocument.domain}
+                </Button>
+              ))}
+            </div>
+
+            {/* Practice Content Sub-tabs */}
+            <div className="flex flex-wrap gap-2 justify-center border-b pb-4">
+              {[
+                { id: "requirements", label: "Requirements", icon: FileText },
+                { id: "strategy", label: "Test Strategy", icon: Target },
+                { id: "plan", label: "Test Plan", icon: ClipboardList },
+                { id: "scenarios", label: "Test Scenarios", icon: FileCheck },
+                { id: "testcases", label: "Test Cases", icon: TestTube }
+              ].map(tab => (
+                <Button
+                  key={tab.id}
+                  variant={practiceTab === tab.id ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setPracticeTab(tab.id)}
+                  className="gap-2"
+                >
+                  <tab.icon className="w-4 h-4" />
+                  {tab.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Practice Content */}
+            {(() => {
+              const project = practiceProjects[selectedPracticeProject];
+              const req = project.requirementDocument;
+              const strategy = project.testStrategy;
+              const plan = project.testPlan;
+
+              return (
+                <ScrollArea className="h-[600px]">
+                  {/* Requirements Document */}
+                  {practiceTab === "requirements" && (
+                    <Card>
+                      <CardHeader className="bg-primary/5">
+                        <div className="flex items-center gap-2">
+                          <Badge>{req.domain}</Badge>
+                          <Badge variant="outline">v{req.version}</Badge>
+                        </div>
+                        <CardTitle className="text-xl">{req.title}</CardTitle>
+                        <p className="text-sm text-muted-foreground">Project: {req.projectName}</p>
+                      </CardHeader>
+                      <CardContent className="space-y-6 pt-6">
+                        <div>
+                          <h3 className="font-semibold mb-2">Description</h3>
+                          <p className="text-muted-foreground">{req.description}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-2">Objectives</h3>
+                          <ul className="space-y-1">
+                            {req.objectives.map((obj, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm">
+                                <CheckCircle className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                                {obj}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-3">Functional Requirements</h3>
+                          <div className="space-y-4">
+                            {req.functionalRequirements.map((fr, i) => (
+                              <Card key={i} className="bg-muted/30">
+                                <CardContent className="p-4">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="outline" className="font-mono">{fr.id}</Badge>
+                                    <span className="font-medium">{fr.title}</span>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-3">{fr.description}</p>
+                                  <div>
+                                    <p className="text-xs font-medium text-primary mb-1">Acceptance Criteria:</p>
+                                    <ul className="text-xs space-y-1">
+                                      {fr.acceptanceCriteria.map((ac, j) => (
+                                        <li key={j} className="flex items-start gap-2">
+                                          <span className="text-success">✓</span> {ac}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2 text-sm">Non-Functional Requirements</h4>
+                              <ul className="text-xs space-y-1">
+                                {req.nonFunctionalRequirements.map((nfr, i) => (
+                                  <li key={i} className="flex items-start gap-1">• {nfr}</li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2 text-sm">Assumptions</h4>
+                              <ul className="text-xs space-y-1">
+                                {req.assumptions.map((a, i) => (
+                                  <li key={i} className="flex items-start gap-1">• {a}</li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2 text-sm">Constraints</h4>
+                              <ul className="text-xs space-y-1">
+                                {req.constraints.map((c, i) => (
+                                  <li key={i} className="flex items-start gap-1">• {c}</li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Test Strategy */}
+                  {practiceTab === "strategy" && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Target className="w-5 h-5 text-primary" />
+                          Test Strategy - {req.domain}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        <div>
+                          <h3 className="font-semibold mb-2">Scope</h3>
+                          <p className="text-muted-foreground">{strategy.scope}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-2">Test Objectives</h3>
+                          <ul className="space-y-1">
+                            {strategy.objectives.map((obj, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm">
+                                <Target className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                                {obj}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2">Test Levels</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {strategy.testLevels.map((level, i) => (
+                                  <Badge key={i} variant="secondary" className="text-xs">{level}</Badge>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2">Test Types</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {strategy.testTypes.map((type, i) => (
+                                  <Badge key={i} variant="outline" className="text-xs">{type}</Badge>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <Card className="border-l-4 border-l-success bg-success/5">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2 text-success">Entry Criteria</h4>
+                              <ul className="text-sm space-y-1">
+                                {strategy.entryExitCriteria.entry.map((e, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <CheckCircle className="w-3 h-3 mt-1 text-success shrink-0" /> {e}
+                                  </li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                          <Card className="border-l-4 border-l-primary bg-primary/5">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2 text-primary">Exit Criteria</h4>
+                              <ul className="text-sm space-y-1">
+                                {strategy.entryExitCriteria.exit.map((e, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <CheckCircle className="w-3 h-3 mt-1 text-primary shrink-0" /> {e}
+                                  </li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-3">Risk Analysis</h3>
+                          <div className="space-y-2">
+                            {strategy.riskAnalysis.map((r, i) => (
+                              <Card key={i} className="bg-warning/5 border-l-4 border-l-warning">
+                                <CardContent className="p-3 flex items-start gap-4">
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium flex items-center gap-2">
+                                      <AlertTriangle className="w-4 h-4 text-warning" />
+                                      {r.risk}
+                                    </p>
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm text-muted-foreground">
+                                      <span className="font-medium text-success">Mitigation:</span> {r.mitigation}
+                                    </p>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-2">Test Environment</h3>
+                          <p className="text-sm text-muted-foreground bg-muted/30 p-3 rounded">{strategy.testEnvironment}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-2">Tools</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {strategy.tools.map((tool, i) => (
+                              <Badge key={i} variant="secondary">{tool}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Test Plan */}
+                  {practiceTab === "plan" && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <ClipboardList className="w-5 h-5 text-primary" />
+                          Test Plan - {req.domain}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        <div>
+                          <h3 className="font-semibold mb-2">Test Approach</h3>
+                          <p className="text-muted-foreground">{plan.testApproach}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-3">Schedule</h3>
+                          <div className="space-y-3">
+                            {plan.schedule.map((phase, i) => (
+                              <Card key={i} className="bg-muted/30">
+                                <CardContent className="p-4">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="font-medium">{phase.phase}</span>
+                                    <Badge variant="outline">{phase.duration}</Badge>
+                                  </div>
+                                  <ul className="text-sm space-y-1">
+                                    {phase.activities.map((act, j) => (
+                                      <li key={j} className="flex items-start gap-2">
+                                        <span className="text-primary">→</span> {act}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2">Resources</h4>
+                              <ul className="text-sm space-y-1">
+                                {plan.resources.map((r, i) => (
+                                  <li key={i}>• {r}</li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                          <Card className="bg-muted/30">
+                            <CardContent className="p-4">
+                              <h4 className="font-medium mb-2">Deliverables</h4>
+                              <ul className="text-sm space-y-1">
+                                {plan.deliverables.map((d, i) => (
+                                  <li key={i}>• {d}</li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold mb-2">Defect Management</h3>
+                          <p className="text-sm text-muted-foreground bg-destructive/5 border border-destructive/20 p-3 rounded">{plan.defectManagement}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Test Scenarios */}
+                  {practiceTab === "scenarios" && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <FileCheck className="w-5 h-5 text-primary" />
+                          Test Scenarios - {req.domain}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">Derived from requirements analysis</p>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {project.testScenarios.map((ts, i) => (
+                            <Card key={i} className="bg-muted/30">
+                              <CardContent className="p-3">
+                                <div className="flex items-start gap-3">
+                                  <Badge variant="outline" className="font-mono shrink-0">{ts.scenarioId}</Badge>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground mb-1">{ts.requirement}</p>
+                                    <p className="text-sm">{ts.scenario}</p>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Test Cases */}
+                  {practiceTab === "testcases" && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <TestTube className="w-5 h-5 text-primary" />
+                          Test Cases - {req.domain}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">Detailed test cases derived from scenarios</p>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {project.testCases.map((tc, i) => (
+                          <Card key={i} className="hover:shadow-soft transition-all">
+                            <CardContent className="p-4 space-y-3">
+                              <div className="flex items-start justify-between gap-4">
+                                <div>
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Badge variant="outline" className="font-mono text-xs">{tc.id}</Badge>
+                                    <Badge className={tc.priority === "P1" ? "bg-destructive" : "bg-warning text-warning-foreground"}>{tc.priority}</Badge>
+                                    <Badge variant="secondary" className="text-xs">{tc.scenario}</Badge>
+                                  </div>
+                                  <h3 className="font-medium">{tc.title}</h3>
+                                </div>
+                              </div>
+                              <div className="text-sm space-y-2">
+                                <p><span className="font-medium">Preconditions:</span> {tc.preconditions}</p>
+                                <p><span className="font-medium">Steps:</span> {tc.steps.join(" → ")}</p>
+                                <p><span className="font-medium">Test Data:</span> <code className="bg-muted px-1 rounded text-xs">{tc.testData}</code></p>
+                                <p><span className="font-medium">Expected Result:</span> <span className="text-success">{tc.expectedResult}</span></p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  )}
+                </ScrollArea>
+              );
+            })()}
           </TabsContent>
         </Tabs>
       </main>
