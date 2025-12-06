@@ -1013,6 +1013,123 @@ export const testScenarioGuide = {
         "Verify voice search functionality",
         "Verify search works with special characters"
       ]
+    },
+    {
+      feature: "Insurance - Policy Management",
+      scenarios: [
+        "Verify user can create a new insurance policy",
+        "Verify premium calculation based on age and coverage",
+        "Verify policy renewal before expiry date",
+        "Verify policy cancellation with refund calculation",
+        "Verify beneficiary addition and modification",
+        "Verify policy document download in PDF format",
+        "Verify grace period handling for late payments",
+        "Verify policy upgrade/downgrade options"
+      ]
+    },
+    {
+      feature: "Insurance - Claims Processing",
+      scenarios: [
+        "Verify claim submission with required documents",
+        "Verify claim status tracking throughout lifecycle",
+        "Verify claim rejection for expired policy",
+        "Verify claim approval notification via email/SMS",
+        "Verify partial claim settlement",
+        "Verify claim resubmission after rejection",
+        "Verify claim amount calculation based on coverage",
+        "Verify fraud detection flags during claim review"
+      ]
+    },
+    {
+      feature: "Banking - Fund Transfer",
+      scenarios: [
+        "Verify transfer between own accounts",
+        "Verify transfer to other bank accounts (NEFT/RTGS)",
+        "Verify transfer with insufficient balance",
+        "Verify scheduled/recurring transfers",
+        "Verify international wire transfer with currency conversion",
+        "Verify transfer limits per day/transaction",
+        "Verify beneficiary management (add/edit/delete)",
+        "Verify transfer confirmation via OTP"
+      ]
+    },
+    {
+      feature: "Banking - Account Management",
+      scenarios: [
+        "Verify account balance inquiry",
+        "Verify mini statement generation",
+        "Verify full statement download with date filter",
+        "Verify cheque book request",
+        "Verify ATM card block/unblock",
+        "Verify PIN change functionality",
+        "Verify account closure request",
+        "Verify joint account holder management"
+      ]
+    },
+    {
+      feature: "Banking - Loans & Deposits",
+      scenarios: [
+        "Verify loan EMI calculator accuracy",
+        "Verify loan application submission",
+        "Verify fixed deposit creation with interest preview",
+        "Verify FD premature withdrawal penalty",
+        "Verify recurring deposit setup",
+        "Verify loan prepayment and foreclosure",
+        "Verify collateral document upload",
+        "Verify loan disbursement notification"
+      ]
+    },
+    {
+      feature: "Telecom - Recharge & Billing",
+      scenarios: [
+        "Verify prepaid mobile recharge",
+        "Verify postpaid bill payment",
+        "Verify auto-pay setup and execution",
+        "Verify bill due date reminder notification",
+        "Verify recharge history display",
+        "Verify failed payment retry mechanism",
+        "Verify partial bill payment",
+        "Verify bill dispute submission"
+      ]
+    },
+    {
+      feature: "Telecom - Plan & Services",
+      scenarios: [
+        "Verify data usage tracking in real-time",
+        "Verify plan upgrade/downgrade",
+        "Verify add-on data pack purchase",
+        "Verify international roaming activation",
+        "Verify number portability request",
+        "Verify SIM replacement/swap request",
+        "Verify caller tune activation",
+        "Verify DND (Do Not Disturb) activation"
+      ]
+    },
+    {
+      feature: "Communication - Messaging",
+      scenarios: [
+        "Verify one-to-one text message delivery",
+        "Verify group chat creation and messaging",
+        "Verify message read receipts (double tick)",
+        "Verify message edit after sending",
+        "Verify message delete for everyone",
+        "Verify file/image attachment sending",
+        "Verify message search in chat history",
+        "Verify offline message queuing"
+      ]
+    },
+    {
+      feature: "Communication - Calls & Video",
+      scenarios: [
+        "Verify voice call initiation and connection",
+        "Verify video call with camera toggle",
+        "Verify screen sharing during call",
+        "Verify call mute/unmute functionality",
+        "Verify call on hold and resume",
+        "Verify group video call with multiple participants",
+        "Verify call quality indicator display",
+        "Verify call recording (where permitted)"
+      ]
     }
   ],
   bestPractices: [
@@ -1069,6 +1186,84 @@ export const testStrategyGuide = {
       name: "Resource Allocation",
       description: "Team members and responsibilities",
       example: "2 manual testers, 1 automation engineer, 1 test lead"
+    }
+  ],
+  domainStrategies: [
+    {
+      domain: "Insurance Application",
+      focus: "Policy lifecycle, claims processing, regulatory compliance",
+      keyAreas: [
+        "Policy creation and premium calculation accuracy",
+        "Claims workflow from submission to settlement",
+        "Document upload and verification",
+        "Renewal and cancellation processes",
+        "Regulatory compliance (HIPAA, GDPR for health insurance)",
+        "Integration with payment gateways",
+        "Agent portal vs customer portal testing"
+      ],
+      risks: [
+        "Incorrect premium calculations affecting revenue",
+        "Claims fraud not detected",
+        "Policy document generation failures",
+        "Payment processing errors"
+      ]
+    },
+    {
+      domain: "Banking Application",
+      focus: "Transaction accuracy, security, regulatory compliance",
+      keyAreas: [
+        "Fund transfer accuracy and limits",
+        "Account balance consistency",
+        "Interest calculation for loans/deposits",
+        "Multi-factor authentication",
+        "Session timeout and security",
+        "Core banking integration",
+        "Regulatory compliance (PCI-DSS, SOX)"
+      ],
+      risks: [
+        "Incorrect transaction amounts",
+        "Security breaches and data theft",
+        "System downtime during peak hours",
+        "Failed reconciliation with core banking"
+      ]
+    },
+    {
+      domain: "Telecom Application",
+      focus: "Real-time usage, billing accuracy, service provisioning",
+      keyAreas: [
+        "Real-time data/voice usage tracking",
+        "Prepaid balance deduction accuracy",
+        "Postpaid billing cycle calculations",
+        "Plan activation and deactivation",
+        "Number portability workflow",
+        "International roaming charges",
+        "Network integration testing"
+      ],
+      risks: [
+        "Billing discrepancies leading to customer complaints",
+        "Usage not tracked in real-time",
+        "Plan changes not reflecting immediately",
+        "Roaming charge calculation errors"
+      ]
+    },
+    {
+      domain: "Communication Application",
+      focus: "Real-time messaging, call quality, cross-platform sync",
+      keyAreas: [
+        "Message delivery and read receipts",
+        "Voice/video call quality",
+        "File sharing and media handling",
+        "Push notification delivery",
+        "Cross-device synchronization",
+        "End-to-end encryption verification",
+        "Offline mode and sync on reconnect"
+      ],
+      risks: [
+        "Message delivery failures",
+        "Call drops and quality issues",
+        "Notification delays",
+        "Data sync conflicts across devices"
+      ]
     }
   ],
   template: `
