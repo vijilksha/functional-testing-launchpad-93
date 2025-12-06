@@ -534,6 +534,432 @@ export const testCases: TestCase[] = [
     expectedResult: "50 items displayed, pagination updates",
     priority: "P2",
     type: "Positive"
+  },
+  
+  // Insurance Test Cases
+  {
+    id: "TC_INS_001",
+    category: "Insurance",
+    title: "New Policy Creation with Valid Details",
+    preconditions: "User is logged in as agent",
+    steps: ["Navigate to New Policy", "Enter policyholder details", "Select coverage type", "Enter premium amount", "Submit policy"],
+    testData: "Name: John Doe, DOB: 15/03/1985, Coverage: Life Insurance, Premium: $500/month",
+    expectedResult: "Policy created successfully with unique policy number generated",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_INS_002",
+    category: "Insurance",
+    title: "Claim Submission with Required Documents",
+    preconditions: "Valid policy exists, User logged in",
+    steps: ["Go to Claims section", "Select policy", "Enter claim details", "Upload documents", "Submit claim"],
+    testData: "Policy: POL123456, Claim Type: Medical, Amount: $5000",
+    expectedResult: "Claim submitted with tracking number, status shows 'Under Review'",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_INS_003",
+    category: "Insurance",
+    title: "Premium Calculation Based on Age",
+    preconditions: "On policy creation page",
+    steps: ["Enter DOB for 25-year-old", "Select term life", "View premium", "Change DOB to 55-year-old", "Compare premium"],
+    testData: "Age 25 vs Age 55, Same coverage amount",
+    expectedResult: "Premium for 55-year-old is higher than 25-year-old",
+    priority: "P1",
+    type: "Boundary"
+  },
+  {
+    id: "TC_INS_004",
+    category: "Insurance",
+    title: "Policy Renewal Before Expiry",
+    preconditions: "Policy expiring in 30 days",
+    steps: ["Login", "View expiring policy", "Click Renew", "Confirm renewal terms", "Make payment"],
+    testData: "Policy: POL789012, Expiry: 30 days",
+    expectedResult: "Policy renewed, new expiry date extended by 1 year",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_INS_005",
+    category: "Insurance",
+    title: "Claim Rejection for Expired Policy",
+    preconditions: "Policy has expired",
+    steps: ["Attempt to file claim", "Enter claim details", "Submit"],
+    testData: "Expired Policy: POL456789",
+    expectedResult: "Error: 'Cannot file claim - Policy expired on [date]'",
+    priority: "P1",
+    type: "Negative"
+  },
+  {
+    id: "TC_INS_006",
+    category: "Insurance",
+    title: "Beneficiary Update on Existing Policy",
+    preconditions: "Active policy exists",
+    steps: ["Navigate to policy details", "Edit beneficiary", "Enter new beneficiary", "Save changes"],
+    testData: "New Beneficiary: Jane Doe, Relationship: Spouse",
+    expectedResult: "Beneficiary updated, confirmation sent to policyholder",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_INS_007",
+    category: "Insurance",
+    title: "Quote Generation for Multiple Coverage Types",
+    preconditions: "Guest or logged-in user",
+    steps: ["Go to Get Quote", "Enter details", "Select multiple coverages", "Generate quote"],
+    testData: "Life + Health + Auto bundle",
+    expectedResult: "Combined quote displayed with bundle discount applied",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_INS_008",
+    category: "Insurance",
+    title: "Policy Document Download",
+    preconditions: "Active policy exists",
+    steps: ["Go to My Policies", "Select policy", "Click Download Documents"],
+    testData: "Policy: POL123456",
+    expectedResult: "PDF downloaded with policy terms, coverage details, premium schedule",
+    priority: "P2",
+    type: "Positive"
+  },
+
+  // Banking Test Cases
+  {
+    id: "TC_BANK_001",
+    category: "Banking",
+    title: "Fund Transfer Between Own Accounts",
+    preconditions: "User has savings and checking accounts",
+    steps: ["Login to banking portal", "Go to Transfers", "Select From/To accounts", "Enter amount", "Confirm transfer"],
+    testData: "From: Savings (Bal: $5000), To: Checking, Amount: $1000",
+    expectedResult: "Transfer successful, balances updated immediately",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_002",
+    category: "Banking",
+    title: "Transfer Exceeding Available Balance",
+    preconditions: "User logged in with known balance",
+    steps: ["Go to Transfers", "Enter amount greater than balance", "Submit"],
+    testData: "Balance: $500, Transfer Amount: $1000",
+    expectedResult: "Error: 'Insufficient funds. Available balance: $500'",
+    priority: "P1",
+    type: "Negative"
+  },
+  {
+    id: "TC_BANK_003",
+    category: "Banking",
+    title: "Bill Payment with Scheduled Date",
+    preconditions: "User has registered billers",
+    steps: ["Go to Bill Pay", "Select biller", "Enter amount", "Set future date", "Confirm"],
+    testData: "Biller: Electric Company, Amount: $150, Date: 15th next month",
+    expectedResult: "Payment scheduled, appears in pending transactions",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_004",
+    category: "Banking",
+    title: "ATM Card Block/Unblock",
+    preconditions: "User has active ATM card",
+    steps: ["Go to Card Services", "Select card", "Click Block Card", "Confirm action"],
+    testData: "Card: **** 4567",
+    expectedResult: "Card blocked immediately, SMS/Email notification sent",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_005",
+    category: "Banking",
+    title: "Fixed Deposit Creation",
+    preconditions: "Sufficient balance in savings",
+    steps: ["Go to Deposits", "Click New FD", "Enter amount and tenure", "Select interest payout", "Confirm"],
+    testData: "Amount: $10,000, Tenure: 12 months, Rate: 6.5%",
+    expectedResult: "FD created, maturity amount displayed, FD certificate generated",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_006",
+    category: "Banking",
+    title: "Loan EMI Calculator",
+    preconditions: "On loan section",
+    steps: ["Select loan type", "Enter principal amount", "Enter tenure", "Enter interest rate", "Calculate"],
+    testData: "Principal: $50,000, Tenure: 60 months, Rate: 8%",
+    expectedResult: "Monthly EMI displayed with amortization schedule",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_007",
+    category: "Banking",
+    title: "International Wire Transfer",
+    preconditions: "User has international transfer enabled",
+    steps: ["Go to International Transfers", "Enter SWIFT/BIC", "Enter beneficiary details", "Enter amount", "Submit"],
+    testData: "To: UK Account, Amount: $2000, SWIFT: BARCGB22",
+    expectedResult: "Transfer initiated, exchange rate applied, fees displayed",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_008",
+    category: "Banking",
+    title: "Transaction History with Date Filter",
+    preconditions: "User has transaction history",
+    steps: ["Go to Statements", "Select date range", "Apply filter", "View transactions"],
+    testData: "From: 01/01/2024, To: 31/01/2024",
+    expectedResult: "Only transactions within date range displayed",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_009",
+    category: "Banking",
+    title: "Cheque Book Request",
+    preconditions: "Account eligible for cheque book",
+    steps: ["Go to Services", "Request Cheque Book", "Select leaves count", "Confirm address", "Submit"],
+    testData: "Leaves: 25, Delivery: Registered address",
+    expectedResult: "Request submitted, tracking number provided",
+    priority: "P3",
+    type: "Positive"
+  },
+  {
+    id: "TC_BANK_010",
+    category: "Banking",
+    title: "Negative Balance Alert",
+    preconditions: "Overdraft facility enabled",
+    steps: ["Make transaction exceeding balance", "Go into overdraft"],
+    testData: "Balance: $100, Transaction: $150",
+    expectedResult: "Transaction allowed, overdraft notification sent, interest info displayed",
+    priority: "P1",
+    type: "Edge Case"
+  },
+
+  // Telecommunication Test Cases
+  {
+    id: "TC_TELCO_001",
+    category: "Telecom",
+    title: "Prepaid Mobile Recharge",
+    preconditions: "Valid mobile number exists",
+    steps: ["Go to Recharge", "Enter mobile number", "Select plan", "Make payment", "Confirm"],
+    testData: "Mobile: 9876543210, Plan: $30 Unlimited",
+    expectedResult: "Recharge successful, new balance/validity updated",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_002",
+    category: "Telecom",
+    title: "Postpaid Bill Payment",
+    preconditions: "Bill generated for the month",
+    steps: ["Login", "View current bill", "Click Pay Now", "Select payment method", "Complete payment"],
+    testData: "Bill Amount: $85.50, Due Date: 15th",
+    expectedResult: "Payment successful, receipt generated, status updated to Paid",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_003",
+    category: "Telecom",
+    title: "Data Usage Tracking Real-time",
+    preconditions: "Active data plan",
+    steps: ["Go to My Usage", "View data consumption", "Check remaining data"],
+    testData: "Plan: 50GB/month",
+    expectedResult: "Used/Remaining data displayed, usage graph shown",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_004",
+    category: "Telecom",
+    title: "Plan Upgrade/Downgrade",
+    preconditions: "Active subscription exists",
+    steps: ["Go to Plans", "Compare plans", "Select new plan", "Confirm change"],
+    testData: "Current: Basic $30, New: Premium $50",
+    expectedResult: "Plan changed, prorated charges applied, confirmation sent",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_005",
+    category: "Telecom",
+    title: "Number Portability Request",
+    preconditions: "Number eligible for porting",
+    steps: ["Go to Port Number", "Enter current provider", "Enter number", "Submit UPC", "Confirm"],
+    testData: "Number: 9876543210, UPC: PORT12345",
+    expectedResult: "Porting request initiated, expected date displayed",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_006",
+    category: "Telecom",
+    title: "International Roaming Activation",
+    preconditions: "User traveling abroad",
+    steps: ["Go to Roaming", "Select country", "Choose roaming pack", "Activate"],
+    testData: "Country: USA, Pack: 7-day unlimited",
+    expectedResult: "Roaming activated, pack details SMS sent",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_007",
+    category: "Telecom",
+    title: "SIM Replacement Request",
+    preconditions: "User has active connection",
+    steps: ["Go to SIM Services", "Select SIM Replacement", "Choose reason", "Verify identity", "Submit"],
+    testData: "Reason: Lost SIM, ID: Verified",
+    expectedResult: "Old SIM deactivated, new SIM dispatched, tracking provided",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_008",
+    category: "Telecom",
+    title: "Add-on Data Pack Purchase",
+    preconditions: "Main data exhausted",
+    steps: ["Receive low data notification", "Click Add Data", "Select pack", "Purchase"],
+    testData: "Add-on: 10GB for $10",
+    expectedResult: "Data added immediately, validity extended",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_009",
+    category: "Telecom",
+    title: "Auto-Pay Setup",
+    preconditions: "Postpaid account",
+    steps: ["Go to Payments", "Enable Auto-Pay", "Add card/bank", "Set deduction date", "Confirm"],
+    testData: "Card: **** 1234, Date: 5th of month",
+    expectedResult: "Auto-pay enabled, confirmation email sent",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_TELCO_010",
+    category: "Telecom",
+    title: "Service Suspension Due to Non-Payment",
+    preconditions: "Bill overdue by 30 days",
+    steps: ["Bill remains unpaid", "Grace period expires", "Attempt outgoing call"],
+    testData: "Overdue: $120, Days: 35",
+    expectedResult: "Outgoing calls blocked, incoming allowed, payment reminder plays",
+    priority: "P1",
+    type: "Negative"
+  },
+
+  // Communication App Test Cases
+  {
+    id: "TC_COMM_001",
+    category: "Communication",
+    title: "One-to-One Text Message Send",
+    preconditions: "User logged in, contact exists",
+    steps: ["Open chat with contact", "Type message", "Click Send"],
+    testData: "Message: 'Hello, how are you?'",
+    expectedResult: "Message sent with single tick, then double tick on delivery",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_002",
+    category: "Communication",
+    title: "Group Chat Creation",
+    preconditions: "User has multiple contacts",
+    steps: ["Click New Group", "Select participants", "Enter group name", "Add group icon", "Create"],
+    testData: "Name: Project Team, Members: 5",
+    expectedResult: "Group created, all members notified, chat opens",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_003",
+    category: "Communication",
+    title: "Voice Call Initiation",
+    preconditions: "Contact online, mic permission granted",
+    steps: ["Open contact chat", "Click voice call icon", "Wait for connection"],
+    testData: "Contact: John Doe",
+    expectedResult: "Call connects, audio works both ways, call timer starts",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_004",
+    category: "Communication",
+    title: "Video Call with Screen Share",
+    preconditions: "Both users have camera",
+    steps: ["Start video call", "Click screen share", "Select screen/window", "Share"],
+    testData: "Share: Full screen",
+    expectedResult: "Screen visible to other participant with smooth streaming",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_005",
+    category: "Communication",
+    title: "File Attachment Send (Image/Doc)",
+    preconditions: "Chat open",
+    steps: ["Click attachment icon", "Select file", "Add caption", "Send"],
+    testData: "File: document.pdf (5MB)",
+    expectedResult: "File uploaded with progress, preview shown, downloadable by recipient",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_006",
+    category: "Communication",
+    title: "Message Edit After Sending",
+    preconditions: "Message sent within edit window",
+    steps: ["Long press sent message", "Click Edit", "Modify text", "Save"],
+    testData: "Original: 'Helo', Edited: 'Hello'",
+    expectedResult: "Message updated, 'Edited' label appears",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_007",
+    category: "Communication",
+    title: "Message Delete for Everyone",
+    preconditions: "Message sent recently",
+    steps: ["Long press message", "Select Delete", "Choose 'Delete for Everyone'"],
+    testData: "Message sent 5 minutes ago",
+    expectedResult: "Message replaced with 'This message was deleted'",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_008",
+    category: "Communication",
+    title: "Push Notification on New Message",
+    preconditions: "App in background, notifications enabled",
+    steps: ["Receive message while app closed"],
+    testData: "New message from contact",
+    expectedResult: "Push notification shows sender name and message preview",
+    priority: "P1",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_009",
+    category: "Communication",
+    title: "Block Contact",
+    preconditions: "Contact exists in chat list",
+    steps: ["Open contact profile", "Click Block", "Confirm"],
+    testData: "Contact: Spammer123",
+    expectedResult: "Contact blocked, no messages received, removed from chat list",
+    priority: "P2",
+    type: "Positive"
+  },
+  {
+    id: "TC_COMM_010",
+    category: "Communication",
+    title: "Message Search in Chat History",
+    preconditions: "Chat has message history",
+    steps: ["Open chat", "Click search icon", "Enter keyword", "View results"],
+    testData: "Keyword: 'meeting'",
+    expectedResult: "All messages containing 'meeting' highlighted and navigable",
+    priority: "P2",
+    type: "Positive"
   }
 ];
 
