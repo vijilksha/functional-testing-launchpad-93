@@ -1,5 +1,45 @@
 // STLC Agile Methodology - Complete Hands-on Training Data
 
+// Workflow Explanation Interfaces
+export interface WorkflowStep {
+  step: number;
+  title: string;
+  description: string;
+  keyActivities: string[];
+  deliverables: string[];
+  tips: string[];
+  example?: string;
+}
+
+export interface RequirementDocument {
+  title: string;
+  version: string;
+  date: string;
+  overview: string;
+  businessObjectives: string[];
+  functionalRequirements: {
+    id: string;
+    title: string;
+    description: string;
+    priority: "Must Have" | "Should Have" | "Nice to Have";
+    acceptanceCriteria: string[];
+  }[];
+  nonFunctionalRequirements: string[];
+  constraints: string[];
+  assumptions: string[];
+  stakeholders: { role: string; responsibility: string }[];
+}
+
+export interface WorkflowExplanation {
+  introduction: string;
+  steps: WorkflowStep[];
+  featureToStoryMapping: {
+    requirement: string;
+    identifiedFeatures: string[];
+    userStories: { storyId: string; derivedFrom: string; explanation: string }[];
+  }[];
+}
+
 export interface UserStory {
   id: string;
   title: string;
@@ -84,6 +124,8 @@ export interface DomainSTLCProject {
   domainIcon: string;
   feature: string;
   featureDescription: string;
+  requirementDocument: RequirementDocument;
+  workflowExplanation: WorkflowExplanation;
   userStories: UserStory[];
   testPlans: TestPlan[];
   manualTestCases: ManualTestCase[];
@@ -100,6 +142,279 @@ export const stlcAgileProjects: DomainSTLCProject[] = [
     domainIcon: "🛒",
     feature: "Shopping Cart Checkout",
     featureDescription: "Complete checkout flow including cart management, payment processing, and order confirmation",
+    requirementDocument: {
+      title: "E-Commerce Shopping Cart & Checkout Module - Business Requirements Document",
+      version: "2.1",
+      date: "2024-01-15",
+      overview: "This document outlines the requirements for building a comprehensive shopping cart and checkout system for our e-commerce platform. The system should handle product addition, cart management, discount application, and secure payment processing to provide a seamless shopping experience.",
+      businessObjectives: [
+        "Increase conversion rate by 25% through streamlined checkout process",
+        "Reduce cart abandonment rate from 70% to 45%",
+        "Support multiple payment methods to cater to diverse customer preferences",
+        "Implement promotional discount system to drive sales",
+        "Ensure PCI-DSS compliance for all payment transactions"
+      ],
+      functionalRequirements: [
+        {
+          id: "FR-EC-001",
+          title: "Add to Cart Functionality",
+          description: "Users should be able to add products to their shopping cart from the product detail page or product listing page. The system should handle quantity selection and validate stock availability before adding.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Add to cart button visible on all product pages",
+            "Quantity selector allows 1-10 items per addition",
+            "Real-time inventory check before adding to cart",
+            "Visual feedback (animation/notification) on successful addition",
+            "Cart icon badge updates with item count"
+          ]
+        },
+        {
+          id: "FR-EC-002",
+          title: "Cart Management",
+          description: "Users should be able to view, modify, and manage items in their cart. This includes updating quantities, removing items, and viewing subtotals.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Cart page displays all added items with images and details",
+            "Users can update quantity directly in cart",
+            "Remove item option available for each product",
+            "Subtotal updates automatically on changes",
+            "Cart persists across browser sessions for logged-in users"
+          ]
+        },
+        {
+          id: "FR-EC-003",
+          title: "Discount/Coupon System",
+          description: "Users should be able to apply promotional codes and coupons during checkout. The system should validate codes and apply appropriate discounts.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Single coupon code input field in cart/checkout",
+            "Support for percentage and flat discounts",
+            "Real-time validation with clear error messages",
+            "Display discount amount and new total",
+            "Minimum purchase requirements enforcement"
+          ]
+        },
+        {
+          id: "FR-EC-004",
+          title: "Payment Processing",
+          description: "The system should support multiple payment methods and process payments securely. Integration with major payment gateways is required.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Credit/Debit card payment via Stripe",
+            "PayPal integration for alternative payment",
+            "Net Banking option for direct bank transfers",
+            "Secure payment page with SSL encryption",
+            "Order confirmation with transaction details"
+          ]
+        },
+        {
+          id: "FR-EC-005",
+          title: "Order Confirmation",
+          description: "After successful payment, users should receive order confirmation with details and tracking information.",
+          priority: "Should Have",
+          acceptanceCriteria: [
+            "Confirmation page with order summary",
+            "Email confirmation sent automatically",
+            "Order tracking number generated",
+            "Estimated delivery date displayed"
+          ]
+        }
+      ],
+      nonFunctionalRequirements: [
+        "Page load time under 3 seconds for cart page",
+        "Support 1000 concurrent checkout sessions",
+        "99.9% uptime for checkout system",
+        "Mobile responsive design for all screens",
+        "WCAG 2.1 AA accessibility compliance"
+      ],
+      constraints: [
+        "Must integrate with existing inventory management system",
+        "Payment gateway limited to Stripe and PayPal initially",
+        "Must comply with PCI-DSS Level 1 requirements",
+        "Launch deadline: Q2 2024"
+      ],
+      assumptions: [
+        "Product catalog API is already available",
+        "User authentication system is in place",
+        "Inventory is updated in real-time by warehouse system"
+      ],
+      stakeholders: [
+        { role: "Product Owner", responsibility: "Define requirements and priorities" },
+        { role: "Development Team", responsibility: "Build and deploy the system" },
+        { role: "QA Team", responsibility: "Validate functionality and quality" },
+        { role: "Operations", responsibility: "Monitor and maintain production system" },
+        { role: "Finance", responsibility: "Verify payment reconciliation" }
+      ]
+    },
+    workflowExplanation: {
+      introduction: "This section demonstrates how to take a real business requirement document and systematically convert it into testable user stories, test plans, and test cases following Agile STLC methodology.",
+      steps: [
+        {
+          step: 1,
+          title: "Requirement Analysis & Feature Identification",
+          description: "Read through the entire BRD to understand business objectives. Identify distinct features/modules that can be developed and tested independently.",
+          keyActivities: [
+            "Review business objectives to understand the 'why' behind features",
+            "Identify functional requirements that map to user-facing features",
+            "Group related requirements into logical feature sets",
+            "Note dependencies between features",
+            "Identify non-functional requirements that apply across features"
+          ],
+          deliverables: ["Feature list with brief descriptions", "Dependency diagram", "Initial risk assessment"],
+          tips: [
+            "Focus on user value - what does this feature enable users to do?",
+            "Look for verbs in requirements - they often indicate actions/features",
+            "Consider the user journey - what sequence of actions makes sense?"
+          ],
+          example: "From FR-EC-001 (Add to Cart), we identify a clear feature: 'Shopping Cart Addition'. This involves product selection, quantity handling, and inventory validation."
+        },
+        {
+          step: 2,
+          title: "Feature Decomposition into User Stories",
+          description: "Break down each feature into user stories following the 'As a... I want... So that...' format. Each story should be independently testable and deliverable.",
+          keyActivities: [
+            "Write user stories for each identified feature",
+            "Define acceptance criteria from functional requirements",
+            "Estimate story points based on complexity",
+            "Prioritize stories (MoSCoW or numeric priority)",
+            "Identify technical stories if needed (e.g., payment gateway integration)"
+          ],
+          deliverables: ["User story cards with acceptance criteria", "Story point estimates", "Priority matrix"],
+          tips: [
+            "Keep stories small enough to complete in one sprint",
+            "Acceptance criteria should be testable - use specific values",
+            "Include edge cases in acceptance criteria",
+            "Get sign-off from Product Owner on story definitions"
+          ],
+          example: "FR-EC-003 (Discount System) becomes: 'As a Customer, I want to apply discount coupons at checkout, So that I can get discounts on my purchase.' Acceptance criteria include: valid coupon shows discount, invalid coupon shows error, expired coupons rejected."
+        },
+        {
+          step: 3,
+          title: "Test Plan Creation",
+          description: "Create a test plan for each user story defining scope, approach, test types, entry/exit criteria, and risks.",
+          keyActivities: [
+            "Define test objectives aligned with acceptance criteria",
+            "Identify test scope - what's in and out of scope",
+            "Select appropriate test types (functional, integration, security, etc.)",
+            "Define entry criteria (what must be ready before testing)",
+            "Define exit criteria (what determines testing is complete)",
+            "Identify risks and mitigation strategies"
+          ],
+          deliverables: ["Test plan document per user story", "Resource allocation", "Test schedule"],
+          tips: [
+            "Entry criteria should prevent testing incomplete features",
+            "Exit criteria should be measurable (e.g., 95% test cases passed)",
+            "Include risk-based testing approach for critical features",
+            "Plan for test environment and test data needs"
+          ],
+          example: "For 'Apply Discount Coupon' story - Test Plan includes: Functional testing of valid/invalid coupons, Integration testing with cart total calculation, Security testing for coupon code injection, Performance testing for coupon validation API."
+        },
+        {
+          step: 4,
+          title: "Manual Test Case Design",
+          description: "Write detailed manual test cases covering positive, negative, edge cases, and boundary conditions.",
+          keyActivities: [
+            "Design test cases from acceptance criteria",
+            "Include positive test cases (happy path)",
+            "Design negative test cases (error scenarios)",
+            "Add boundary value test cases",
+            "Create end-to-end test scenarios",
+            "Mark test cases as automation candidates"
+          ],
+          deliverables: ["Test case document with steps and expected results", "Test data requirements", "Automation candidate list"],
+          tips: [
+            "Each test case should have clear preconditions",
+            "Steps should be unambiguous - anyone should get same result",
+            "Expected results should be specific and verifiable",
+            "Consider user personas when designing test scenarios"
+          ],
+          example: "Test Case: Apply Valid Percentage Coupon - Preconditions: Cart total $100, valid 20% coupon exists. Steps: 1. Go to cart 2. Enter SAVE20 3. Click Apply. Expected: Discount $20 shown, Total $80."
+        },
+        {
+          step: 5,
+          title: "Automation Analysis & Decision",
+          description: "Analyze each test case to determine if it should be automated based on ROI, stability, frequency, and complexity.",
+          keyActivities: [
+            "Evaluate test cases against automation criteria",
+            "Calculate ROI for automation (time saved vs effort)",
+            "Identify suitable automation framework/tools",
+            "Assess complexity and maintenance effort",
+            "Create automation roadmap"
+          ],
+          deliverables: ["Automation decision matrix", "Tool selection recommendation", "Sprint automation goals"],
+          tips: [
+            "Prioritize high-frequency, high-business-impact tests",
+            "Don't automate unstable features too early",
+            "Consider data-driven approach for similar test cases",
+            "Plan for test data management in automation"
+          ],
+          example: "Coupon test cases are good automation candidates: stable UI, calculation verification needed, data-driven testing opportunity. ROI: High. Recommended: Selenium + TestNG DataProvider."
+        },
+        {
+          step: 6,
+          title: "Sprint Automation & Execution",
+          description: "Implement automated tests in sprints, starting with smoke tests and expanding to regression suite.",
+          keyActivities: [
+            "Set up automation framework in Sprint 1",
+            "Automate smoke tests first (critical path)",
+            "Add regression tests incrementally",
+            "Integrate with CI/CD pipeline",
+            "Review and maintain test scripts"
+          ],
+          deliverables: ["Automated test scripts", "CI/CD integration", "Execution reports"],
+          tips: [
+            "Start with Page Object Model for maintainability",
+            "Use meaningful test names and logging",
+            "Handle waits properly - avoid Thread.sleep",
+            "Clean up test data after execution"
+          ],
+          example: "Sprint 1: Framework setup + Add to Cart smoke test + Cart update test. Sprint 2: Coupon automation with data-driven approach + Payment failure scenario."
+        },
+        {
+          step: 7,
+          title: "Regression & Smoke Test Suite Definition",
+          description: "Identify and organize tests into regression and smoke suites for ongoing quality assurance.",
+          keyActivities: [
+            "Classify tests by priority (P0, P1, P2)",
+            "Define smoke suite (deployment verification)",
+            "Define regression suite (comprehensive validation)",
+            "Set execution frequency for each suite",
+            "Configure CI/CD triggers"
+          ],
+          deliverables: ["Smoke test suite", "Regression test suite", "CI/CD pipeline configuration"],
+          tips: [
+            "Smoke tests should run in under 5 minutes",
+            "P0 tests = business-critical, run every build",
+            "Consider parallel execution for faster feedback",
+            "Set up alerting for test failures"
+          ],
+          example: "Smoke Suite: Homepage loads, Add to cart works, Checkout accessible (3 min total). Regression: All cart operations, All payment methods, All coupon scenarios (20 min total)."
+        }
+      ],
+      featureToStoryMapping: [
+        {
+          requirement: "FR-EC-001: Add to Cart Functionality",
+          identifiedFeatures: ["Product addition to cart", "Quantity management", "Inventory validation"],
+          userStories: [
+            { storyId: "EC-US-001", derivedFrom: "Add to Cart Functionality", explanation: "The core feature of adding items maps directly to a user story. Acceptance criteria come from the functional requirements - cart icon update, quantity handling, stock validation." }
+          ]
+        },
+        {
+          requirement: "FR-EC-003: Discount/Coupon System",
+          identifiedFeatures: ["Coupon input and validation", "Discount calculation", "Error handling"],
+          userStories: [
+            { storyId: "EC-US-002", derivedFrom: "Discount/Coupon System", explanation: "Coupon functionality is user-facing and independently testable. The acceptance criteria include positive (valid coupon) and negative (invalid/expired) scenarios from the BRD." }
+          ]
+        },
+        {
+          requirement: "FR-EC-004: Payment Processing",
+          identifiedFeatures: ["Multiple payment methods", "Secure transaction processing", "Order confirmation"],
+          userStories: [
+            { storyId: "EC-US-003", derivedFrom: "Payment Processing", explanation: "Payment is a critical path feature. The story includes all payment methods mentioned in BRD. Acceptance criteria cover success and failure scenarios for each method." }
+          ]
+        }
+      ]
+    },
     userStories: [
       {
         id: "EC-US-001",
@@ -624,6 +939,235 @@ public void testCartAPIAddItem() {
     domainIcon: "🏦",
     feature: "Fund Transfer Module",
     featureDescription: "Secure fund transfer functionality including NEFT, RTGS, IMPS, and internal transfers",
+    requirementDocument: {
+      title: "Digital Banking Fund Transfer Module - Business Requirements Document",
+      version: "3.0",
+      date: "2024-02-01",
+      overview: "This document specifies requirements for a secure, real-time fund transfer module for our digital banking platform. The system must support internal transfers, NEFT, RTGS, and IMPS payment modes while ensuring regulatory compliance and robust security measures.",
+      businessObjectives: [
+        "Enable 24/7 digital fund transfer capabilities for customers",
+        "Reduce branch dependency for transfer transactions by 60%",
+        "Achieve transaction success rate of 99.5%",
+        "Ensure RBI compliance for all payment modes",
+        "Provide real-time transaction tracking and notifications"
+      ],
+      functionalRequirements: [
+        {
+          id: "FR-BK-001",
+          title: "Internal Fund Transfer",
+          description: "Account holders should be able to transfer funds between their own accounts within the same bank instantly. The transfer should be immediate for amounts up to daily limits.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Dropdown to select source and destination accounts",
+            "Display available balance before transfer",
+            "Transfer amount validation against available balance",
+            "OTP verification for transfers above ₹10,000",
+            "Instant balance update in both accounts",
+            "Transaction reference number generation"
+          ]
+        },
+        {
+          id: "FR-BK-002",
+          title: "NEFT Transfer to Other Banks",
+          description: "Users should be able to transfer funds to accounts in other banks using NEFT. System must validate beneficiary details and IFSC codes.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Beneficiary management (add/edit/delete)",
+            "IFSC code validation with auto bank name population",
+            "Transfer scheduling for future dates",
+            "Batch-wise processing status display",
+            "Email/SMS notification on transfer completion"
+          ]
+        },
+        {
+          id: "FR-BK-003",
+          title: "Transaction History & Statements",
+          description: "Users should be able to view complete transaction history with filtering and export capabilities.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Date range filter (last 7 days, 30 days, custom)",
+            "Transaction type filter (Credit/Debit/All)",
+            "Search by amount or description",
+            "Export to PDF and Excel formats",
+            "Pagination for large datasets"
+          ]
+        },
+        {
+          id: "FR-BK-004",
+          title: "Security & Authentication",
+          description: "All transactions must be secured with multi-factor authentication and proper session management.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Session timeout after 5 minutes inactivity",
+            "OTP for high-value transactions",
+            "Device binding for registered devices",
+            "Transaction signing for amounts above ₹50,000",
+            "Fraud detection alerts"
+          ]
+        }
+      ],
+      nonFunctionalRequirements: [
+        "Transaction response time under 3 seconds",
+        "Support 10,000 concurrent users",
+        "99.99% availability during banking hours",
+        "Data encryption at rest and in transit (AES-256)",
+        "Audit logging for all transactions"
+      ],
+      constraints: [
+        "Must integrate with Core Banking System (CBS)",
+        "NEFT transactions follow RBI batch timings",
+        "Daily transfer limits as per RBI guidelines",
+        "KYC compliance mandatory for all users"
+      ],
+      assumptions: [
+        "Core Banking APIs are available and documented",
+        "OTP service is already operational",
+        "Customer KYC is completed during account opening"
+      ],
+      stakeholders: [
+        { role: "Product Manager", responsibility: "Define banking product requirements" },
+        { role: "Development Team", responsibility: "Implement secure banking features" },
+        { role: "QA Team", responsibility: "Security and functional testing" },
+        { role: "Compliance Officer", responsibility: "Ensure regulatory compliance" },
+        { role: "Risk Team", responsibility: "Fraud monitoring and prevention" }
+      ]
+    },
+    workflowExplanation: {
+      introduction: "Banking domain requires extra focus on security, compliance, and data integrity. This workflow shows how to derive testable artifacts from banking requirements while ensuring regulatory compliance.",
+      steps: [
+        {
+          step: 1,
+          title: "Requirement Analysis with Compliance Focus",
+          description: "Banking requirements must be analyzed with regulatory compliance in mind. Identify features that require special security testing.",
+          keyActivities: [
+            "Review RBI guidelines applicable to the feature",
+            "Identify security-critical features (payments, authentication)",
+            "Map compliance requirements to functional requirements",
+            "Identify audit trail requirements"
+          ],
+          deliverables: ["Compliance checklist", "Security requirement mapping", "Audit requirements"],
+          tips: [
+            "Always check for regulatory updates before finalizing requirements",
+            "Security requirements are often non-negotiable in banking",
+            "Consider fraud scenarios during requirement analysis"
+          ],
+          example: "FR-BK-002 (NEFT Transfer) requires IFSC validation per RBI guidelines. This becomes a mandatory acceptance criterion."
+        },
+        {
+          step: 2,
+          title: "User Story Creation with Security Criteria",
+          description: "Banking user stories must include security acceptance criteria alongside functional ones.",
+          keyActivities: [
+            "Write user stories for each banking feature",
+            "Add security acceptance criteria",
+            "Include audit logging requirements",
+            "Define error handling for sensitive data"
+          ],
+          deliverables: ["User stories with security criteria", "Data handling requirements"],
+          tips: [
+            "Never log sensitive data (account numbers, OTPs) in plain text",
+            "Include session handling in acceptance criteria",
+            "Consider concurrent access scenarios"
+          ],
+          example: "Internal Transfer story includes: 'OTP verification for transfers > ₹10,000' as acceptance criterion derived from FR-BK-001."
+        },
+        {
+          step: 3,
+          title: "Test Plan with Security Testing",
+          description: "Banking test plans must include dedicated security and penetration testing phases.",
+          keyActivities: [
+            "Include security testing in every test plan",
+            "Plan for SQL injection and XSS testing",
+            "Include data integrity verification",
+            "Plan for concurrent transaction testing"
+          ],
+          deliverables: ["Security test plan", "Penetration testing scope", "Data validation checklist"],
+          tips: [
+            "Use banking-specific security testing tools",
+            "Test with production-like data volumes",
+            "Include negative security tests (unauthorized access)"
+          ],
+          example: "Fund Transfer test plan includes: Security testing for SQL injection in amount fields, XSS in remarks, and session hijacking prevention."
+        },
+        {
+          step: 4,
+          title: "Test Case Design for Financial Accuracy",
+          description: "Test cases must verify financial calculations with high precision and handle edge cases.",
+          keyActivities: [
+            "Design test cases for exact amount calculations",
+            "Include boundary tests for transfer limits",
+            "Add concurrent transaction tests",
+            "Design rollback scenario tests"
+          ],
+          deliverables: ["Financial calculation test cases", "Boundary value test cases", "Concurrency test cases"],
+          tips: [
+            "Use decimal precision tests (not floating point)",
+            "Test with maximum allowed amounts",
+            "Verify balance consistency after failed transactions"
+          ],
+          example: "Test case: Transfer ₹10,000.50 - verify both accounts reflect exact amount, no rounding errors, OTP triggered."
+        },
+        {
+          step: 5,
+          title: "Automation with Security Considerations",
+          description: "Banking automation must handle sensitive data securely and include database verification.",
+          keyActivities: [
+            "Automate balance verification via database",
+            "Implement secure test data handling",
+            "Add audit log verification",
+            "Automate rollback verification"
+          ],
+          deliverables: ["Secure automation framework", "Database verification scripts", "Audit log validators"],
+          tips: [
+            "Never hardcode credentials in test scripts",
+            "Use test accounts with limited access",
+            "Verify database state, not just UI responses"
+          ],
+          example: "Automation verifies: API response + Database balance + Audit log entry + SMS notification - all must match."
+        },
+        {
+          step: 6,
+          title: "Regression Suite for Banking Compliance",
+          description: "Banking regression must include compliance verification tests that run on every build.",
+          keyActivities: [
+            "Include compliance tests in regression",
+            "Add transaction limit verification",
+            "Include security regression tests",
+            "Verify audit trail completeness"
+          ],
+          deliverables: ["Compliance regression suite", "Security regression suite"],
+          tips: [
+            "Run security tests in every regression cycle",
+            "Include database consistency checks",
+            "Verify notification delivery in regression"
+          ],
+          example: "Regression includes: All transfer limits enforced, OTP triggered correctly, audit logs complete, no unauthorized access possible."
+        }
+      ],
+      featureToStoryMapping: [
+        {
+          requirement: "FR-BK-001: Internal Fund Transfer",
+          identifiedFeatures: ["Account selection", "Balance validation", "OTP verification", "Instant transfer"],
+          userStories: [
+            { storyId: "BK-US-001", derivedFrom: "Internal Fund Transfer", explanation: "The requirement specifies instant transfer between own accounts. User story captures the complete flow including balance check and OTP for high-value transfers." }
+          ]
+        },
+        {
+          requirement: "FR-BK-002: NEFT Transfer to Other Banks",
+          identifiedFeatures: ["Beneficiary management", "IFSC validation", "Transfer scheduling", "Status tracking"],
+          userStories: [
+            { storyId: "BK-US-002", derivedFrom: "NEFT Transfer", explanation: "NEFT feature requires beneficiary setup first, then transfer. Acceptance criteria include IFSC validation and notification requirements from the BRD." }
+          ]
+        },
+        {
+          requirement: "FR-BK-003: Transaction History & Statements",
+          identifiedFeatures: ["Transaction listing", "Filtering", "Search", "Export"],
+          userStories: [
+            { storyId: "BK-US-003", derivedFrom: "Transaction History", explanation: "Users need to view and export transaction history. Story includes all filter types and export formats mentioned in requirements." }
+          ]
+        }
+      ]
+    },
     userStories: [
       {
         id: "BK-US-001",
@@ -1121,6 +1665,236 @@ public void testStatementDownload() throws IOException {
     domainIcon: "📱",
     feature: "Prepaid Recharge & Plan Management",
     featureDescription: "Mobile prepaid recharge system with plan selection, payment processing, and usage tracking",
+    requirementDocument: {
+      title: "Telecom Prepaid Recharge Portal - Business Requirements Document",
+      version: "2.5",
+      date: "2024-01-20",
+      overview: "This document outlines requirements for a customer-facing prepaid recharge and plan management portal. The system should enable customers to recharge their mobile numbers, compare and select plans, and track their usage in real-time.",
+      businessObjectives: [
+        "Increase digital recharge adoption to 80% of total recharges",
+        "Reduce call center load for recharge queries by 50%",
+        "Enable instant plan activation within 30 seconds",
+        "Provide real-time usage visibility to reduce customer complaints",
+        "Support 100,000 concurrent recharge transactions"
+      ],
+      functionalRequirements: [
+        {
+          id: "FR-TL-001",
+          title: "Instant Prepaid Recharge",
+          description: "Users should be able to recharge any prepaid mobile number instantly using multiple payment methods. The system must validate the mobile number and credit balance immediately upon successful payment.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "10-digit mobile number validation",
+            "Auto-detect operator/circle from number",
+            "Display available recharge denominations",
+            "Support card, UPI, wallet payments",
+            "Instant balance credit (< 30 seconds)",
+            "SMS/email receipt delivery"
+          ]
+        },
+        {
+          id: "FR-TL-002",
+          title: "Plan Comparison & Selection",
+          description: "Users should be able to view, compare, and select from available prepaid plans. The system should help users find the best plan based on their usage patterns.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Display all active plans with full details",
+            "Filter by data/voice/validity/price",
+            "Side-by-side comparison of up to 3 plans",
+            "Recommend best value plans",
+            "One-click plan activation"
+          ]
+        },
+        {
+          id: "FR-TL-003",
+          title: "Usage Dashboard",
+          description: "Users should be able to view their current balance, data usage, voice minutes, and plan validity in a comprehensive dashboard.",
+          priority: "Must Have",
+          acceptanceCriteria: [
+            "Real-time balance display",
+            "Data usage with daily breakdown chart",
+            "Voice minutes consumed vs remaining",
+            "SMS count remaining",
+            "Plan validity with countdown",
+            "Usage alerts configuration"
+          ]
+        },
+        {
+          id: "FR-TL-004",
+          title: "Auto-Recharge Setup",
+          description: "Users should be able to set up automatic recharge when balance falls below a threshold or plan is about to expire.",
+          priority: "Should Have",
+          acceptanceCriteria: [
+            "Set minimum balance threshold",
+            "Select recharge amount/plan for auto-recharge",
+            "Save payment method for auto-debit",
+            "Notification before auto-recharge",
+            "Easy enable/disable toggle"
+          ]
+        }
+      ],
+      nonFunctionalRequirements: [
+        "Recharge completion in under 5 seconds",
+        "99.9% uptime for recharge service",
+        "Mobile-first responsive design",
+        "Support for low bandwidth (2G/3G) networks",
+        "Multi-language support (10 regional languages)"
+      ],
+      constraints: [
+        "Must integrate with existing billing system (BSS)",
+        "Payment gateway limited to approved vendors",
+        "Operator circle restrictions apply",
+        "Regulatory compliance for prepaid services"
+      ],
+      assumptions: [
+        "Billing system APIs are real-time",
+        "Mobile number database is up-to-date",
+        "Payment gateway handles all card validations"
+      ],
+      stakeholders: [
+        { role: "Product Manager", responsibility: "Define customer experience requirements" },
+        { role: "Development Team", responsibility: "Build and integrate recharge systems" },
+        { role: "QA Team", responsibility: "Validate recharge flows and billing accuracy" },
+        { role: "Operations", responsibility: "Monitor recharge success rates" },
+        { role: "Customer Support", responsibility: "Handle recharge failures and disputes" }
+      ]
+    },
+    workflowExplanation: {
+      introduction: "Telecom domain focuses on high-volume transactions, real-time billing integration, and mobile-first user experience. This workflow demonstrates testing approach for telecom-specific requirements.",
+      steps: [
+        {
+          step: 1,
+          title: "Requirement Analysis for High-Volume Systems",
+          description: "Telecom systems handle millions of transactions. Requirements must be analyzed with scalability and real-time processing in mind.",
+          keyActivities: [
+            "Identify real-time processing requirements",
+            "Map billing system integration points",
+            "Understand circle/operator specific rules",
+            "Identify peak load scenarios"
+          ],
+          deliverables: ["Integration points document", "Performance requirements", "Circle-specific rules matrix"],
+          tips: [
+            "Telecom has complex business rules per circle",
+            "Real-time balance updates are critical",
+            "Consider network latency in mobile app testing"
+          ],
+          example: "FR-TL-001 requires instant credit - this means billing system integration must be synchronous, not batch-based."
+        },
+        {
+          step: 2,
+          title: "User Story with Mobile-First Focus",
+          description: "Telecom user stories should emphasize mobile experience and handle network variability.",
+          keyActivities: [
+            "Write stories considering mobile users",
+            "Include offline/poor network scenarios",
+            "Consider various screen sizes",
+            "Include accessibility requirements"
+          ],
+          deliverables: ["Mobile-focused user stories", "Network handling requirements"],
+          tips: [
+            "Most telecom users are on mobile apps",
+            "Consider data saving mode requirements",
+            "Include quick recharge options for repeat users"
+          ],
+          example: "Recharge story includes: 'Works on 2G network' and 'Saves last used mobile number' as acceptance criteria."
+        },
+        {
+          step: 3,
+          title: "Test Plan with Billing Integration Focus",
+          description: "Telecom test plans must extensively cover billing system integration and real-time balance updates.",
+          keyActivities: [
+            "Plan for billing system integration testing",
+            "Include real-time balance verification",
+            "Plan for payment gateway integration",
+            "Include SMS gateway testing"
+          ],
+          deliverables: ["Billing integration test plan", "Payment flow test plan", "Notification test plan"],
+          tips: [
+            "Test with actual billing sandbox if available",
+            "Verify balance in billing system, not just UI",
+            "Test SMS delivery across different operators"
+          ],
+          example: "Recharge test plan includes: Balance verification in BSS after recharge, SMS delivery confirmation, Payment reconciliation check."
+        },
+        {
+          step: 4,
+          title: "Test Cases for Telecom Scenarios",
+          description: "Test cases must cover operator-specific rules, circle restrictions, and payment variations.",
+          keyActivities: [
+            "Design operator-specific test cases",
+            "Include circle restriction tests",
+            "Add payment failure recovery tests",
+            "Include plan validity edge cases"
+          ],
+          deliverables: ["Operator matrix test cases", "Payment scenario test cases", "Edge case documentation"],
+          tips: [
+            "Test with numbers from different circles",
+            "Include porting scenarios (MNP)",
+            "Test recharge at validity expiry time"
+          ],
+          example: "Test case: Recharge prepaid number that is in grace period - verify balance credited and validity extended correctly."
+        },
+        {
+          step: 5,
+          title: "Automation for High-Volume Testing",
+          description: "Telecom automation must support high-volume execution and billing verification.",
+          keyActivities: [
+            "Implement API-level automation for speed",
+            "Add billing system verification",
+            "Create data-driven tests for multiple operators",
+            "Implement parallel execution for volume"
+          ],
+          deliverables: ["High-volume test framework", "Billing verification scripts", "Operator test data sets"],
+          tips: [
+            "API tests are faster than UI for volume testing",
+            "Use separate test accounts per parallel thread",
+            "Implement automatic balance reset between tests"
+          ],
+          example: "Automation suite: 100 parallel recharges across 5 operators, verify all balances in billing system within 30 seconds."
+        },
+        {
+          step: 6,
+          title: "Regression with Performance Focus",
+          description: "Telecom regression must include performance benchmarks and billing accuracy verification.",
+          keyActivities: [
+            "Include response time assertions",
+            "Add billing accuracy verification",
+            "Include notification delivery checks",
+            "Monitor error rates"
+          ],
+          deliverables: ["Performance regression suite", "Billing accuracy suite", "SLA verification tests"],
+          tips: [
+            "Set strict SLAs for recharge time",
+            "Include billing reconciliation in nightly runs",
+            "Monitor success rates across operators"
+          ],
+          example: "Regression SLA: Recharge < 5 sec, Balance update < 30 sec, SMS delivery < 60 sec, Success rate > 99.5%."
+        }
+      ],
+      featureToStoryMapping: [
+        {
+          requirement: "FR-TL-001: Instant Prepaid Recharge",
+          identifiedFeatures: ["Mobile validation", "Recharge processing", "Payment handling", "Balance credit"],
+          userStories: [
+            { storyId: "TL-US-001", derivedFrom: "Instant Prepaid Recharge", explanation: "The core recharge functionality. Acceptance criteria include instant credit, multi-payment support, and receipt delivery from the BRD." }
+          ]
+        },
+        {
+          requirement: "FR-TL-002: Plan Comparison & Selection",
+          identifiedFeatures: ["Plan listing", "Filtering", "Comparison", "Activation"],
+          userStories: [
+            { storyId: "TL-US-002", derivedFrom: "Plan Comparison", explanation: "Users want to compare plans before selecting. Story includes filter, compare, and one-click activation from requirements." }
+          ]
+        },
+        {
+          requirement: "FR-TL-003: Usage Dashboard",
+          identifiedFeatures: ["Balance display", "Usage charts", "Validity tracking"],
+          userStories: [
+            { storyId: "TL-US-003", derivedFrom: "Usage Dashboard", explanation: "Real-time usage visibility helps users manage their plans. Acceptance criteria from BRD include daily breakdown and countdown." }
+          ]
+        }
+      ]
+    },
     userStories: [
       {
         id: "TL-US-001",
@@ -1592,6 +2366,44 @@ public void testUsageDashboardAccuracy() {
     domainIcon: "🛡️",
     feature: "Policy Purchase & Claims",
     featureDescription: "End-to-end insurance policy purchase and claims management system",
+    requirementDocument: {
+      title: "Insurance Portal - Policy & Claims Module BRD",
+      version: "1.5",
+      date: "2024-01-25",
+      overview: "Requirements for an online insurance portal enabling customers to get quotes, purchase policies, and file claims digitally.",
+      businessObjectives: [
+        "Enable 100% digital policy purchase",
+        "Reduce claim processing time by 40%",
+        "Achieve 95% customer satisfaction in claims"
+      ],
+      functionalRequirements: [
+        { id: "FR-IN-001", title: "Get Insurance Quote", description: "Users get instant premium quotes based on their profile", priority: "Must Have", acceptanceCriteria: ["Select insurance type", "Enter basic details", "Instant premium calculation", "Save quote for later"] },
+        { id: "FR-IN-002", title: "Purchase Policy", description: "Complete policy purchase with KYC and payment", priority: "Must Have", acceptanceCriteria: ["KYC verification", "Document upload", "Payment processing", "Policy document generation"] },
+        { id: "FR-IN-003", title: "File Claim", description: "Submit and track insurance claims online", priority: "Must Have", acceptanceCriteria: ["Select claim type", "Upload documents", "Track status", "Receive notifications"] }
+      ],
+      nonFunctionalRequirements: ["Quote generation < 3 seconds", "99.9% uptime", "IRDAI compliance"],
+      constraints: ["Must integrate with underwriting system", "KYC as per IRDAI guidelines"],
+      assumptions: ["Actuarial tables are maintained", "Document verification service available"],
+      stakeholders: [
+        { role: "Product Manager", responsibility: "Define insurance product requirements" },
+        { role: "QA Team", responsibility: "Validate premium calculations and claims workflow" }
+      ]
+    },
+    workflowExplanation: {
+      introduction: "Insurance domain requires actuarial validation, compliance testing, and complex workflow verification. This shows how to test insurance-specific requirements.",
+      steps: [
+        { step: 1, title: "Requirement Analysis with Compliance", description: "Analyze requirements with IRDAI compliance focus", keyActivities: ["Review IRDAI guidelines", "Map actuarial requirements", "Identify KYC needs"], deliverables: ["Compliance checklist"], tips: ["Insurance has strict regulatory requirements"], example: "Quote calculation must use approved actuarial tables." },
+        { step: 2, title: "User Story with Actuarial Criteria", description: "Include premium calculation validation in acceptance criteria", keyActivities: ["Define calculation validation criteria", "Include compliance checks"], deliverables: ["Stories with actuarial validation"], tips: ["Premium calculations must be exact"], example: "Quote story: 'Premium matches actuarial table for age/coverage combination'" },
+        { step: 3, title: "Test Plan for Insurance Workflows", description: "Plan for complex claim workflows and document verification", keyActivities: ["Plan workflow testing", "Include document validation"], deliverables: ["Workflow test plan"], tips: ["Claims have multiple status transitions"], example: "Claims test plan covers: Submitted → Under Review → Approved → Settled" },
+        { step: 4, title: "Test Cases for Premium Accuracy", description: "Data-driven tests for premium calculations across demographics", keyActivities: ["Create actuarial test data", "Design boundary tests"], deliverables: ["Premium calculation test matrix"], tips: ["Use actuarial tables as test oracle"], example: "Test: Age 35, Non-smoker, $500K coverage = $650 premium (per actuarial table)" },
+        { step: 5, title: "Automation for Calculations", description: "Automate premium validation with data-driven approach", keyActivities: ["Implement data-driven premium tests", "Add document upload automation"], deliverables: ["Premium validation suite"], tips: ["API tests for calculations are faster"], example: "Data provider with 50+ age/coverage combinations validated against actuarial tables" },
+        { step: 6, title: "Regression for Compliance", description: "Include regulatory compliance in every regression", keyActivities: ["Add compliance checks to regression", "Verify document requirements"], deliverables: ["Compliance regression suite"], tips: ["Compliance tests are mandatory"], example: "Regression verifies: KYC mandatory, Premium accurate, Documents validated" }
+      ],
+      featureToStoryMapping: [
+        { requirement: "FR-IN-001: Get Insurance Quote", identifiedFeatures: ["Quote form", "Premium calculation", "Quote saving"], userStories: [{ storyId: "IN-US-001", derivedFrom: "Get Insurance Quote", explanation: "Quote feature enables users to get instant premiums. Acceptance criteria include calculation accuracy and quote persistence." }] },
+        { requirement: "FR-IN-003: File Claim", identifiedFeatures: ["Claim submission", "Document upload", "Status tracking"], userStories: [{ storyId: "IN-US-003", derivedFrom: "File Claim", explanation: "Claims workflow from submission to settlement. Includes document upload and status tracking requirements." }] }
+      ]
+    },
     userStories: [
       {
         id: "IN-US-001",
