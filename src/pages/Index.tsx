@@ -1228,6 +1228,451 @@ const Index = () => {
               </TabsContent>
             </Tabs>
           </TabsContent>
+
+          {/* STLC Agile Tab */}
+          <TabsContent value="stlc-agile" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <GitBranch className="w-5 h-5 text-primary" />
+                  STLC with Agile Methodology - Hands-on Training
+                </CardTitle>
+                <p className="text-muted-foreground">
+                  Complete software testing lifecycle using Agile methodology. Learn to decompose features into user stories, 
+                  create test plans, write test cases, analyze automation candidates, and build regression/smoke test suites.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {stlcAgileProjects.map((project, idx) => (
+                    <Button
+                      key={idx}
+                      variant={selectedStlcDomain === idx ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedStlcDomain(idx)}
+                      className="gap-2"
+                    >
+                      <span>{project.domainIcon}</span>
+                      {project.domain}
+                    </Button>
+                  ))}
+                </div>
+                <div className="bg-accent/10 rounded-lg p-4">
+                  <h3 className="font-semibold text-lg">{stlcAgileProjects[selectedStlcDomain]?.feature}</h3>
+                  <p className="text-sm text-muted-foreground">{stlcAgileProjects[selectedStlcDomain]?.featureDescription}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Tabs value={stlcTab} onValueChange={setStlcTab} className="space-y-4">
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="userstories" className="gap-1"><Users className="w-3 h-3" /> User Stories</TabsTrigger>
+                <TabsTrigger value="testplans" className="gap-1"><ClipboardList className="w-3 h-3" /> Test Plans</TabsTrigger>
+                <TabsTrigger value="testcases" className="gap-1"><FileCheck className="w-3 h-3" /> Test Cases</TabsTrigger>
+                <TabsTrigger value="automation" className="gap-1"><TestTube className="w-3 h-3" /> Automation</TabsTrigger>
+                <TabsTrigger value="sprint" className="gap-1"><PlayCircle className="w-3 h-3" /> Sprint Auto</TabsTrigger>
+                <TabsTrigger value="regression" className="gap-1"><Settings className="w-3 h-3" /> Regression</TabsTrigger>
+              </TabsList>
+
+              {/* User Stories */}
+              <TabsContent value="userstories" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    {stlcAgileProjects[selectedStlcDomain]?.userStories.map((story, idx) => (
+                      <Card key={idx} className="border-l-4 border-l-primary">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <Badge variant="outline" className="font-mono mb-2">{story.id}</Badge>
+                              <CardTitle className="text-lg">{story.title}</CardTitle>
+                            </div>
+                            <div className="flex gap-2">
+                              <Badge className={story.priority === "High" ? "bg-destructive" : story.priority === "Medium" ? "bg-warning text-warning-foreground" : "bg-secondary"}>
+                                {story.priority}
+                              </Badge>
+                              <Badge variant="outline">{story.storyPoints} SP</Badge>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-muted/50 p-3 rounded-lg space-y-1">
+                            <p className="text-sm"><span className="font-medium">As a</span> {story.asA}</p>
+                            <p className="text-sm"><span className="font-medium">I want</span> {story.iWant}</p>
+                            <p className="text-sm"><span className="font-medium">So that</span> {story.soThat}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2">Acceptance Criteria</h4>
+                            <ul className="space-y-1">
+                              {story.acceptanceCriteria.map((ac, i) => (
+                                <li key={i} className="flex items-center gap-2 text-sm">
+                                  <CheckCircle className="w-4 h-4 text-success shrink-0" />
+                                  {ac}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Test Plans */}
+              <TabsContent value="testplans" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    {stlcAgileProjects[selectedStlcDomain]?.testPlans.map((plan, idx) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="font-mono">{plan.userStoryId}</Badge>
+                            <CardTitle className="text-lg">Test Plan</CardTitle>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{plan.objective}</p>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="font-semibold text-sm mb-2">Scope</h4>
+                              <ul className="space-y-1">
+                                {plan.scope.map((s, i) => (
+                                  <li key={i} className="text-sm flex items-center gap-2">
+                                    <Target className="w-3 h-3 text-primary" /> {s}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-sm mb-2">Test Types</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {plan.testTypes.map((t, i) => (
+                                  <Badge key={i} variant="secondary" className="text-xs">{t}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="bg-muted/30 p-3 rounded-lg">
+                            <h4 className="font-semibold text-sm mb-1">Approach</h4>
+                            <p className="text-sm text-muted-foreground">{plan.approach}</p>
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div className="bg-success/10 p-3 rounded-lg">
+                              <h4 className="font-semibold text-sm mb-2">Entry Criteria</h4>
+                              <ul className="space-y-1">
+                                {plan.entryExitCriteria.entry.map((e, i) => (
+                                  <li key={i} className="text-xs flex items-center gap-1">
+                                    <ChevronRight className="w-3 h-3" /> {e}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className="bg-primary/10 p-3 rounded-lg">
+                              <h4 className="font-semibold text-sm mb-2">Exit Criteria</h4>
+                              <ul className="space-y-1">
+                                {plan.entryExitCriteria.exit.map((e, i) => (
+                                  <li key={i} className="text-xs flex items-center gap-1">
+                                    <ChevronRight className="w-3 h-3" /> {e}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2 flex items-center gap-1">
+                              <AlertTriangle className="w-4 h-4 text-warning" /> Risks
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {plan.risks.map((r, i) => (
+                                <Badge key={i} variant="outline" className="text-xs bg-warning/10">{r}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Manual Test Cases */}
+              <TabsContent value="testcases" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    {stlcAgileProjects[selectedStlcDomain]?.manualTestCases.map((tc, idx) => (
+                      <Collapsible key={idx}>
+                        <Card>
+                          <CollapsibleTrigger asChild>
+                            <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Badge variant="outline" className="font-mono text-xs">{tc.id}</Badge>
+                                    <Badge variant="outline" className="font-mono text-xs">{tc.userStoryId}</Badge>
+                                    <Badge className={tc.priority === "High" ? "bg-destructive" : tc.priority === "Medium" ? "bg-warning text-warning-foreground" : "bg-secondary"}>
+                                      {tc.priority}
+                                    </Badge>
+                                  </div>
+                                  <CardTitle className="text-base">{tc.title}</CardTitle>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {tc.automationCandidate ? (
+                                    <Badge className="bg-success">Automatable</Badge>
+                                  ) : (
+                                    <Badge variant="outline">Manual Only</Badge>
+                                  )}
+                                  <ChevronDown className="w-4 h-4" />
+                                </div>
+                              </div>
+                            </CardHeader>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <CardContent className="space-y-4 pt-0">
+                              <div>
+                                <h4 className="font-semibold text-sm mb-2">Preconditions</h4>
+                                <ul className="flex flex-wrap gap-2">
+                                  {tc.preconditions.map((p, i) => (
+                                    <Badge key={i} variant="secondary" className="text-xs">{p}</Badge>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-sm mb-2">Test Steps</h4>
+                                <div className="border rounded-lg overflow-hidden">
+                                  <table className="w-full text-sm">
+                                    <thead className="bg-muted">
+                                      <tr>
+                                        <th className="p-2 text-left w-12">#</th>
+                                        <th className="p-2 text-left">Step</th>
+                                        <th className="p-2 text-left">Expected Result</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {tc.steps.map((step, i) => (
+                                        <tr key={i} className="border-t">
+                                          <td className="p-2 font-mono">{i + 1}</td>
+                                          <td className="p-2">{step.step}</td>
+                                          <td className="p-2 text-success">{step.expectedResult}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <div className={`p-3 rounded-lg ${tc.automationCandidate ? 'bg-success/10' : 'bg-muted/50'}`}>
+                                <h4 className="font-semibold text-sm mb-1">
+                                  {tc.automationCandidate ? '✓ Automation Candidate' : '✗ Manual Only'}
+                                </h4>
+                                <p className="text-sm text-muted-foreground">{tc.automationReason}</p>
+                              </div>
+                            </CardContent>
+                          </CollapsibleContent>
+                        </Card>
+                      </Collapsible>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Automation Analysis */}
+              <TabsContent value="automation" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    {stlcAgileProjects[selectedStlcDomain]?.automationAnalysis.map((analysis, idx) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="font-mono">{analysis.userStoryId}</Badge>
+                              <CardTitle className="text-lg">Automation Analysis</CardTitle>
+                            </div>
+                            <Badge className="bg-primary">{analysis.automationPercentage}% Automatable</Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2">Recommended Tools</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {analysis.recommendedTools.map((tool, i) => (
+                                <Badge key={i} variant="secondary">{tool}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2">Test Case Analysis</h4>
+                            <div className="space-y-2">
+                              {analysis.testCases.map((tc, i) => (
+                                <div key={i} className={`p-3 rounded-lg border ${tc.automatable ? 'border-success/30 bg-success/5' : 'border-muted'}`}>
+                                  <div className="flex items-start justify-between mb-2">
+                                    <Badge variant="outline" className="font-mono text-xs">{tc.testCaseId}</Badge>
+                                    <div className="flex gap-2">
+                                      <Badge variant={tc.automatable ? "default" : "outline"} className={tc.automatable ? "bg-success" : ""}>
+                                        {tc.automatable ? "Automate" : "Manual"}
+                                      </Badge>
+                                      <Badge variant="outline" className="text-xs">ROI: {tc.roi}</Badge>
+                                      <Badge variant="outline" className="text-xs">Complexity: {tc.complexity}</Badge>
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-1">{tc.reason}</p>
+                                  <p className="text-xs"><span className="font-medium">Framework:</span> {tc.framework}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Sprint Automation */}
+              <TabsContent value="sprint" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    {stlcAgileProjects[selectedStlcDomain]?.sprintAutomation.map((sprint, idx) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg flex items-center gap-2">
+                              <PlayCircle className="w-5 h-5 text-primary" />
+                              Sprint {sprint.sprintNumber}
+                            </CardTitle>
+                            <div className="flex gap-2">
+                              <Badge variant="secondary">{sprint.metrics.automated}/{sprint.metrics.totalTests} Automated</Badge>
+                              <Badge className="bg-primary">{sprint.metrics.coverage}% Coverage</Badge>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2">Sprint Goals</h4>
+                            <ul className="grid md:grid-cols-2 gap-2">
+                              {sprint.goals.map((goal, i) => (
+                                <li key={i} className="flex items-center gap-2 text-sm">
+                                  <Target className="w-4 h-4 text-primary" /> {goal}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm mb-2">Automated Tests</h4>
+                            <div className="space-y-3">
+                              {sprint.automatedTests.map((test, i) => (
+                                <Collapsible key={i}>
+                                  <CollapsibleTrigger asChild>
+                                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors">
+                                      <div className="flex items-center gap-2">
+                                        <Code className="w-4 h-4 text-primary" />
+                                        <span className="font-medium text-sm">{test.testName}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        <Badge variant={test.type === "Smoke" ? "default" : test.type === "Regression" ? "secondary" : "outline"} className="text-xs">
+                                          {test.type}
+                                        </Badge>
+                                        <Badge variant="outline" className="text-xs">{test.framework}</Badge>
+                                        <ChevronDown className="w-4 h-4" />
+                                      </div>
+                                    </div>
+                                  </CollapsibleTrigger>
+                                  <CollapsibleContent>
+                                    <div className="mt-2">
+                                      <pre className="bg-background border border-border p-3 rounded text-xs overflow-x-auto"><code>{test.code}</code></pre>
+                                    </div>
+                                  </CollapsibleContent>
+                                </Collapsible>
+                              ))}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Regression/Smoke Tests */}
+              <TabsContent value="regression" className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Smoke Tests */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Zap className="w-5 h-5 text-warning" />
+                        Smoke Tests
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {stlcAgileProjects[selectedStlcDomain]?.smokeTests.executionStrategy}
+                      </p>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="bg-muted/50 p-3 rounded-lg">
+                        <h4 className="font-semibold text-sm mb-1">CI/CD Integration</h4>
+                        <p className="text-xs text-muted-foreground">{stlcAgileProjects[selectedStlcDomain]?.smokeTests.ciCdIntegration}</p>
+                      </div>
+                      <ScrollArea className="h-[300px]">
+                        <div className="space-y-2">
+                          {stlcAgileProjects[selectedStlcDomain]?.smokeTests.tests.map((test, i) => (
+                            <div key={i} className="p-3 border rounded-lg hover:shadow-soft transition-all">
+                              <div className="flex items-start justify-between mb-1">
+                                <Badge variant="outline" className="font-mono text-xs">{test.id}</Badge>
+                                <Badge className={test.priority === "P0" ? "bg-destructive" : test.priority === "P1" ? "bg-warning text-warning-foreground" : "bg-secondary"}>
+                                  {test.priority}
+                                </Badge>
+                              </div>
+                              <h4 className="font-medium text-sm">{test.name}</h4>
+                              <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                                <span>⏱ {test.estimatedTime}</span>
+                                <span>🔄 {test.frequency}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
+
+                  {/* Regression Tests */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Settings className="w-5 h-5 text-primary" />
+                        Regression Tests
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {stlcAgileProjects[selectedStlcDomain]?.regressionTests.executionStrategy}
+                      </p>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="bg-muted/50 p-3 rounded-lg">
+                        <h4 className="font-semibold text-sm mb-1">CI/CD Integration</h4>
+                        <p className="text-xs text-muted-foreground">{stlcAgileProjects[selectedStlcDomain]?.regressionTests.ciCdIntegration}</p>
+                      </div>
+                      <ScrollArea className="h-[300px]">
+                        <div className="space-y-2">
+                          {stlcAgileProjects[selectedStlcDomain]?.regressionTests.tests.map((test, i) => (
+                            <div key={i} className="p-3 border rounded-lg hover:shadow-soft transition-all">
+                              <div className="flex items-start justify-between mb-1">
+                                <Badge variant="outline" className="font-mono text-xs">{test.id}</Badge>
+                                <Badge className={test.priority === "P0" ? "bg-destructive" : test.priority === "P1" ? "bg-warning text-warning-foreground" : "bg-secondary"}>
+                                  {test.priority}
+                                </Badge>
+                              </div>
+                              <h4 className="font-medium text-sm">{test.name}</h4>
+                              <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                                <span>⏱ {test.estimatedTime}</span>
+                                <span>🔄 {test.frequency}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </TabsContent>
         </Tabs>
       </main>
     </div>
