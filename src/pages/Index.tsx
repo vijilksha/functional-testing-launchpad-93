@@ -1265,14 +1265,137 @@ const Index = () => {
             </Card>
 
             <Tabs value={stlcTab} onValueChange={setStlcTab} className="space-y-4">
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="userstories" className="gap-1"><Users className="w-3 h-3" /> User Stories</TabsTrigger>
-                <TabsTrigger value="testplans" className="gap-1"><ClipboardList className="w-3 h-3" /> Test Plans</TabsTrigger>
-                <TabsTrigger value="testcases" className="gap-1"><FileCheck className="w-3 h-3" /> Test Cases</TabsTrigger>
-                <TabsTrigger value="automation" className="gap-1"><TestTube className="w-3 h-3" /> Automation</TabsTrigger>
-                <TabsTrigger value="sprint" className="gap-1"><PlayCircle className="w-3 h-3" /> Sprint Auto</TabsTrigger>
-                <TabsTrigger value="regression" className="gap-1"><Settings className="w-3 h-3" /> Regression</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-8">
+                <TabsTrigger value="requirements" className="gap-1 text-xs"><FileText className="w-3 h-3" /> Requirements</TabsTrigger>
+                <TabsTrigger value="workflow" className="gap-1 text-xs"><Lightbulb className="w-3 h-3" /> Workflow</TabsTrigger>
+                <TabsTrigger value="userstories" className="gap-1 text-xs"><Users className="w-3 h-3" /> Stories</TabsTrigger>
+                <TabsTrigger value="testplans" className="gap-1 text-xs"><ClipboardList className="w-3 h-3" /> Plans</TabsTrigger>
+                <TabsTrigger value="testcases" className="gap-1 text-xs"><FileCheck className="w-3 h-3" /> Cases</TabsTrigger>
+                <TabsTrigger value="automation" className="gap-1 text-xs"><TestTube className="w-3 h-3" /> Auto</TabsTrigger>
+                <TabsTrigger value="sprint" className="gap-1 text-xs"><PlayCircle className="w-3 h-3" /> Sprint</TabsTrigger>
+                <TabsTrigger value="regression" className="gap-1 text-xs"><Settings className="w-3 h-3" /> Reg</TabsTrigger>
               </TabsList>
+
+              {/* Requirements Document */}
+              <TabsContent value="requirements" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg">{stlcAgileProjects[selectedStlcDomain]?.requirementDocument.title}</CardTitle>
+                          <Badge variant="outline">v{stlcAgileProjects[selectedStlcDomain]?.requirementDocument.version}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{stlcAgileProjects[selectedStlcDomain]?.requirementDocument.overview}</p>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        <div>
+                          <h4 className="font-semibold mb-2 flex items-center gap-2"><Target className="w-4 h-4 text-primary" /> Business Objectives</h4>
+                          <ul className="space-y-1">
+                            {stlcAgileProjects[selectedStlcDomain]?.requirementDocument.businessObjectives.map((obj, i) => (
+                              <li key={i} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-success" />{obj}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-3 flex items-center gap-2"><FileText className="w-4 h-4 text-primary" /> Functional Requirements</h4>
+                          <div className="space-y-3">
+                            {stlcAgileProjects[selectedStlcDomain]?.requirementDocument.functionalRequirements.map((req, i) => (
+                              <Card key={i} className="border-l-4 border-l-primary">
+                                <CardContent className="p-4">
+                                  <div className="flex items-start justify-between mb-2">
+                                    <div>
+                                      <Badge variant="outline" className="font-mono text-xs mb-1">{req.id}</Badge>
+                                      <h5 className="font-semibold">{req.title}</h5>
+                                    </div>
+                                    <Badge className={req.priority === "Must Have" ? "bg-destructive" : req.priority === "Should Have" ? "bg-warning text-warning-foreground" : "bg-secondary"}>{req.priority}</Badge>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-2">{req.description}</p>
+                                  <div>
+                                    <span className="text-xs font-medium">Acceptance Criteria:</span>
+                                    <ul className="mt-1 space-y-1">
+                                      {req.acceptanceCriteria.map((ac, j) => (
+                                        <li key={j} className="text-xs flex items-center gap-1"><ChevronRight className="w-3 h-3" />{ac}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="bg-muted/30 p-3 rounded-lg">
+                            <h4 className="font-semibold text-sm mb-2">Non-Functional Requirements</h4>
+                            <ul className="space-y-1">{stlcAgileProjects[selectedStlcDomain]?.requirementDocument.nonFunctionalRequirements.map((nfr, i) => <li key={i} className="text-xs flex items-center gap-1"><ChevronRight className="w-3 h-3" />{nfr}</li>)}</ul>
+                          </div>
+                          <div className="bg-warning/10 p-3 rounded-lg">
+                            <h4 className="font-semibold text-sm mb-2">Constraints</h4>
+                            <ul className="space-y-1">{stlcAgileProjects[selectedStlcDomain]?.requirementDocument.constraints.map((c, i) => <li key={i} className="text-xs flex items-center gap-1"><AlertTriangle className="w-3 h-3 text-warning" />{c}</li>)}</ul>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Workflow Explanation */}
+              <TabsContent value="workflow" className="space-y-4">
+                <ScrollArea className="h-[550px]">
+                  <div className="space-y-4">
+                    <Card className="bg-primary/5">
+                      <CardContent className="p-4">
+                        <p className="text-sm">{stlcAgileProjects[selectedStlcDomain]?.workflowExplanation.introduction}</p>
+                      </CardContent>
+                    </Card>
+                    {stlcAgileProjects[selectedStlcDomain]?.workflowExplanation.steps.map((step, idx) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">{step.step}</div>
+                            <CardTitle className="text-base">{step.title}</CardTitle>
+                          </div>
+                          <p className="text-sm text-muted-foreground ml-11">{step.description}</p>
+                        </CardHeader>
+                        <CardContent className="space-y-3 ml-11">
+                          <div>
+                            <h5 className="text-sm font-semibold mb-1">Key Activities</h5>
+                            <ul className="space-y-1">{step.keyActivities.map((a, i) => <li key={i} className="text-xs flex items-center gap-1"><CheckCircle className="w-3 h-3 text-success" />{a}</li>)}</ul>
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-3">
+                            <div className="bg-muted/30 p-2 rounded">
+                              <h5 className="text-xs font-semibold mb-1">Deliverables</h5>
+                              <ul>{step.deliverables.map((d, i) => <li key={i} className="text-xs">• {d}</li>)}</ul>
+                            </div>
+                            <div className="bg-primary/10 p-2 rounded">
+                              <h5 className="text-xs font-semibold mb-1">Tips</h5>
+                              <ul>{step.tips.map((t, i) => <li key={i} className="text-xs">💡 {t}</li>)}</ul>
+                            </div>
+                          </div>
+                          {step.example && <div className="bg-success/10 p-2 rounded text-xs"><strong>Example:</strong> {step.example}</div>}
+                        </CardContent>
+                      </Card>
+                    ))}
+                    <Card>
+                      <CardHeader><CardTitle className="text-lg">Requirement to User Story Mapping</CardTitle></CardHeader>
+                      <CardContent className="space-y-3">
+                        {stlcAgileProjects[selectedStlcDomain]?.workflowExplanation.featureToStoryMapping.map((mapping, idx) => (
+                          <div key={idx} className="border rounded-lg p-3">
+                            <Badge variant="outline" className="mb-2">{mapping.requirement}</Badge>
+                            <div className="flex flex-wrap gap-1 mb-2">{mapping.identifiedFeatures.map((f, i) => <Badge key={i} variant="secondary" className="text-xs">{f}</Badge>)}</div>
+                            {mapping.userStories.map((us, i) => (
+                              <div key={i} className="bg-muted/30 p-2 rounded text-sm">
+                                <span className="font-mono text-xs">{us.storyId}</span>: {us.explanation}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
 
               {/* User Stories */}
               <TabsContent value="userstories" className="space-y-4">
