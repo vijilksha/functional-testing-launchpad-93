@@ -1,6 +1,7 @@
 import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data/courseData";
 import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
+import { stlcAgileProjects } from "@/data/stlcAgileData";
 
 export const generateFullGuideMarkdown = (): string => {
   let content = `# Functional Testing Complete Guide
@@ -16,6 +17,7 @@ export const generateFullGuideMarkdown = (): string => {
 4. Test Strategy Guide
 5. Practice Projects (Requirements → Test Cases)
 6. AI-Based Testing Materials (Pack 6)
+7. STLC with Agile Methodology
 
 ---
 
@@ -437,8 +439,139 @@ export const generateFullGuideMarkdown = (): string => {
     content += "\n";
   });
 
+  // PART 7: STLC WITH AGILE METHODOLOGY
+  content += `# PART 7: STLC WITH AGILE METHODOLOGY\n\n`;
+  content += `*Complete software testing lifecycle using Agile methodology - from requirements to regression testing*\n\n`;
+
+  stlcAgileProjects.forEach((project, projectIndex) => {
+    content += `---\n\n## ${project.domainIcon} ${project.domain} Domain\n\n`;
+    content += `### Feature: ${project.feature}\n\n`;
+    content += `${project.featureDescription}\n\n`;
+
+    // User Stories
+    content += `### 7.${projectIndex + 1}.1 User Stories\n\n`;
+    project.userStories.forEach(story => {
+      content += `#### ${story.id}: ${story.title}\n\n`;
+      content += `- **Priority:** ${story.priority} | **Story Points:** ${story.storyPoints}\n\n`;
+      content += `**As a** ${story.asA}\n`;
+      content += `**I want** ${story.iWant}\n`;
+      content += `**So that** ${story.soThat}\n\n`;
+      content += `**Acceptance Criteria:**\n`;
+      story.acceptanceCriteria.forEach(ac => {
+        content += `- ✓ ${ac}\n`;
+      });
+      content += "\n";
+    });
+
+    // Test Plans
+    content += `### 7.${projectIndex + 1}.2 Test Plans\n\n`;
+    project.testPlans.forEach(plan => {
+      content += `#### Test Plan for ${plan.userStoryId}\n\n`;
+      content += `**Objective:** ${plan.objective}\n\n`;
+      content += `**Approach:** ${plan.approach}\n\n`;
+      content += `**Scope:**\n`;
+      plan.scope.forEach(s => {
+        content += `- ${s}\n`;
+      });
+      content += "\n";
+      content += `**Test Types:** ${plan.testTypes.join(", ")}\n\n`;
+      content += `**Entry Criteria:**\n`;
+      plan.entryExitCriteria.entry.forEach(e => {
+        content += `- ${e}\n`;
+      });
+      content += "\n";
+      content += `**Exit Criteria:**\n`;
+      plan.entryExitCriteria.exit.forEach(e => {
+        content += `- ${e}\n`;
+      });
+      content += "\n";
+      content += `**Risks:**\n`;
+      plan.risks.forEach(r => {
+        content += `- ⚠ ${r}\n`;
+      });
+      content += "\n";
+      content += `**Resources:** ${plan.resources.join(", ")}\n\n`;
+    });
+
+    // Manual Test Cases
+    content += `### 7.${projectIndex + 1}.3 Manual Test Cases\n\n`;
+    project.manualTestCases.forEach(tc => {
+      content += `#### ${tc.id}: ${tc.title}\n\n`;
+      content += `- **User Story:** ${tc.userStoryId}\n`;
+      content += `- **Priority:** ${tc.priority}\n`;
+      content += `- **Automation Candidate:** ${tc.automationCandidate ? "Yes" : "No"}\n\n`;
+      content += `**Preconditions:**\n`;
+      tc.preconditions.forEach(p => {
+        content += `- ${p}\n`;
+      });
+      content += "\n";
+      content += `**Test Steps:**\n\n`;
+      content += `| Step | Action | Expected Result |\n`;
+      content += `| --- | --- | --- |\n`;
+      tc.steps.forEach((step, i) => {
+        content += `| ${i + 1} | ${step.step} | ${step.expectedResult} |\n`;
+      });
+      content += "\n";
+      content += `**Automation Analysis:** ${tc.automationReason}\n\n`;
+    });
+
+    // Automation Analysis
+    content += `### 7.${projectIndex + 1}.4 Automation Analysis\n\n`;
+    project.automationAnalysis.forEach(analysis => {
+      content += `#### Analysis for ${analysis.userStoryId}\n\n`;
+      content += `**Automation Coverage:** ${analysis.automationPercentage}%\n\n`;
+      content += `**Recommended Tools:** ${analysis.recommendedTools.join(", ")}\n\n`;
+      content += `| Test Case | Automatable | Complexity | ROI | Framework | Reason |\n`;
+      content += `| --- | --- | --- | --- | --- | --- |\n`;
+      analysis.testCases.forEach(tc => {
+        content += `| ${tc.testCaseId} | ${tc.automatable ? "Yes" : "No"} | ${tc.complexity} | ${tc.roi} | ${tc.framework} | ${tc.reason} |\n`;
+      });
+      content += "\n";
+    });
+
+    // Sprint Automation
+    content += `### 7.${projectIndex + 1}.5 Sprint Automation\n\n`;
+    project.sprintAutomation.forEach(sprint => {
+      content += `#### Sprint ${sprint.sprintNumber}\n\n`;
+      content += `**Metrics:** ${sprint.metrics.automated}/${sprint.metrics.totalTests} tests automated (${sprint.metrics.coverage}% coverage)\n\n`;
+      content += `**Goals:**\n`;
+      sprint.goals.forEach(g => {
+        content += `- ${g}\n`;
+      });
+      content += "\n";
+      content += `**Automated Tests:**\n\n`;
+      sprint.automatedTests.forEach(test => {
+        content += `##### ${test.testName} (${test.type})\n\n`;
+        content += `**Framework:** ${test.framework}\n\n`;
+        content += `\`\`\`java\n${test.code}\n\`\`\`\n\n`;
+      });
+    });
+
+    // Smoke Tests
+    content += `### 7.${projectIndex + 1}.6 Smoke Tests\n\n`;
+    content += `**Execution Strategy:** ${project.smokeTests.executionStrategy}\n\n`;
+    content += `**CI/CD Integration:** ${project.smokeTests.ciCdIntegration}\n\n`;
+    content += `| ID | Test Name | Priority | Frequency | Est. Time |\n`;
+    content += `| --- | --- | --- | --- | --- |\n`;
+    project.smokeTests.tests.forEach(test => {
+      content += `| ${test.id} | ${test.name} | ${test.priority} | ${test.frequency} | ${test.estimatedTime} |\n`;
+    });
+    content += "\n";
+
+    // Regression Tests
+    content += `### 7.${projectIndex + 1}.7 Regression Tests\n\n`;
+    content += `**Execution Strategy:** ${project.regressionTests.executionStrategy}\n\n`;
+    content += `**CI/CD Integration:** ${project.regressionTests.ciCdIntegration}\n\n`;
+    content += `| ID | Test Name | Priority | Frequency | Est. Time |\n`;
+    content += `| --- | --- | --- | --- | --- |\n`;
+    project.regressionTests.tests.forEach(test => {
+      content += `| ${test.id} | ${test.name} | ${test.priority} | ${test.frequency} | ${test.estimatedTime} |\n`;
+    });
+    content += "\n";
+  });
+
   content += `\n---\n\n*Generated from Functional Testing Mastery Training Course*\n`;
-  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length}*\n`;
+  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length} | STLC Domains: ${stlcAgileProjects.length}*\n`;
 
   return content;
 };
