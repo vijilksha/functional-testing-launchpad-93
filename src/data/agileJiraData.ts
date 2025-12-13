@@ -1479,137 +1479,1077 @@ Day 1: 24 points | Day 5: 18 points | Day 10: 8 points
   }
 ];
 
-export const testingActivities: TestingActivity[] = [
+export interface DeliverableDetail {
+  name: string;
+  description: string;
+  purpose: string;
+  keyElements: string[];
+  sampleContent?: string;
+}
+
+export interface EnhancedTestingActivity {
+  activity: string;
+  description: string;
+  whatItIs: string;
+  whyItMatters: string;
+  deliverables: DeliverableDetail[];
+  bestPractices: string[];
+  domainExample: {
+    domain: string;
+    scenario: string;
+    sampleDeliverable: string;
+  };
+}
+
+export const enhancedTestingActivities: EnhancedTestingActivity[] = [
   {
     activity: "Requirement Analysis",
+    whatItIs: "Requirement Analysis is the process of examining user stories, acceptance criteria, and business requirements to understand what needs to be tested. Testers break down requirements into testable conditions and identify gaps or ambiguities.",
+    whyItMatters: "Without proper requirement analysis, testers may miss critical scenarios, leading to defects in production. It ensures complete test coverage and helps identify issues early when they are cheaper to fix.",
     description: "Review and understand user stories and acceptance criteria to identify testable requirements",
     deliverables: [
-      "Requirement Traceability Matrix (RTM)",
-      "Clarification questions document",
-      "Test scope document"
+      {
+        name: "Requirement Traceability Matrix (RTM)",
+        description: "A document that maps requirements to test cases, ensuring every requirement has corresponding tests",
+        purpose: "Track test coverage and ensure no requirement is left untested",
+        keyElements: ["Requirement ID", "Requirement Description", "Test Case ID", "Test Case Description", "Status", "Priority"],
+        sampleContent: `| Req ID | Requirement | Test Case ID | Test Case | Status |
+|--------|-------------|--------------|-----------|--------|
+| REQ-001 | User can add items to cart | TC-001, TC-002 | Add single item, Add multiple items | Covered |
+| REQ-002 | Cart shows updated total | TC-003 | Verify cart total updates | Covered |
+| REQ-003 | Guest user can checkout | TC-004, TC-005 | Guest checkout flow | Covered |`
+      },
+      {
+        name: "Clarification Questions Document",
+        description: "A list of questions raised during requirement review that need answers from stakeholders",
+        purpose: "Resolve ambiguities before testing begins to avoid rework",
+        keyElements: ["Question ID", "Question", "Asked To", "Date Asked", "Answer", "Impact on Testing"],
+        sampleContent: `| Q# | Question | Asked To | Answer |
+|----|----------|----------|--------|
+| Q1 | What is the max items allowed in cart? | Product Owner | 50 items |
+| Q2 | Can guest users save cart for later? | BA | No, only registered users |
+| Q3 | Is cart persistent across sessions? | Dev Lead | Yes, for 7 days |`
+      },
+      {
+        name: "Test Scope Document",
+        description: "Defines what will and will not be tested for a particular user story or sprint",
+        purpose: "Set clear boundaries and manage stakeholder expectations",
+        keyElements: ["In-Scope Features", "Out-of-Scope Features", "Assumptions", "Dependencies", "Risks"],
+        sampleContent: `IN SCOPE:
+- Add to cart functionality
+- Cart quantity updates
+- Remove from cart
+- Apply coupon codes
+
+OUT OF SCOPE:
+- Payment processing (separate story)
+- Wishlist feature (future sprint)
+
+ASSUMPTIONS:
+- Test environment will have product catalog loaded
+- Test users will be pre-created`
+      }
     ],
     bestPractices: [
-      "Participate in grooming sessions",
+      "Participate in grooming sessions actively",
       "Ask clarifying questions early",
       "Identify implicit requirements",
-      "Document assumptions"
+      "Document all assumptions",
+      "Review with BA and Dev before finalizing"
     ],
-    domainExample: "For E-commerce 'Add to Cart' story: Analyze what happens when item is out of stock, max quantity limits, guest vs registered user behavior, cart persistence rules"
+    domainExample: {
+      domain: "E-Commerce",
+      scenario: "Add to Cart Feature",
+      sampleDeliverable: `REQUIREMENT ANALYSIS - ADD TO CART
+
+User Story: As a customer, I want to add products to my cart so I can purchase them later.
+
+TESTABLE CONDITIONS IDENTIFIED:
+1. Add single item to empty cart
+2. Add same item multiple times (quantity increase)
+3. Add different items to cart
+4. Add item when cart is at max capacity (50 items)
+5. Add out-of-stock item (should show error)
+6. Add item as guest user
+7. Add item as logged-in user
+8. Cart persistence after logout/login
+9. Cart merge when guest logs in with existing cart
+
+EDGE CASES:
+- Item goes out of stock while in cart
+- Price changes while item in cart
+- Promotional item with purchase limit`
+    }
   },
   {
     activity: "Test Planning",
+    whatItIs: "Test Planning is the strategic phase where testers define the approach, scope, resources, timelines, and risks for testing a particular feature or sprint. It answers 'how will we test this?'",
+    whyItMatters: "A well-defined test plan ensures efficient use of time and resources, prevents last-minute surprises, and helps teams stay aligned on testing expectations.",
     description: "Define the testing approach, scope, resources, and schedule for the sprint",
     deliverables: [
-      "Sprint Test Plan",
-      "Test effort estimation",
-      "Resource allocation",
-      "Risk assessment"
+      {
+        name: "Sprint Test Plan",
+        description: "A document outlining what, how, when, and who will test features in the sprint",
+        purpose: "Provide a roadmap for testing activities during the sprint",
+        keyElements: ["Objectives", "Scope", "Test Approach", "Entry/Exit Criteria", "Schedule", "Resources", "Risks"],
+        sampleContent: `SPRINT TEST PLAN - Sprint 5
+
+OBJECTIVE: Validate Fund Transfer feature for Banking App
+
+SCOPE:
+- Same bank transfers
+- NEFT/RTGS transfers
+- Transfer limits validation
+- Transaction history updates
+
+TEST APPROACH:
+- Functional testing: 60%
+- Integration testing: 25%
+- Security testing: 15%
+
+ENTRY CRITERIA:
+- Dev complete & unit tested
+- Test environment available
+- Test data prepared
+
+EXIT CRITERIA:
+- All P1/P2 test cases passed
+- Zero critical defects open
+- 90% test case execution`
+      },
+      {
+        name: "Test Effort Estimation",
+        description: "Breakdown of time required for each testing activity",
+        purpose: "Plan sprint capacity and set realistic timelines",
+        keyElements: ["Activity", "Estimated Hours", "Resource", "Buffer Time"],
+        sampleContent: `| Activity | Est. Hours | Resource |
+|----------|------------|----------|
+| Test Case Writing | 8 hrs | Tester 1 |
+| Test Data Setup | 4 hrs | Tester 1 |
+| Functional Testing | 16 hrs | Tester 1, 2 |
+| Regression Testing | 8 hrs | Tester 2 |
+| Defect Retesting | 4 hrs | Tester 1 |
+| TOTAL | 40 hrs | - |`
+      },
+      {
+        name: "Risk Assessment",
+        description: "Identification and mitigation plan for potential testing risks",
+        purpose: "Proactively address issues that could impact testing success",
+        keyElements: ["Risk", "Probability", "Impact", "Mitigation Strategy"],
+        sampleContent: `| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Payment gateway unavailable | Medium | High | Use mock service |
+| Late code delivery | High | High | Start with API testing |
+| Test data corruption | Low | Medium | Daily backup of test DB |`
+      }
     ],
     bestPractices: [
-      "Plan for exploratory testing",
+      "Plan for exploratory testing time",
       "Consider test data setup time",
       "Identify environment needs early",
-      "Include regression time"
+      "Include regression time in estimates",
+      "Add buffer for defect retesting"
     ],
-    domainExample: "For Banking 'Fund Transfer' feature: Plan for security testing, performance testing for high-value transfers, integration testing with payment gateway"
+    domainExample: {
+      domain: "Banking",
+      scenario: "Fund Transfer Feature",
+      sampleDeliverable: `TEST PLAN - FUND TRANSFER MODULE
+
+1. INTRODUCTION
+   Feature: Inter-bank and intra-bank fund transfers
+   Sprint: Sprint 7
+   Test Lead: [Tester Name]
+
+2. TEST SCOPE
+   IN SCOPE:
+   - IMPS transfers (up to ₹2 lakhs)
+   - NEFT transfers
+   - RTGS transfers (min ₹2 lakhs)
+   - Beneficiary management
+   - Transaction limits
+   
+   OUT OF SCOPE:
+   - International transfers (future release)
+   - Scheduled transfers
+
+3. TEST APPROACH
+   - Positive scenarios: Valid transfers
+   - Negative scenarios: Invalid account, insufficient balance
+   - Boundary testing: Min/max limits
+   - Security: OTP validation, session timeout
+   - Integration: Core banking system
+
+4. TEST ENVIRONMENT
+   - UAT server with mock banking core
+   - Test accounts with various balance levels
+   - SMS gateway simulator
+
+5. SCHEDULE
+   - Day 1-2: Test case review
+   - Day 3-5: Execution
+   - Day 6: Defect retesting
+   - Day 7: Sign-off`
+    }
   },
   {
     activity: "Test Case Development",
+    whatItIs: "Test Case Development involves creating detailed, step-by-step instructions for testing each requirement. Each test case includes preconditions, test steps, test data, and expected results.",
+    whyItMatters: "Well-written test cases ensure consistent testing across team members and provide documentation that can be reused. They form the basis for both manual and automated testing.",
     description: "Create detailed test cases covering all acceptance criteria and scenarios",
     deliverables: [
-      "Test cases document",
-      "Test data requirements",
-      "Expected results documentation"
+      {
+        name: "Test Cases Document",
+        description: "Comprehensive collection of test cases for the feature being tested",
+        purpose: "Provide step-by-step instructions for executing tests",
+        keyElements: ["Test Case ID", "Title", "Preconditions", "Test Steps", "Test Data", "Expected Result", "Priority"],
+        sampleContent: `TEST CASE: TC-REQ-001
+Title: Verify successful mobile recharge
+Priority: P1 - Critical
+Preconditions: 
+- User is logged in
+- Wallet has sufficient balance
+
+Test Steps:
+1. Navigate to Recharge section
+2. Enter valid mobile number: 9876543210
+3. Select operator: Airtel
+4. Select recharge plan: ₹199 Unlimited
+5. Click 'Pay Now'
+6. Confirm transaction
+
+Expected Result:
+- Recharge successful message displayed
+- SMS confirmation received
+- Transaction appears in history
+- Wallet balance deducted by ₹199`
+      },
+      {
+        name: "Test Data Requirements",
+        description: "Specification of data needed to execute test cases",
+        purpose: "Ensure all necessary test data is prepared before execution",
+        keyElements: ["Data Type", "Sample Values", "Quantity Needed", "Source/Creation Method"],
+        sampleContent: `TEST DATA REQUIREMENTS
+
+| Data Type | Sample | Qty | Source |
+|-----------|--------|-----|--------|
+| Valid Mobile Numbers | 98765xxxxx | 10 | Generate |
+| Invalid Numbers | 12345 | 5 | Manual |
+| Prepaid Users | With active plan | 5 | Test DB |
+| Postpaid Users | With pending bill | 3 | Test DB |
+| Recharge Amounts | 10, 99, 199, 999 | 4 | Config |
+| Wallet Balance | 0, 100, 5000 | 3 | Setup |`
+      },
+      {
+        name: "Expected Results Documentation",
+        description: "Detailed description of expected system behavior for each scenario",
+        purpose: "Provide clear pass/fail criteria for test execution",
+        keyElements: ["Scenario", "Expected Behavior", "Validation Points"],
+        sampleContent: `EXPECTED RESULTS - MOBILE RECHARGE
+
+SCENARIO 1: Successful Recharge
+- Success message: "Recharge of ₹XXX successful"
+- SMS to user with transaction ID
+- Balance deducted immediately
+- History updated within 5 seconds
+
+SCENARIO 2: Insufficient Balance
+- Error: "Insufficient wallet balance"
+- Link to 'Add Money' displayed
+- Transaction not processed
+- No SMS sent
+
+SCENARIO 3: Invalid Number
+- Error: "Please enter valid 10-digit number"
+- Submit button disabled
+- No API call made`
+      }
     ],
     bestPractices: [
       "Cover positive and negative scenarios",
       "Include boundary conditions",
       "Write reusable test cases",
-      "Peer review test cases"
+      "Get peer review on test cases",
+      "Use clear, unambiguous language"
     ],
-    domainExample: "For Telecom 'Recharge' feature: Test cases for valid amounts, minimum/maximum limits, expired offers, concurrent recharges, payment failures"
+    domainExample: {
+      domain: "Telecom",
+      scenario: "Mobile Recharge Feature",
+      sampleDeliverable: `TEST CASES - MOBILE RECHARGE
+
+TC-001: Successful Prepaid Recharge
+Priority: P1
+Preconditions: Logged in user, wallet balance ₹500
+Steps:
+1. Click 'Recharge' from home
+2. Enter number: 9876543210
+3. System auto-detects Airtel
+4. Select ₹199 plan
+5. Click 'Proceed to Pay'
+6. Confirm payment
+Expected: Success message, SMS received, ₹199 deducted
+
+TC-002: Recharge with Insufficient Balance
+Priority: P1
+Preconditions: Logged in user, wallet balance ₹50
+Steps:
+1. Enter number: 9876543210
+2. Select ₹199 plan
+3. Click 'Proceed to Pay'
+Expected: "Insufficient balance" error, "Add Money" option shown
+
+TC-003: Invalid Mobile Number
+Priority: P2
+Preconditions: User on recharge page
+Steps:
+1. Enter number: 12345
+2. Tab out of field
+Expected: "Enter valid 10-digit mobile number" error
+
+TC-004: Recharge at Maximum Limit
+Priority: P2
+Preconditions: Daily limit ₹10,000, already recharged ₹9,900
+Steps:
+1. Attempt ₹199 recharge
+Expected: "Daily limit exceeded" message
+
+TC-005: Operator Auto-Detection
+Priority: P3
+Steps:
+1. Enter number: 9876543210 (Airtel)
+2. Observe operator field
+Expected: "Airtel" auto-selected with logo`
+    }
   },
   {
     activity: "Automation Feasibility",
+    whatItIs: "Automation Feasibility Analysis evaluates which test cases should be automated based on factors like ROI, test stability, execution frequency, and maintenance effort.",
+    whyItMatters: "Not all tests should be automated. This analysis helps prioritize automation efforts on tests that provide the most value, saving time and resources.",
     description: "Analyze which test cases are suitable for automation and prioritize them",
     deliverables: [
-      "Automation candidates list",
-      "ROI analysis",
-      "Automation approach document"
+      {
+        name: "Automation Candidates List",
+        description: "Prioritized list of test cases recommended for automation",
+        purpose: "Focus automation efforts on high-value tests",
+        keyElements: ["Test Case ID", "Automation Priority", "Complexity", "ROI Score", "Recommendation"],
+        sampleContent: `AUTOMATION CANDIDATES
+
+| TC ID | Test Case | Priority | Complexity | ROI | Recommend |
+|-------|-----------|----------|------------|-----|-----------|
+| TC-001 | Login validation | High | Low | 9/10 | Automate |
+| TC-015 | Calculate premium | High | Medium | 8/10 | Automate |
+| TC-023 | PDF policy download | Medium | High | 5/10 | Manual |
+| TC-007 | Form validations | High | Low | 9/10 | Automate |
+| TC-031 | Visual layout | Low | High | 2/10 | Manual |`
+      },
+      {
+        name: "ROI Analysis",
+        description: "Cost-benefit analysis of automating specific test cases",
+        purpose: "Justify automation investment with measurable benefits",
+        keyElements: ["Manual Effort", "Automation Effort", "Maintenance Cost", "Break-even Point", "Annual Savings"],
+        sampleContent: `ROI ANALYSIS - PREMIUM CALCULATOR
+
+MANUAL TESTING COST:
+- Time per execution: 2 hours
+- Executions per sprint: 4
+- Annual executions: 52
+- Hourly rate: ₹500
+- Annual cost: 52 × 2 × 500 = ₹52,000
+
+AUTOMATION COST:
+- Development: 16 hours = ₹8,000
+- Maintenance: 2 hrs/month = ₹12,000/year
+- Total first year: ₹20,000
+
+ROI: ₹32,000 saved annually (61% savings)
+Break-even: 4 months`
+      },
+      {
+        name: "Automation Approach Document",
+        description: "Technical approach for implementing test automation",
+        purpose: "Define tools, frameworks, and patterns for automation",
+        keyElements: ["Tool Selection", "Framework Design", "Coding Standards", "CI/CD Integration Plan"],
+        sampleContent: `AUTOMATION APPROACH
+
+TOOL STACK:
+- Language: Java
+- Framework: Selenium + TestNG
+- Build: Maven
+- Reporting: ExtentReports
+- CI: Jenkins
+
+DESIGN PATTERNS:
+- Page Object Model (POM)
+- Data-driven testing
+- Keyword-driven for complex flows
+
+FOLDER STRUCTURE:
+├── src/test/java
+│   ├── pages/
+│   ├── tests/
+│   ├── utils/
+│   └── data/
+├── testng.xml
+└── pom.xml`
+      }
     ],
     bestPractices: [
       "Prioritize smoke and regression tests",
-      "Consider test stability",
-      "Evaluate maintenance effort",
-      "Start with high-value tests"
+      "Consider test stability before automating",
+      "Evaluate ongoing maintenance effort",
+      "Start with high-value, low-complexity tests",
+      "Avoid automating one-time tests"
     ],
-    domainExample: "For Insurance 'Premium Calculator': Automate calculation scenarios with different inputs, compare results with expected premium tables"
+    domainExample: {
+      domain: "Insurance",
+      scenario: "Premium Calculator Feature",
+      sampleDeliverable: `AUTOMATION FEASIBILITY - INSURANCE PREMIUM CALCULATOR
+
+FEATURE: Calculate insurance premium based on user inputs
+
+TEST CASES ANALYSIS:
+
+✅ AUTOMATE (High Priority):
+1. TC-101: Basic premium calculation
+   - Runs every build
+   - Stable inputs/outputs
+   - Easy to validate
+
+2. TC-102: Age-based premium variation
+   - Data-driven: 20+ age combinations
+   - Manual execution tedious
+   - High regression value
+
+3. TC-103: Sum assured validation
+   - Boundary testing: 1L, 5L, 10L, 1Cr
+   - Repetitive calculations
+
+❌ DO NOT AUTOMATE:
+1. TC-110: UI layout verification
+   - Frequent UI changes
+   - Visual testing needed
+
+2. TC-115: Document upload
+   - Complex file handling
+   - Flaky in CI environment
+
+⚠️ AUTOMATE LATER:
+1. TC-120: Quote comparison
+   - Dependent on external APIs
+   - Wait for API stability
+
+RECOMMENDATION:
+Start with TC-101, 102, 103 in Sprint 1
+Add TC-104-109 in Sprint 2
+Total automation coverage: 65%`
+    }
   },
   {
     activity: "Sprint Automation",
+    whatItIs: "Sprint Automation is the development and execution of automated test scripts within the sprint. It involves writing code that simulates user actions and validates system behavior automatically.",
+    whyItMatters: "Automating tests within the sprint ensures that new features have automated regression coverage from day one, enabling faster feedback and more frequent releases.",
     description: "Develop and execute automated tests within the sprint",
     deliverables: [
-      "Automated test scripts",
-      "Test execution reports",
-      "Defect reports from automation"
+      {
+        name: "Automated Test Scripts",
+        description: "Executable code that performs tests automatically",
+        purpose: "Enable repeatable, fast test execution without manual effort",
+        keyElements: ["Page Objects", "Test Classes", "Test Data Files", "Configuration Files"],
+        sampleContent: `// LoginPage.java
+public class LoginPage {
+    @FindBy(id = "username")
+    private WebElement usernameField;
+    
+    @FindBy(id = "password")
+    private WebElement passwordField;
+    
+    @FindBy(id = "login-btn")
+    private WebElement loginButton;
+    
+    public void login(String user, String pass) {
+        usernameField.sendKeys(user);
+        passwordField.sendKeys(pass);
+        loginButton.click();
+    }
+}
+
+// LoginTest.java
+@Test
+public void testValidLogin() {
+    loginPage.login("testuser", "Pass@123");
+    Assert.assertTrue(homePage.isDisplayed());
+}`
+      },
+      {
+        name: "Test Execution Reports",
+        description: "Automated reports generated after test suite execution",
+        purpose: "Provide visibility into test results and trends",
+        keyElements: ["Total Tests", "Passed/Failed", "Execution Time", "Screenshots on Failure"],
+        sampleContent: `AUTOMATION EXECUTION REPORT
+Date: 2024-01-15
+Suite: Checkout Flow Regression
+
+SUMMARY:
+Total Tests: 45
+Passed: 42 (93.3%)
+Failed: 2 (4.4%)
+Skipped: 1 (2.2%)
+Duration: 12 min 34 sec
+
+FAILED TESTS:
+1. testPaymentTimeout
+   Error: Element not found: #confirm-btn
+   Screenshot: attached
+   
+2. testCouponExpired
+   Error: Expected discount 10%, Actual 0%
+   
+SKIPPED:
+1. testGiftCard - Feature not deployed`
+      },
+      {
+        name: "Defect Reports from Automation",
+        description: "Bugs discovered during automated test execution",
+        purpose: "Document issues found by automation for developer fix",
+        keyElements: ["Bug ID", "Test Case", "Error Message", "Steps to Reproduce", "Evidence"],
+        sampleContent: `DEFECT REPORT
+ID: BUG-2024-0156
+Source: Automated Test - testCartTotal
+Severity: High
+Priority: P1
+
+DESCRIPTION:
+Cart total calculation incorrect when coupon applied to items with existing discount.
+
+STEPS TO REPRODUCE:
+1. Add item with 20% discount (₹800 → ₹640)
+2. Apply coupon EXTRA10 (10% off)
+3. Observe total
+
+EXPECTED: ₹576 (10% off ₹640)
+ACTUAL: ₹520 (10% off original ₹800, then 20%)
+
+EVIDENCE:
+- Screenshot attached
+- API response log attached
+- Test execution log attached`
+      }
     ],
     bestPractices: [
-      "Follow page object pattern",
-      "Use data-driven approach",
-      "Integrate with CI/CD",
-      "Maintain test data separately"
+      "Follow Page Object Model pattern",
+      "Use data-driven testing approach",
+      "Integrate with CI/CD pipeline",
+      "Maintain test data separately",
+      "Add meaningful assertions and logging"
     ],
-    domainExample: "Automate E-commerce checkout flow: Add item, update quantity, apply coupon, complete payment - run on every build"
+    domainExample: {
+      domain: "E-Commerce",
+      scenario: "Checkout Flow Automation",
+      sampleDeliverable: `AUTOMATED TEST SCRIPT - CHECKOUT FLOW
+
+// CheckoutTest.java
+@Test(dataProvider = "checkoutData")
+public void testCompleteCheckout(String product, 
+    String qty, String coupon, String expectedTotal) {
+    
+    // Step 1: Add product to cart
+    productPage.searchProduct(product);
+    productPage.addToCart();
+    
+    // Step 2: Update quantity
+    cartPage.updateQuantity(qty);
+    
+    // Step 3: Apply coupon if provided
+    if (coupon != null) {
+        cartPage.applyCoupon(coupon);
+    }
+    
+    // Step 4: Proceed to checkout
+    cartPage.proceedToCheckout();
+    
+    // Step 5: Fill shipping details
+    checkoutPage.fillShippingAddress(TestData.getAddress());
+    
+    // Step 6: Select payment method
+    checkoutPage.selectPaymentMethod("COD");
+    
+    // Step 7: Verify total and place order
+    Assert.assertEquals(checkoutPage.getTotal(), expectedTotal);
+    checkoutPage.placeOrder();
+    
+    // Step 8: Verify order confirmation
+    Assert.assertTrue(confirmationPage.isOrderPlaced());
+    Assert.assertNotNull(confirmationPage.getOrderId());
+}
+
+@DataProvider
+public Object[][] checkoutData() {
+    return new Object[][] {
+        {"iPhone 15", "1", null, "₹79,999"},
+        {"iPhone 15", "2", "SAVE10", "₹1,43,998"},
+        {"AirPods", "1", "FIRST50", "₹12,450"}
+    };
+}`
+    }
   },
   {
     activity: "Regression & Smoke Testing",
+    whatItIs: "Smoke Testing verifies critical functionalities work after a new build (sanity check). Regression Testing ensures new changes haven't broken existing features. Both are essential quality gates.",
+    whyItMatters: "These tests catch integration issues early. Smoke tests prevent wasted effort on broken builds, while regression tests ensure system stability as features are added.",
     description: "Ensure new changes don't break existing functionality",
     deliverables: [
-      "Smoke test suite",
-      "Regression test suite",
-      "Execution summary"
+      {
+        name: "Smoke Test Suite",
+        description: "Minimal set of tests covering critical paths that must pass before detailed testing",
+        purpose: "Quick validation that build is stable enough for further testing",
+        keyElements: ["Critical User Journeys", "Core Features", "Fast Execution Time"],
+        sampleContent: `SMOKE TEST SUITE - BANKING APP
+
+Duration: ~15 minutes
+Frequency: Every build
+
+TEST CASES:
+✓ SM-001: User Login
+✓ SM-002: View Account Balance
+✓ SM-003: View Transaction History
+✓ SM-004: Quick Fund Transfer (same bank)
+✓ SM-005: Bill Payment
+✓ SM-006: User Logout
+
+PASS CRITERIA: All 6 tests must pass
+FAILURE ACTION: Reject build, notify dev team`
+      },
+      {
+        name: "Regression Test Suite",
+        description: "Comprehensive test suite covering all existing functionality",
+        purpose: "Ensure new changes don't break existing features",
+        keyElements: ["All Features", "All User Types", "Integration Points", "Historical Bug Areas"],
+        sampleContent: `REGRESSION TEST SUITE - BANKING APP
+
+Duration: ~4 hours
+Frequency: Before each release
+
+MODULES COVERED:
+1. Authentication (12 tests)
+2. Account Management (18 tests)
+3. Fund Transfer (25 tests)
+4. Bill Payments (15 tests)
+5. Cards Management (10 tests)
+6. Loans (8 tests)
+7. Support/Help (5 tests)
+
+TOTAL: 93 test cases
+AUTOMATION: 78 automated (84%)
+MANUAL: 15 (complex scenarios)
+
+PRIORITY EXECUTION:
+First: P1 tests (45) - 2 hours
+Then: P2 tests (35) - 1.5 hours
+Finally: P3 tests (13) - 0.5 hours`
+      },
+      {
+        name: "Execution Summary Report",
+        description: "Results summary after smoke/regression execution",
+        purpose: "Communicate test results to stakeholders for go/no-go decisions",
+        keyElements: ["Pass/Fail Summary", "Blockers Found", "Recommendation"],
+        sampleContent: `REGRESSION EXECUTION SUMMARY
+Release: v2.5.0
+Date: 2024-01-20
+
+RESULTS:
+Total Executed: 93
+Passed: 89 (95.7%)
+Failed: 3 (3.2%)
+Blocked: 1 (1.1%)
+
+FAILED TESTS:
+1. REG-045: NEFT transfer above 5L (P2)
+   - Timeout on confirmation screen
+2. REG-067: Credit card statement (P3)
+   - PDF not loading
+3. REG-078: Loan EMI calculator (P3)
+   - Rounding error in display
+
+BLOCKED:
+1. REG-082: UPI payment (P2)
+   - UPI service down for maintenance
+
+RECOMMENDATION: ✅ GO
+No P1 failures. P2 failures have workarounds.
+P3 failures are cosmetic, can fix post-release.`
+      }
     ],
     bestPractices: [
-      "Automate smoke tests",
-      "Run regression on stable builds",
-      "Prioritize critical paths",
-      "Update suite with new features"
+      "Automate smoke tests completely",
+      "Run regression on stable builds only",
+      "Prioritize critical path tests",
+      "Update suites when new features added",
+      "Track regression suite growth"
     ],
-    domainExample: "Banking app smoke suite: Login, View Balance, Quick Transfer, Logout - must pass before any deployment"
+    domainExample: {
+      domain: "Banking",
+      scenario: "Core Banking Regression",
+      sampleDeliverable: `SMOKE & REGRESSION STRATEGY - BANKING APP
+
+SMOKE TEST SUITE (Must pass before any testing):
+Duration: 15 min | Automated: 100%
+
+1. Login with valid credentials
+2. Dashboard loads with balance
+3. View recent transactions
+4. Initiate transfer (don't complete)
+5. Open settings
+6. Logout successfully
+
+RUN TRIGGER: Every deployment to test environment
+
+---
+
+REGRESSION TEST SUITE:
+Duration: 4 hours | Automated: 85%
+
+MODULE BREAKDOWN:
+┌─────────────────┬───────┬──────┐
+│ Module          │ Tests │ Auto │
+├─────────────────┼───────┼──────┤
+│ Login/Auth      │ 12    │ 12   │
+│ Dashboard       │ 8     │ 8    │
+│ Transfers       │ 25    │ 20   │
+│ Bill Pay        │ 15    │ 15   │
+│ Cards           │ 10    │ 8    │
+│ Statements      │ 8     │ 6    │
+│ Settings        │ 10    │ 10   │
+│ Security        │ 5     │ 0    │
+└─────────────────┴───────┴──────┘
+
+RUN SCHEDULE:
+- Nightly: Full regression
+- Pre-release: Full regression + manual security
+- Hotfix: Smoke + affected module only`
+    }
   },
   {
     activity: "Test Execution",
+    whatItIs: "Test Execution is the phase where testers run prepared test cases against the application, record actual results, compare with expected results, and log defects for any failures.",
+    whyItMatters: "This is where bugs are actually found. Proper execution with detailed documentation ensures issues are reproducible and fixable by developers.",
     description: "Execute planned test cases and document results",
     deliverables: [
-      "Test execution log",
-      "Defect reports",
-      "Test summary report"
+      {
+        name: "Test Execution Log",
+        description: "Detailed record of each test case execution with actual results",
+        purpose: "Track what was tested, when, and with what outcome",
+        keyElements: ["Test ID", "Execution Date", "Tester", "Status", "Actual Result", "Comments"],
+        sampleContent: `TEST EXECUTION LOG
+Sprint: 5 | Feature: Bill Payment
+Tester: [Name] | Environment: UAT
+
+| TC ID | Date | Status | Actual Result | Comments |
+|-------|------|--------|---------------|----------|
+| TC-201 | Jan 15 | PASS | Bill paid successfully | - |
+| TC-202 | Jan 15 | PASS | Receipt generated | PDF verified |
+| TC-203 | Jan 15 | FAIL | Timeout error | See BUG-156 |
+| TC-204 | Jan 15 | PASS | Schedule saved | - |
+| TC-205 | Jan 16 | PASS | Reminder sent | SMS received |
+| TC-206 | Jan 16 | BLOCKED | - | Dependent on TC-203 |`
+      },
+      {
+        name: "Defect Reports",
+        description: "Detailed bug reports for failed test cases",
+        purpose: "Provide developers with all information needed to fix issues",
+        keyElements: ["Bug ID", "Summary", "Steps to Reproduce", "Expected vs Actual", "Severity", "Priority", "Evidence"],
+        sampleContent: `DEFECT REPORT
+ID: BUG-2024-0156
+Title: Bill payment timeout for amounts > ₹50,000
+
+ENVIRONMENT: UAT | Browser: Chrome 120
+
+STEPS TO REPRODUCE:
+1. Login as testuser01
+2. Navigate to Bill Payments
+3. Select: Electricity - BESCOM
+4. Enter amount: ₹55,000
+5. Click 'Pay Now'
+6. Complete OTP verification
+
+EXPECTED RESULT:
+Payment processed, success message displayed
+
+ACTUAL RESULT:
+Spinner shows for 30 seconds, then
+"Request Timeout" error displayed
+
+SEVERITY: High
+PRIORITY: P1
+
+ATTACHMENTS:
+- Screenshot of error
+- Network console log
+- HAR file`
+      },
+      {
+        name: "Test Summary Report",
+        description: "Overall summary of test execution for stakeholders",
+        purpose: "Communicate testing progress and quality status",
+        keyElements: ["Execution Metrics", "Pass/Fail Analysis", "Defect Summary", "Risk Assessment", "Recommendation"],
+        sampleContent: `TEST SUMMARY REPORT
+Project: Bill Payment Module
+Sprint: 5 | Date: Jan 16, 2024
+
+EXECUTION SUMMARY:
+┌──────────────┬───────┐
+│ Total TCs    │ 45    │
+│ Executed     │ 42    │
+│ Passed       │ 38    │
+│ Failed       │ 3     │
+│ Blocked      │ 4     │
+└──────────────┴───────┘
+
+Pass Rate: 90.5%
+
+DEFECT SUMMARY:
+- Critical: 0
+- High: 1 (BUG-156)
+- Medium: 2
+- Low: 1
+
+RISK ASSESSMENT:
+High amount transactions timeout - P1 blocker
+
+RECOMMENDATION:
+Hold release until BUG-156 fixed.
+Medium/Low defects can go as known issues.`
+      }
     ],
     bestPractices: [
-      "Follow test case steps exactly",
-      "Document actual results",
-      "Capture evidence (screenshots/logs)",
-      "Re-test fixed defects"
+      "Follow test case steps exactly as written",
+      "Document actual results clearly",
+      "Capture evidence (screenshots, logs)",
+      "Re-test fixed defects promptly",
+      "Update test cases if steps are unclear"
     ],
-    domainExample: "Execute Telecom bill payment tests: Verify amount display, payment processing, SMS confirmation, receipt generation"
+    domainExample: {
+      domain: "Telecom",
+      scenario: "Bill Payment Execution",
+      sampleDeliverable: `TEST EXECUTION RECORD - TELECOM BILL PAYMENT
+
+SPRINT 5 - EXECUTION LOG
+Feature: Bill Payment for Postpaid Users
+Environment: UAT-2 | Date: Jan 15-16, 2024
+
+DAY 1 EXECUTION:
+┌────────┬─────────────────────────┬────────┬─────────────────┐
+│ TC ID  │ Test Case               │ Status │ Notes           │
+├────────┼─────────────────────────┼────────┼─────────────────┤
+│ BP-001 │ View outstanding bill   │ PASS   │ Displays ₹1,234 │
+│ BP-002 │ Pay full amount         │ PASS   │ Receipt #12345  │
+│ BP-003 │ Pay partial amount      │ PASS   │ Balance updated │
+│ BP-004 │ Pay via saved card      │ PASS   │ -               │
+│ BP-005 │ Pay via net banking     │ FAIL   │ BUG-157 logged  │
+│ BP-006 │ Pay via UPI             │ PASS   │ -               │
+│ BP-007 │ Schedule future payment │ PASS   │ Date validated  │
+│ BP-008 │ Cancel scheduled pay    │ PASS   │ -               │
+└────────┴─────────────────────────┴────────┴─────────────────┘
+
+DEFECT LOGGED:
+BUG-157: Net banking redirect fails for HDFC
+Severity: Medium | Assigned: Dev Team
+
+DAY 1 SUMMARY: 7/8 Passed (87.5%)
+
+DAY 2 EXECUTION:
+- Retested BP-005 after fix: PASS
+- Completed remaining 6 test cases
+- All PASS
+
+FINAL STATUS: 14/14 Passed (100%)`
+    }
   },
   {
     activity: "CI/CD Integration",
+    whatItIs: "CI/CD Integration involves connecting automated tests to the Continuous Integration/Continuous Deployment pipeline. Tests run automatically on code changes, providing immediate feedback.",
+    whyItMatters: "Automated tests in CI/CD catch bugs within minutes of code being committed, enabling faster releases with higher confidence. It shifts testing left in the development cycle.",
     description: "Integrate automated tests into the continuous integration pipeline",
     deliverables: [
-      "CI/CD configuration",
-      "Pipeline test reports",
-      "Quality gates defined"
+      {
+        name: "CI/CD Pipeline Configuration",
+        description: "Configuration files that define when and how tests run in the pipeline",
+        purpose: "Automate test execution on code changes",
+        keyElements: ["Pipeline Stages", "Test Triggers", "Environment Setup", "Parallel Execution"],
+        sampleContent: `# Jenkinsfile
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Unit Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('Smoke Tests') {
+            steps {
+                sh 'mvn verify -Dsuite=smoke'
+            }
+        }
+        
+        stage('Deploy to QA') {
+            when { branch 'develop' }
+            steps {
+                sh './deploy-qa.sh'
+            }
+        }
+        
+        stage('Regression Tests') {
+            when { branch 'main' }
+            steps {
+                sh 'mvn verify -Dsuite=regression'
+            }
+        }
+    }
+    
+    post {
+        always {
+            publishHTML(target: [
+                reportDir: 'target/reports',
+                reportFiles: 'index.html'
+            ])
+        }
+    }
+}`
+      },
+      {
+        name: "Pipeline Test Reports",
+        description: "Test results published as part of pipeline execution",
+        purpose: "Provide visibility into test results for each build",
+        keyElements: ["Build Number", "Test Results", "Duration", "Trend Analysis"],
+        sampleContent: `JENKINS BUILD REPORT
+Build: #245
+Branch: feature/payment-gateway
+Trigger: Pull Request
+
+STAGE RESULTS:
+┌─────────────────┬────────┬──────────┐
+│ Stage           │ Status │ Duration │
+├─────────────────┼────────┼──────────┤
+│ Build           │ ✓      │ 45s      │
+│ Unit Tests      │ ✓      │ 2m 15s   │
+│ Smoke Tests     │ ✓      │ 8m 30s   │
+│ API Tests       │ ✗      │ 5m 12s   │
+└─────────────────┴────────┴──────────┘
+
+OVERALL: FAILED
+
+FAILURE DETAILS:
+API Tests: 2 of 35 failed
+- testPaymentWebhook: Timeout
+- testRefundAPI: 500 error
+
+ACTION REQUIRED:
+Fix failing tests before merge`
+      },
+      {
+        name: "Quality Gates Definition",
+        description: "Rules that determine if a build passes or fails based on quality metrics",
+        purpose: "Enforce quality standards automatically",
+        keyElements: ["Pass Rate Threshold", "Code Coverage", "Critical Bug Count", "Performance Metrics"],
+        sampleContent: `QUALITY GATES CONFIGURATION
+
+GATE 1: Unit Test Gate
+- Minimum pass rate: 100%
+- Code coverage: > 80%
+- New code coverage: > 85%
+→ Blocks: Merge to develop
+
+GATE 2: Integration Test Gate
+- Minimum pass rate: 95%
+- No critical defects
+- API response time < 2s
+→ Blocks: Deploy to QA
+
+GATE 3: Regression Test Gate
+- Minimum pass rate: 98%
+- No P1/P2 defects
+- Performance within 10% baseline
+→ Blocks: Deploy to Production
+
+GATE 4: Security Gate
+- No high/critical vulnerabilities
+- OWASP top 10 scan pass
+- Dependency check pass
+→ Blocks: Production release`
+      }
     ],
     bestPractices: [
-      "Fail build on test failure",
+      "Fail build immediately on test failure",
       "Run smoke tests on every commit",
       "Run full regression nightly",
-      "Archive test reports"
+      "Archive test reports for each build",
+      "Set up notifications for failures"
     ],
-    domainExample: "Insurance portal: On every PR - run unit tests + API tests; On merge to main - run full regression; On release - run smoke + security tests"
+    domainExample: {
+      domain: "Insurance",
+      scenario: "Portal CI/CD Pipeline",
+      sampleDeliverable: `CI/CD PIPELINE - INSURANCE PORTAL
+
+PIPELINE OVERVIEW:
+┌──────────────────────────────────────────────────────────┐
+│  COMMIT → BUILD → UNIT → SMOKE → DEPLOY → REGRESSION   │
+└──────────────────────────────────────────────────────────┘
+
+STAGE CONFIGURATION:
+
+1. ON EVERY COMMIT:
+   - Compile code
+   - Run unit tests (target: 100% pass)
+   - Run static analysis (SonarQube)
+   Duration: ~5 minutes
+
+2. ON PULL REQUEST:
+   - All above +
+   - Run smoke tests (15 critical tests)
+   - Run API tests (50 tests)
+   Duration: ~20 minutes
+
+3. ON MERGE TO DEVELOP:
+   - Deploy to QA environment
+   - Run integration tests
+   - Run performance baseline
+   Duration: ~45 minutes
+
+4. ON MERGE TO MAIN:
+   - Deploy to Staging
+   - Run full regression (200 tests)
+   - Run security scan
+   - Generate release notes
+   Duration: ~2 hours
+
+5. ON RELEASE TAG:
+   - Deploy to Production
+   - Run production smoke
+   - Enable monitoring alerts
+   Duration: ~30 minutes
+
+NOTIFICATIONS:
+- Slack: #insurance-builds
+- Email: qa-team@company.com
+- PagerDuty: On production failure`
+    }
   }
 ];
+
+// Keep the original for backward compatibility
+export const testingActivities: TestingActivity[] = enhancedTestingActivities.map(activity => ({
+  activity: activity.activity,
+  description: activity.description,
+  deliverables: activity.deliverables.map(d => d.name),
+  bestPractices: activity.bestPractices,
+  domainExample: activity.domainExample.sampleDeliverable.substring(0, 150) + "..."
+}));
 
 export const interviewQuestions: InterviewQuestion[] = [
   {
