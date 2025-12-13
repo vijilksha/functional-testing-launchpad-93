@@ -4,6 +4,7 @@ import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { stlcAgileProjects, stlcDocumentation, automationDecisionMatrix } from "@/data/stlcAgileData";
 import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, enhancedTestingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
+import { interviewCategories, interviewTips } from "@/data/interviewPrepData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -91,7 +92,7 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="course" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl grid-cols-8 mx-auto">
+          <TabsList className="grid w-full max-w-6xl grid-cols-9 mx-auto">
             <TabsTrigger value="course">Course</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
             <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
@@ -100,6 +101,7 @@ const Index = () => {
             <TabsTrigger value="ai-testing">AI Testing</TabsTrigger>
             <TabsTrigger value="stlc-agile">STLC Agile</TabsTrigger>
             <TabsTrigger value="agile-jira">Agile & Jira</TabsTrigger>
+            <TabsTrigger value="interview-prep">Interview Prep</TabsTrigger>
           </TabsList>
 
           {/* Course Tab */}
@@ -2490,6 +2492,168 @@ const Index = () => {
                 </Card>
               </TabsContent>
             </Tabs>
+          </TabsContent>
+
+          {/* Interview Prep Tab */}
+          <TabsContent value="interview-prep" className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-2">Complete Interview Preparation Package</h2>
+              <p className="text-muted-foreground">All questions from all tabs with STLC Agile & Agile-Jira examples and sample documents</p>
+              <div className="flex justify-center gap-4 mt-4">
+                <Badge variant="secondary" className="text-sm">{interviewCategories.length} Categories</Badge>
+                <Badge variant="secondary" className="text-sm">{interviewCategories.reduce((acc, c) => acc + c.questions.length, 0)} Questions</Badge>
+              </div>
+            </div>
+
+            {/* Interview Tips Card */}
+            <Card className="border-primary/20 bg-primary/5">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-primary" />
+                  Interview Tips
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-primary">Before Interview</h4>
+                    <ul className="text-sm space-y-1">
+                      {interviewTips.preparation.map((tip, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-primary">During Interview</h4>
+                    <ul className="text-sm space-y-1">
+                      {interviewTips.during.map((tip, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-primary">Common Tips</h4>
+                    <ul className="text-sm space-y-1">
+                      {interviewTips.common.map((tip, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Question Categories */}
+            <div className="space-y-8">
+              {interviewCategories.map((category, catIdx) => (
+                <Card key={catIdx}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <span className="text-2xl">{category.icon}</span>
+                      {category.category}
+                      <Badge variant="outline">{category.questions.length} Questions</Badge>
+                    </CardTitle>
+                    <p className="text-muted-foreground">{category.description}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {category.questions.map((q, qIdx) => (
+                      <Collapsible key={qIdx}>
+                        <CollapsibleTrigger className="w-full">
+                          <div className="flex items-start gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-all text-left">
+                            <Badge variant={q.difficulty === "Beginner" ? "secondary" : q.difficulty === "Intermediate" ? "default" : "destructive"} className="shrink-0 mt-1">
+                              {q.difficulty}
+                            </Badge>
+                            <div className="flex-1">
+                              <h4 className="font-semibold">{q.question}</h4>
+                              <p className="text-sm text-muted-foreground mt-1">{q.shortAnswer}</p>
+                            </div>
+                            <ChevronDown className="w-5 h-5 text-muted-foreground shrink-0" />
+                          </div>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <div className="p-4 border border-t-0 rounded-b-lg bg-muted/30 space-y-4">
+                            {/* Detailed Answer */}
+                            <div>
+                              <h5 className="font-semibold text-primary mb-2">Detailed Answer:</h5>
+                              <pre className="text-sm whitespace-pre-wrap bg-background p-3 rounded border">{q.detailedAnswer}</pre>
+                            </div>
+
+                            {/* STLC Agile Example */}
+                            {q.stlcAgileExample && (
+                              <div className="border-l-4 border-blue-500 pl-4">
+                                <h5 className="font-semibold text-blue-600 mb-2 flex items-center gap-2">
+                                  <GitBranch className="w-4 h-4" />
+                                  STLC Agile Example:
+                                </h5>
+                                <p className="text-sm mb-2"><strong>Context:</strong> {q.stlcAgileExample.context}</p>
+                                <p className="text-sm mb-2"><strong>Real-World Scenario:</strong> {q.stlcAgileExample.realWorldScenario}</p>
+                                {q.stlcAgileExample.sampleDocument && (
+                                  <div>
+                                    <p className="text-sm font-medium mb-1">Sample Document:</p>
+                                    <pre className="text-xs bg-slate-900 text-green-400 p-3 rounded overflow-x-auto">{q.stlcAgileExample.sampleDocument}</pre>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Agile & Jira Example */}
+                            {q.agileJiraExample && (
+                              <div className="border-l-4 border-purple-500 pl-4">
+                                <h5 className="font-semibold text-purple-600 mb-2 flex items-center gap-2">
+                                  <Layout className="w-4 h-4" />
+                                  Agile & Jira Example:
+                                </h5>
+                                <p className="text-sm mb-2"><strong>Context:</strong> {q.agileJiraExample.context}</p>
+                                <p className="text-sm mb-2"><strong>Real-World Scenario:</strong> {q.agileJiraExample.realWorldScenario}</p>
+                                {q.agileJiraExample.sampleDocument && (
+                                  <div>
+                                    <p className="text-sm font-medium mb-1">Sample Document:</p>
+                                    <pre className="text-xs bg-slate-900 text-cyan-400 p-3 rounded overflow-x-auto">{q.agileJiraExample.sampleDocument}</pre>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Tips & Mistakes */}
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div className="bg-success/10 p-3 rounded">
+                                <h5 className="font-semibold text-success mb-2">💡 Tips:</h5>
+                                <ul className="text-sm space-y-1">
+                                  {q.tips.map((tip, i) => <li key={i}>• {tip}</li>)}
+                                </ul>
+                              </div>
+                              <div className="bg-destructive/10 p-3 rounded">
+                                <h5 className="font-semibold text-destructive mb-2">⚠️ Common Mistakes:</h5>
+                                <ul className="text-sm space-y-1">
+                                  {q.commonMistakes.map((m, i) => <li key={i}>• {m}</li>)}
+                                </ul>
+                              </div>
+                            </div>
+
+                            {/* Follow-up Questions */}
+                            <div className="bg-muted p-3 rounded">
+                              <h5 className="font-semibold mb-2">🔄 Follow-up Questions to Prepare:</h5>
+                              <ul className="text-sm space-y-1">
+                                {q.followUpQuestions.map((fq, i) => <li key={i}>• {fq}</li>)}
+                              </ul>
+                            </div>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </main>
