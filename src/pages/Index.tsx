@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb, GitBranch, Users, PlayCircle, Settings, Briefcase, Layout, HelpCircle, CheckSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { downloadGuide } from "@/utils/downloadGuide";
+import { downloadGuide, downloadInterviewPrepGuide } from "@/utils/downloadGuide";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Index = () => {
@@ -2503,6 +2503,10 @@ const Index = () => {
                 <Badge variant="secondary" className="text-sm">{interviewCategories.length} Categories</Badge>
                 <Badge variant="secondary" className="text-sm">{interviewCategories.reduce((acc, c) => acc + c.questions.length, 0)} Questions</Badge>
               </div>
+              <Button onClick={downloadInterviewPrepGuide} className="mt-4 gap-2" variant="outline">
+                <Download className="w-4 h-4" />
+                Download Interview Prep Guide
+              </Button>
             </div>
 
             {/* Interview Tips Card */}
