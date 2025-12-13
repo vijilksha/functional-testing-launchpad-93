@@ -2,6 +2,7 @@ import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data
 import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { stlcAgileProjects } from "@/data/stlcAgileData";
+import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, testingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
 
 export const generateFullGuideMarkdown = (): string => {
   let content = `# Functional Testing Complete Guide
@@ -18,6 +19,7 @@ export const generateFullGuideMarkdown = (): string => {
 5. Practice Projects (Requirements → Test Cases)
 6. AI-Based Testing Materials (Pack 6)
 7. STLC with Agile Methodology
+8. Agile & Jira Training Guide
 
 ---
 
@@ -570,8 +572,192 @@ export const generateFullGuideMarkdown = (): string => {
     content += "\n";
   });
 
+  // Part 8: Agile & Jira Training Guide
+  content += `\n---\n\n# PART 8: AGILE & JIRA TRAINING GUIDE\n\n`;
+
+  // Agile Basics
+  content += `## 8.1 Agile Methodology Fundamentals\n\n`;
+  content += `${agileBasics.description}\n\n`;
+
+  content += `### Scrum Roles\n\n`;
+  agileBasics.scrumRoles.forEach(role => {
+    content += `#### ${role.role}\n\n`;
+    content += `**Responsibilities:**\n`;
+    role.responsibilities.forEach(r => {
+      content += `- ${r}\n`;
+    });
+    content += `\n**Real-World Example:** ${role.realWorldExample}\n\n`;
+  });
+
+  content += `### Scrum Ceremonies\n\n`;
+  agileBasics.ceremonies.forEach(ceremony => {
+    content += `#### ${ceremony.name}\n\n`;
+    content += `- **Purpose:** ${ceremony.purpose}\n`;
+    content += `- **Duration:** ${ceremony.duration}\n`;
+    content += `- **Participants:** ${ceremony.participants.join(", ")}\n\n`;
+    content += `**Outcomes:**\n`;
+    ceremony.outcomes.forEach(o => {
+      content += `- ${o}\n`;
+    });
+    content += `\n**Tips:**\n`;
+    ceremony.tips.forEach(t => {
+      content += `- ${t}\n`;
+    });
+    content += "\n";
+  });
+
+  content += `### Scrum Artifacts\n\n`;
+  agileBasics.artifacts.forEach(artifact => {
+    content += `#### ${artifact.name}\n\n`;
+    content += `- **Owner:** ${artifact.owner}\n`;
+    content += `- **Description:** ${artifact.description}\n`;
+    content += `- **Example:** ${artifact.example}\n\n`;
+  });
+
+  // Jira Overview
+  content += `## 8.2 Jira Overview\n\n`;
+  content += `${jiraOverview.whatIsJira}\n\n`;
+
+  content += `### Why Companies Use Jira\n\n`;
+  jiraOverview.whyCompaniesUseIt.forEach(reason => {
+    content += `- ${reason}\n`;
+  });
+  content += "\n";
+
+  content += `### Jira Hierarchy\n\n`;
+  content += `| Level | Description | When to Use | Example |\n`;
+  content += `| --- | --- | --- | --- |\n`;
+  jiraOverview.hierarchy.forEach(level => {
+    content += `| ${level.level} | ${level.description} | ${level.whenToUse} | ${level.example} |\n`;
+  });
+  content += "\n";
+
+  content += `### Key Features\n\n`;
+  jiraOverview.keyFeatures.forEach(feature => {
+    content += `- ${feature}\n`;
+  });
+  content += "\n";
+
+  // Domain Requirements
+  content += `## 8.3 Domain Requirements & User Stories\n\n`;
+  domainRequirements.forEach(domain => {
+    content += `### ${domain.domain}: ${domain.projectName}\n\n`;
+    content += `**Business Context:** ${domain.businessContext}\n\n`;
+
+    content += `#### Functional Requirements\n\n`;
+    domain.functionalRequirements.forEach(req => {
+      content += `- ${req}\n`;
+    });
+    content += "\n";
+
+    content += `#### How to Identify Features (Step-by-Step)\n\n`;
+    domain.howToIdentifyFeatures.forEach(step => {
+      content += `**${step.step}**\n\n`;
+      content += `${step.explanation}\n\n`;
+      content += `*Example:* ${step.example}\n\n`;
+    });
+
+    content += `#### Epics & User Stories\n\n`;
+    domain.epics.forEach(epic => {
+      content += `##### Epic: ${epic.name}\n\n`;
+      content += `*${epic.description}*\n\n`;
+      content += `**Business Value:** ${epic.businessValue}\n\n`;
+
+      epic.userStories.forEach(story => {
+        content += `###### ${story.id}: ${story.title}\n\n`;
+        content += `**As a** ${story.asA}, **I want** ${story.iWant}, **so that** ${story.soThat}\n\n`;
+        content += `- **Priority:** ${story.priority}\n`;
+        content += `- **Story Points:** ${story.storyPoints}\n\n`;
+        content += `**Acceptance Criteria:**\n`;
+        story.acceptanceCriteria.forEach((ac, i) => {
+          content += `${i + 1}. ${ac}\n`;
+        });
+        content += "\n";
+      });
+    });
+  });
+
+  // Hands-On Phases
+  content += `## 8.4 Hands-On Instructions\n\n`;
+  handsOnPhases.forEach(phase => {
+    content += `### ${phase.phase}: ${phase.title}\n\n`;
+    content += `**Objective:** ${phase.objective}\n\n`;
+
+    phase.steps.forEach(step => {
+      content += `#### Step ${step.stepNumber}: ${step.action}\n\n`;
+      step.details.forEach(d => {
+        content += `- ${d}\n`;
+      });
+      content += `\n**Tips:**\n`;
+      step.tips.forEach(t => {
+        content += `- ${t}\n`;
+      });
+      content += "\n";
+    });
+
+    content += `**Expected Outcome:** ${phase.expectedOutcome}\n\n`;
+  });
+
+  // Agile Templates
+  content += `## 8.5 Agile Document Templates\n\n`;
+  agileTemplates.forEach(template => {
+    content += `### ${template.name}\n\n`;
+    content += `**Purpose:** ${template.purpose}\n\n`;
+
+    content += `**Sections:**\n\n`;
+    template.sections.forEach(section => {
+      content += `- **${section.sectionName}:** ${section.content}\n`;
+    });
+    content += "\n";
+
+    content += `**Example:**\n\n\`\`\`\n${template.example}\n\`\`\`\n\n`;
+  });
+
+  // Testing Activities
+  content += `## 8.6 Testing Activities in Agile Sprint\n\n`;
+  testingActivities.forEach(activity => {
+    content += `### ${activity.activity}\n\n`;
+    content += `${activity.description}\n\n`;
+
+    content += `**Deliverables:** ${activity.deliverables.join(", ")}\n\n`;
+
+    content += `**Best Practices:**\n`;
+    activity.bestPractices.forEach(bp => {
+      content += `- ${bp}\n`;
+    });
+    content += `\n**Domain Example:** ${activity.domainExample}\n\n`;
+  });
+
+  // Interview Questions
+  content += `## 8.7 Interview Questions\n\n`;
+  interviewQuestions.forEach(category => {
+    content += `### ${category.category}\n\n`;
+
+    category.questions.forEach((q, i) => {
+      content += `#### ${i + 1}. ${q.question}\n\n`;
+      content += `**Expected Answer:** ${q.expectedAnswer}\n\n`;
+      content += `**Follow-up Questions:**\n`;
+      q.followUpQuestions.forEach(fq => {
+        content += `- ${fq}\n`;
+      });
+      content += "\n";
+    });
+  });
+
+  // Trainee Checklists
+  content += `## 8.8 Trainee Checklist\n\n`;
+  traineeChecklists.forEach(category => {
+    content += `### ${category.category}\n\n`;
+    content += `| Task | Notes |\n`;
+    content += `| --- | --- |\n`;
+    category.items.forEach(item => {
+      content += `| ☐ ${item.task} | ${item.notes} |\n`;
+    });
+    content += "\n";
+  });
+
   content += `\n---\n\n*Generated from Functional Testing Mastery Training Course*\n`;
-  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length} | STLC Domains: ${stlcAgileProjects.length}*\n`;
+  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length} | STLC Domains: ${stlcAgileProjects.length} | Agile Domains: ${domainRequirements.length}*\n`;
 
   return content;
 };

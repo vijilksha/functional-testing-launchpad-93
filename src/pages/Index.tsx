@@ -3,13 +3,14 @@ import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data
 import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { stlcAgileProjects, stlcDocumentation, automationDecisionMatrix } from "@/data/stlcAgileData";
+import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, testingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb, GitBranch, Users, PlayCircle, Settings } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb, GitBranch, Users, PlayCircle, Settings, Briefcase, Layout, HelpCircle, CheckSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadGuide } from "@/utils/downloadGuide";
@@ -27,6 +28,10 @@ const Index = () => {
   const [selectedStlcDomain, setSelectedStlcDomain] = useState<number>(0);
   const [stlcTab, setStlcTab] = useState<string>("userstories");
   const [expandedStlcItems, setExpandedStlcItems] = useState<string[]>([]);
+  const [selectedAgileDomain, setSelectedAgileDomain] = useState<number>(0);
+  const [agileTab, setAgileTab] = useState<string>("basics");
+  const [expandedAgileItems, setExpandedAgileItems] = useState<string[]>([]);
+  const [completedChecklist, setCompletedChecklist] = useState<string[]>([]);
   const currentModule = modules.find(m => m.id === selectedModule);
   const currentLesson = currentModule?.lessons.find(l => l.id === selectedLesson);
 
@@ -86,7 +91,7 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="course" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl grid-cols-7 mx-auto">
+          <TabsList className="grid w-full max-w-5xl grid-cols-8 mx-auto">
             <TabsTrigger value="course">Course</TabsTrigger>
             <TabsTrigger value="testcases">Test Cases</TabsTrigger>
             <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
@@ -94,6 +99,7 @@ const Index = () => {
             <TabsTrigger value="practice">Practice</TabsTrigger>
             <TabsTrigger value="ai-testing">AI Testing</TabsTrigger>
             <TabsTrigger value="stlc-agile">STLC Agile</TabsTrigger>
+            <TabsTrigger value="agile-jira">Agile & Jira</TabsTrigger>
           </TabsList>
 
           {/* Course Tab */}
@@ -1793,8 +1799,610 @@ const Index = () => {
                     </CardContent>
                   </Card>
                 </div>
+          </TabsContent>
+
+          {/* Agile & Jira Tab */}
+          <TabsContent value="agile-jira" className="space-y-6">
+            <Tabs value={agileTab} onValueChange={setAgileTab} className="space-y-6">
+              <TabsList className="grid w-full max-w-4xl grid-cols-8 mx-auto">
+                <TabsTrigger value="basics">Basics</TabsTrigger>
+                <TabsTrigger value="jira">Jira</TabsTrigger>
+                <TabsTrigger value="requirements">Requirements</TabsTrigger>
+                <TabsTrigger value="handson">Hands-On</TabsTrigger>
+                <TabsTrigger value="templates">Templates</TabsTrigger>
+                <TabsTrigger value="testing">Testing</TabsTrigger>
+                <TabsTrigger value="interview">Interview</TabsTrigger>
+                <TabsTrigger value="checklist">Checklist</TabsTrigger>
+              </TabsList>
+
+              {/* Agile Basics */}
+              <TabsContent value="basics" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="w-5 h-5 text-primary" />
+                      {agileBasics.title}
+                    </CardTitle>
+                    <p className="text-muted-foreground">{agileBasics.description}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Scrum Roles */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Scrum Roles</h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        {agileBasics.scrumRoles.map((role, i) => (
+                          <Card key={i} className="border-l-4 border-l-primary">
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-base">{role.role}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-3">
+                              <ul className="space-y-1">
+                                {role.responsibilities.map((r, j) => (
+                                  <li key={j} className="text-sm flex items-start gap-2">
+                                    <CheckCircle className="w-3 h-3 mt-1 text-success shrink-0" />
+                                    {r}
+                                  </li>
+                                ))}
+                              </ul>
+                              <div className="bg-accent/10 p-2 rounded text-xs">
+                                <span className="font-medium">Example: </span>{role.realWorldExample}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Ceremonies */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Scrum Ceremonies</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {agileBasics.ceremonies.map((ceremony, i) => (
+                          <Collapsible key={i} open={expandedAgileItems.includes(`ceremony-${i}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`ceremony-${i}`) ? prev.filter(x => x !== `ceremony-${i}`) : [...prev, `ceremony-${i}`])}>
+                            <Card>
+                              <CollapsibleTrigger asChild>
+                                <CardHeader className="cursor-pointer hover:bg-muted/50">
+                                  <div className="flex items-center justify-between">
+                                    <CardTitle className="text-base">{ceremony.name}</CardTitle>
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline">{ceremony.duration}</Badge>
+                                      {expandedAgileItems.includes(`ceremony-${i}`) ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground">{ceremony.purpose}</p>
+                                </CardHeader>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <CardContent className="pt-0 space-y-3">
+                                  <div>
+                                    <h5 className="text-sm font-medium mb-1">Participants</h5>
+                                    <div className="flex flex-wrap gap-1">
+                                      {ceremony.participants.map((p, j) => (
+                                        <Badge key={j} variant="secondary" className="text-xs">{p}</Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h5 className="text-sm font-medium mb-1">Outcomes</h5>
+                                    <ul className="space-y-1">
+                                      {ceremony.outcomes.map((o, j) => (
+                                        <li key={j} className="text-xs flex items-center gap-1">
+                                          <CheckCircle className="w-3 h-3 text-success" />{o}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                  <div className="bg-warning/10 p-2 rounded">
+                                    <h5 className="text-sm font-medium mb-1">Tips</h5>
+                                    <ul className="space-y-1">
+                                      {ceremony.tips.map((t, j) => (
+                                        <li key={j} className="text-xs flex items-center gap-1">
+                                          <Lightbulb className="w-3 h-3 text-warning" />{t}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </CardContent>
+                              </CollapsibleContent>
+                            </Card>
+                          </Collapsible>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Artifacts */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Scrum Artifacts</h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        {agileBasics.artifacts.map((artifact, i) => (
+                          <Card key={i}>
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-base">{artifact.name}</CardTitle>
+                              <Badge variant="outline" className="w-fit">{artifact.owner}</Badge>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                              <p className="text-sm text-muted-foreground">{artifact.description}</p>
+                              <div className="bg-muted/50 p-2 rounded text-xs">
+                                <span className="font-medium">Example: </span>{artifact.example}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Jira Overview */}
+              <TabsContent value="jira" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Layout className="w-5 h-5 text-primary" />
+                      Jira Overview
+                    </CardTitle>
+                    <p className="text-muted-foreground">{jiraOverview.whatIsJira}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Why Companies Use Jira */}
+                    <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+                      <h3 className="font-semibold mb-3">Why Companies Use Jira</h3>
+                      <div className="grid md:grid-cols-2 gap-2">
+                        {jiraOverview.whyCompaniesUseIt.map((reason, i) => (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="w-4 h-4 text-success" />{reason}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Jira Hierarchy */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Jira Hierarchy: Epic → Story → Task → Sub-task</h3>
+                      <div className="space-y-3">
+                        {jiraOverview.hierarchy.map((level, i) => (
+                          <Card key={i} className={`border-l-4 ${i === 0 ? 'border-l-primary' : i === 1 ? 'border-l-success' : i === 2 ? 'border-l-warning' : i === 3 ? 'border-l-secondary' : 'border-l-destructive'}`}>
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between mb-2">
+                                <h4 className="font-semibold">{level.level}</h4>
+                                <Badge variant="outline">{level.whenToUse}</Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">{level.description}</p>
+                              <div className="bg-muted/50 p-2 rounded text-xs">
+                                <span className="font-medium">Example: </span>{level.example}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Key Features */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Key Features</h3>
+                      <div className="grid md:grid-cols-3 gap-2">
+                        {jiraOverview.keyFeatures.map((feature, i) => (
+                          <div key={i} className="flex items-center gap-2 p-2 bg-muted/50 rounded text-sm">
+                            <Zap className="w-4 h-4 text-primary" />{feature}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Domain Requirements */}
+              <TabsContent value="requirements" className="space-y-6">
+                <div className="flex gap-2 flex-wrap mb-4">
+                  {domainRequirements.map((domain, i) => (
+                    <Button key={i} variant={selectedAgileDomain === i ? "default" : "outline"} onClick={() => setSelectedAgileDomain(i)} className="gap-2">
+                      <Briefcase className="w-4 h-4" />
+                      {domain.domain}
+                    </Button>
+                  ))}
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{domainRequirements[selectedAgileDomain]?.projectName}</CardTitle>
+                    <p className="text-muted-foreground">{domainRequirements[selectedAgileDomain]?.businessContext}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Functional Requirements */}
+                    <div className="bg-muted/50 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-3">Functional Requirements</h3>
+                      <div className="grid md:grid-cols-2 gap-2">
+                        {domainRequirements[selectedAgileDomain]?.functionalRequirements.map((req, i) => (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="w-4 h-4 text-success" />{req}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* How to Identify Features */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                        <Lightbulb className="w-5 h-5 text-warning" />
+                        How to Identify Features (Step-by-Step)
+                      </h3>
+                      <div className="space-y-4">
+                        {domainRequirements[selectedAgileDomain]?.howToIdentifyFeatures.map((step, i) => (
+                          <Card key={i} className="border-l-4 border-l-primary">
+                            <CardContent className="p-4">
+                              <h4 className="font-semibold text-primary mb-2">{step.step}</h4>
+                              <p className="text-sm text-muted-foreground mb-3">{step.explanation}</p>
+                              <div className="bg-accent/10 p-3 rounded">
+                                <span className="font-medium text-sm">Example: </span>
+                                <span className="text-sm">{step.example}</span>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Epics and User Stories */}
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Epics & User Stories</h3>
+                      <ScrollArea className="h-[500px]">
+                        <div className="space-y-4">
+                          {domainRequirements[selectedAgileDomain]?.epics.map((epic, i) => (
+                            <Collapsible key={i} open={expandedAgileItems.includes(`epic-${i}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`epic-${i}`) ? prev.filter(x => x !== `epic-${i}`) : [...prev, `epic-${i}`])}>
+                              <Card>
+                                <CollapsibleTrigger asChild>
+                                  <CardHeader className="cursor-pointer hover:bg-muted/50">
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <CardTitle className="text-base flex items-center gap-2">
+                                          <Layers className="w-4 h-4 text-primary" />
+                                          Epic: {epic.name}
+                                        </CardTitle>
+                                        <p className="text-sm text-muted-foreground">{epic.description}</p>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        <Badge>{epic.userStories.length} Stories</Badge>
+                                        {expandedAgileItems.includes(`epic-${i}`) ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                      </div>
+                                    </div>
+                                  </CardHeader>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <CardContent className="pt-0 space-y-3">
+                                    <div className="bg-success/10 p-2 rounded text-sm">
+                                      <span className="font-medium">Business Value: </span>{epic.businessValue}
+                                    </div>
+                                    {epic.userStories.map((story, j) => (
+                                      <Card key={j} className="border-l-4 border-l-success">
+                                        <CardContent className="p-4 space-y-3">
+                                          <div className="flex items-start justify-between">
+                                            <div>
+                                              <Badge variant="outline" className="font-mono text-xs mb-2">{story.id}</Badge>
+                                              <h5 className="font-medium">{story.title}</h5>
+                                            </div>
+                                            <div className="flex gap-2">
+                                              <Badge className={story.priority === "High" ? "bg-destructive" : story.priority === "Medium" ? "bg-warning text-warning-foreground" : "bg-secondary"}>{story.priority}</Badge>
+                                              <Badge variant="outline">{story.storyPoints} pts</Badge>
+                                            </div>
+                                          </div>
+                                          <div className="bg-muted/50 p-3 rounded text-sm">
+                                            <p><strong>As a</strong> {story.asA},</p>
+                                            <p><strong>I want</strong> {story.iWant},</p>
+                                            <p><strong>So that</strong> {story.soThat}</p>
+                                          </div>
+                                          <div>
+                                            <h6 className="text-sm font-medium mb-2">Acceptance Criteria</h6>
+                                            <ul className="space-y-1">
+                                              {story.acceptanceCriteria.map((ac, k) => (
+                                                <li key={k} className="text-xs flex items-start gap-2">
+                                                  <CheckCircle className="w-3 h-3 mt-0.5 text-success shrink-0" />{ac}
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    ))}
+                                  </CardContent>
+                                </CollapsibleContent>
+                              </Card>
+                            </Collapsible>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Hands-On Phases */}
+              <TabsContent value="handson" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <PlayCircle className="w-5 h-5 text-primary" />
+                      Step-by-Step Hands-On Instructions
+                    </CardTitle>
+                    <p className="text-muted-foreground">Follow these phases to set up and work with Jira in an Agile environment</p>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[600px]">
+                      <div className="space-y-4">
+                        {handsOnPhases.map((phase, i) => (
+                          <Collapsible key={i} open={expandedAgileItems.includes(`phase-${i}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`phase-${i}`) ? prev.filter(x => x !== `phase-${i}`) : [...prev, `phase-${i}`])}>
+                            <Card className="border-l-4 border-l-primary">
+                              <CollapsibleTrigger asChild>
+                                <CardHeader className="cursor-pointer hover:bg-muted/50">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <Badge className="mb-2">{phase.phase}</Badge>
+                                      <CardTitle className="text-base">{phase.title}</CardTitle>
+                                      <p className="text-sm text-muted-foreground">{phase.objective}</p>
+                                    </div>
+                                    {expandedAgileItems.includes(`phase-${i}`) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                  </div>
+                                </CardHeader>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <CardContent className="pt-0 space-y-4">
+                                  {phase.steps.map((step, j) => (
+                                    <div key={j} className="border rounded-lg p-4">
+                                      <div className="flex items-center gap-3 mb-3">
+                                        <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
+                                          {step.stepNumber}
+                                        </div>
+                                        <h5 className="font-semibold">{step.action}</h5>
+                                      </div>
+                                      <ul className="space-y-1 mb-3">
+                                        {step.details.map((d, k) => (
+                                          <li key={k} className="text-sm flex items-start gap-2">
+                                            <ChevronRight className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />{d}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                      <div className="bg-warning/10 p-2 rounded">
+                                        <h6 className="text-xs font-medium mb-1 flex items-center gap-1">
+                                          <Lightbulb className="w-3 h-3 text-warning" /> Tips
+                                        </h6>
+                                        <ul className="space-y-1">
+                                          {step.tips.map((t, k) => (
+                                            <li key={k} className="text-xs">{t}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  ))}
+                                  <div className="bg-success/10 p-3 rounded border border-success/20">
+                                    <h5 className="text-sm font-medium flex items-center gap-2">
+                                      <CheckCircle className="w-4 h-4 text-success" />
+                                      Expected Outcome
+                                    </h5>
+                                    <p className="text-sm mt-1">{phase.expectedOutcome}</p>
+                                  </div>
+                                </CardContent>
+                              </CollapsibleContent>
+                            </Card>
+                          </Collapsible>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Templates */}
+              <TabsContent value="templates" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-primary" />
+                      Agile Document Templates
+                    </CardTitle>
+                    <p className="text-muted-foreground">Ready-to-use templates for Agile documentation</p>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[600px]">
+                      <div className="space-y-4">
+                        {agileTemplates.map((template, i) => (
+                          <Collapsible key={i} open={expandedAgileItems.includes(`template-${i}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`template-${i}`) ? prev.filter(x => x !== `template-${i}`) : [...prev, `template-${i}`])}>
+                            <Card>
+                              <CollapsibleTrigger asChild>
+                                <CardHeader className="cursor-pointer hover:bg-muted/50">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <CardTitle className="text-base">{template.name}</CardTitle>
+                                      <p className="text-sm text-muted-foreground">{template.purpose}</p>
+                                    </div>
+                                    {expandedAgileItems.includes(`template-${i}`) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                  </div>
+                                </CardHeader>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <CardContent className="pt-0 space-y-4">
+                                  <div>
+                                    <h5 className="font-medium mb-2">Template Sections</h5>
+                                    <div className="grid md:grid-cols-2 gap-2">
+                                      {template.sections.map((section, j) => (
+                                        <div key={j} className="p-2 border rounded text-sm">
+                                          <span className="font-medium">{section.sectionName}:</span> {section.content}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h5 className="font-medium mb-2">Example</h5>
+                                    <pre className="bg-muted p-4 rounded-lg text-xs overflow-x-auto whitespace-pre-wrap">{template.example}</pre>
+                                  </div>
+                                </CardContent>
+                              </CollapsibleContent>
+                            </Card>
+                          </Collapsible>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Testing Activities */}
+              <TabsContent value="testing" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TestTube className="w-5 h-5 text-primary" />
+                      Testing Activities in Agile Sprint
+                    </CardTitle>
+                    <p className="text-muted-foreground">All testing activities performed during a sprint</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {testingActivities.map((activity, i) => (
+                        <Card key={i} className="border-l-4 border-l-primary">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base">{activity.activity}</CardTitle>
+                            <p className="text-sm text-muted-foreground">{activity.description}</p>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <div>
+                              <h5 className="text-sm font-medium mb-1">Deliverables</h5>
+                              <div className="flex flex-wrap gap-1">
+                                {activity.deliverables.map((d, j) => (
+                                  <Badge key={j} variant="secondary" className="text-xs">{d}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                            <div>
+                              <h5 className="text-sm font-medium mb-1">Best Practices</h5>
+                              <ul className="space-y-1">
+                                {activity.bestPractices.map((bp, j) => (
+                                  <li key={j} className="text-xs flex items-center gap-1">
+                                    <CheckCircle className="w-3 h-3 text-success" />{bp}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className="bg-accent/10 p-2 rounded text-xs">
+                              <span className="font-medium">Domain Example: </span>{activity.domainExample}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Interview Questions */}
+              <TabsContent value="interview" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <HelpCircle className="w-5 h-5 text-primary" />
+                      Interview Questions
+                    </CardTitle>
+                    <p className="text-muted-foreground">Common interview questions with expected answers</p>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[600px]">
+                      <div className="space-y-6">
+                        {interviewQuestions.map((category, i) => (
+                          <div key={i}>
+                            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                              <Badge>{category.category}</Badge>
+                            </h3>
+                            <div className="space-y-3">
+                              {category.questions.map((q, j) => (
+                                <Collapsible key={j} open={expandedAgileItems.includes(`q-${i}-${j}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`q-${i}-${j}`) ? prev.filter(x => x !== `q-${i}-${j}`) : [...prev, `q-${i}-${j}`])}>
+                                  <Card>
+                                    <CollapsibleTrigger asChild>
+                                      <CardHeader className="cursor-pointer hover:bg-muted/50 py-3">
+                                        <div className="flex items-center justify-between">
+                                          <CardTitle className="text-sm font-medium">{j + 1}. {q.question}</CardTitle>
+                                          {expandedAgileItems.includes(`q-${i}-${j}`) ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                        </div>
+                                      </CardHeader>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent>
+                                      <CardContent className="pt-0 space-y-3">
+                                        <div className="bg-success/10 p-3 rounded border border-success/20">
+                                          <h5 className="text-sm font-medium mb-1">Expected Answer</h5>
+                                          <p className="text-sm">{q.expectedAnswer}</p>
+                                        </div>
+                                        <div>
+                                          <h5 className="text-sm font-medium mb-2">Follow-up Questions</h5>
+                                          <ul className="space-y-1">
+                                            {q.followUpQuestions.map((fq, k) => (
+                                              <li key={k} className="text-xs flex items-center gap-2">
+                                                <MessageSquare className="w-3 h-3 text-primary" />{fq}
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      </CardContent>
+                                    </CollapsibleContent>
+                                  </Card>
+                                </Collapsible>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Checklist */}
+              <TabsContent value="checklist" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <CheckSquare className="w-5 h-5 text-primary" />
+                      Trainee Checklist
+                    </CardTitle>
+                    <p className="text-muted-foreground">Track your progress through the Agile & Jira training</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Progress value={(completedChecklist.length / traineeChecklists.reduce((acc, c) => acc + c.items.length, 0)) * 100} className="flex-1 h-2" />
+                      <span className="text-sm font-medium">{completedChecklist.length}/{traineeChecklists.reduce((acc, c) => acc + c.items.length, 0)} completed</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      {traineeChecklists.map((category, i) => (
+                        <div key={i}>
+                          <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <Badge variant="outline">{category.category}</Badge>
+                          </h3>
+                          <div className="space-y-2">
+                            {category.items.map((item, j) => {
+                              const itemId = `${category.category}-${j}`;
+                              const isCompleted = completedChecklist.includes(itemId);
+                              return (
+                                <div key={j} className={`p-3 border rounded-lg cursor-pointer transition-all ${isCompleted ? 'bg-success/10 border-success/30' : 'hover:bg-muted/50'}`} onClick={() => setCompletedChecklist(prev => isCompleted ? prev.filter(x => x !== itemId) : [...prev, itemId])}>
+                                  <div className="flex items-start gap-3">
+                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 ${isCompleted ? 'bg-success border-success' : 'border-muted-foreground'}`}>
+                                      {isCompleted && <CheckCircle className="w-4 h-4 text-success-foreground" />}
+                                    </div>
+                                    <div>
+                                      <p className={`text-sm font-medium ${isCompleted ? 'line-through text-muted-foreground' : ''}`}>{item.task}</p>
+                                      <p className="text-xs text-muted-foreground">{item.notes}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
+          </TabsContent>
+        </Tabs>
           </TabsContent>
         </Tabs>
       </main>
