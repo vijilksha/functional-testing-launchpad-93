@@ -3,6 +3,7 @@ import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { stlcAgileProjects } from "@/data/stlcAgileData";
 import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, testingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
+import { interviewCategories } from "@/data/interviewPrepData";
 
 export const generateFullGuideMarkdown = (): string => {
   let content = `# Functional Testing Complete Guide
@@ -20,6 +21,7 @@ export const generateFullGuideMarkdown = (): string => {
 6. AI-Based Testing Materials (Pack 6)
 7. STLC with Agile Methodology
 8. Agile & Jira Training Guide
+9. Interview Preparation Package
 
 ---
 
@@ -756,10 +758,172 @@ export const generateFullGuideMarkdown = (): string => {
     content += "\n";
   });
 
+  // Part 9: Interview Preparation Package
+  content += `\n---\n\n# PART 9: INTERVIEW PREPARATION PACKAGE\n\n`;
+  content += `*Comprehensive interview questions with STLC Agile and Agile & Jira examples*\n\n`;
+
+  interviewCategories.forEach(category => {
+    content += `## ${category.icon} ${category.category}\n\n`;
+    content += `*${category.description}*\n\n`;
+
+    category.questions.forEach((q, i) => {
+      content += `### ${i + 1}. ${q.question}\n\n`;
+      content += `**Difficulty:** ${q.difficulty}\n\n`;
+      
+      content += `**Short Answer:**\n${q.shortAnswer}\n\n`;
+      content += `**Detailed Answer:**\n${q.detailedAnswer}\n\n`;
+      
+      // STLC Agile Example
+      if (q.stlcAgileExample) {
+        content += `#### 📊 STLC Agile Example\n\n`;
+        content += `**Context:** ${q.stlcAgileExample.context}\n\n`;
+        content += `**Real-World Scenario:** ${q.stlcAgileExample.realWorldScenario}\n\n`;
+        if (q.stlcAgileExample.sampleDocument) {
+          content += `**Sample Document:**\n\`\`\`\n${q.stlcAgileExample.sampleDocument}\n\`\`\`\n\n`;
+        }
+      }
+      
+      // Agile & Jira Example
+      if (q.agileJiraExample) {
+        content += `#### 📋 Agile & Jira Example\n\n`;
+        content += `**Context:** ${q.agileJiraExample.context}\n\n`;
+        content += `**Real-World Scenario:** ${q.agileJiraExample.realWorldScenario}\n\n`;
+        if (q.agileJiraExample.sampleDocument) {
+          content += `**Sample Document:**\n\`\`\`\n${q.agileJiraExample.sampleDocument}\n\`\`\`\n\n`;
+        }
+      }
+      
+      content += `**Interview Tips:**\n`;
+      q.tips.forEach(tip => {
+        content += `- ✓ ${tip}\n`;
+      });
+      content += "\n";
+      
+      content += `**Common Mistakes to Avoid:**\n`;
+      q.commonMistakes.forEach(mistake => {
+        content += `- ⚠ ${mistake}\n`;
+      });
+      content += "\n";
+      
+      content += `**Follow-up Questions:**\n`;
+      q.followUpQuestions.forEach(fq => {
+        content += `- ${fq}\n`;
+      });
+      content += "\n---\n\n";
+    });
+  });
+
+  const totalInterviewQuestions = interviewCategories.reduce((acc, cat) => acc + cat.questions.length, 0);
+
   content += `\n---\n\n*Generated from Functional Testing Mastery Training Course*\n`;
-  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length} | STLC Domains: ${stlcAgileProjects.length} | Agile Domains: ${domainRequirements.length}*\n`;
+  content += `*Total Modules: ${modules.length} | Total Lessons: ${modules.reduce((acc, m) => acc + m.lessons.length, 0)} | Total Test Cases: ${testCases.length} | Practice Projects: ${practiceProjects.length} | AI Tools: ${aiTestGenTools.length} | STLC Domains: ${stlcAgileProjects.length} | Agile Domains: ${domainRequirements.length} | Interview Questions: ${totalInterviewQuestions}*\n`;
 
   return content;
+};
+
+// Generate Interview Prep only markdown
+export const generateInterviewPrepMarkdown = (): string => {
+  let content = `# Interview Preparation Package
+## Functional Testing Training Course
+## Complete Interview Questions with Examples
+
+---
+
+# TABLE OF CONTENTS
+
+`;
+
+  interviewCategories.forEach((category, idx) => {
+    content += `${idx + 1}. ${category.category}\n`;
+  });
+  content += "\n---\n\n";
+
+  interviewCategories.forEach(category => {
+    content += `# ${category.icon} ${category.category}\n\n`;
+    content += `*${category.description}*\n\n`;
+
+    category.questions.forEach((q, i) => {
+      content += `## ${i + 1}. ${q.question}\n\n`;
+      content += `**ID:** ${q.id} | **Difficulty:** ${q.difficulty}\n\n`;
+      
+      content += `### Short Answer\n${q.shortAnswer}\n\n`;
+      content += `### Detailed Answer\n${q.detailedAnswer}\n\n`;
+      
+      // STLC Agile Example
+      if (q.stlcAgileExample) {
+        content += `### 📊 STLC Agile Example\n\n`;
+        content += `**Context:** ${q.stlcAgileExample.context}\n\n`;
+        content += `**Real-World Scenario:** ${q.stlcAgileExample.realWorldScenario}\n\n`;
+        if (q.stlcAgileExample.sampleDocument) {
+          content += `**Sample Document:**\n\`\`\`\n${q.stlcAgileExample.sampleDocument}\n\`\`\`\n\n`;
+        }
+      }
+      
+      // Agile & Jira Example
+      if (q.agileJiraExample) {
+        content += `### 📋 Agile & Jira Example\n\n`;
+        content += `**Context:** ${q.agileJiraExample.context}\n\n`;
+        content += `**Real-World Scenario:** ${q.agileJiraExample.realWorldScenario}\n\n`;
+        if (q.agileJiraExample.sampleDocument) {
+          content += `**Sample Document:**\n\`\`\`\n${q.agileJiraExample.sampleDocument}\n\`\`\`\n\n`;
+        }
+      }
+      
+      content += `### Interview Tips\n`;
+      q.tips.forEach(tip => {
+        content += `- ✓ ${tip}\n`;
+      });
+      content += "\n";
+      
+      content += `### Common Mistakes to Avoid\n`;
+      q.commonMistakes.forEach(mistake => {
+        content += `- ⚠ ${mistake}\n`;
+      });
+      content += "\n";
+      
+      content += `### Follow-up Questions\n`;
+      q.followUpQuestions.forEach(fq => {
+        content += `- ${fq}\n`;
+      });
+      content += "\n---\n\n";
+    });
+  });
+
+  const totalQuestions = interviewCategories.reduce((acc, cat) => acc + cat.questions.length, 0);
+  content += `\n---\n\n*Interview Preparation Package - Functional Testing Training Course*\n`;
+  content += `*Total Categories: ${interviewCategories.length} | Total Questions: ${totalQuestions}*\n`;
+
+  return content;
+};
+
+// Download Interview Prep only guide
+export const downloadInterviewPrepGuide = () => {
+  try {
+    const content = generateInterviewPrepMarkdown();
+    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Interview_Prep_Complete_Guide.md";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 100);
+  } catch (error) {
+    console.error("Download failed:", error);
+    // Fallback method
+    const content = generateInterviewPrepMarkdown();
+    const dataUri = "data:text/markdown;charset=utf-8," + encodeURIComponent(content);
+    const link = document.createElement("a");
+    link.href = dataUri;
+    link.download = "Interview_Prep_Complete_Guide.md";
+    link.click();
+  }
 };
 
 export const downloadGuide = () => {
