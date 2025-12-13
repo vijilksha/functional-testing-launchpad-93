@@ -3,7 +3,7 @@ import { modules, testCases, testScenarioGuide, testStrategyGuide } from "@/data
 import { practiceProjects } from "@/data/practiceData";
 import { aiTestGenTools, toolComparisonTable, promptsGuide, aiAutomationExamples, aiBugDetectionGuide } from "@/data/aiTestingData";
 import { stlcAgileProjects, stlcDocumentation, automationDecisionMatrix } from "@/data/stlcAgileData";
-import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, testingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
+import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, enhancedTestingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -2256,42 +2256,129 @@ const Index = () => {
                       <TestTube className="w-5 h-5 text-primary" />
                       Testing Activities in Agile Sprint
                     </CardTitle>
-                    <p className="text-muted-foreground">All testing activities performed during a sprint</p>
+                    <p className="text-muted-foreground">Comprehensive guide to all testing activities with detailed deliverables and examples</p>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {testingActivities.map((activity, i) => (
-                        <Card key={i} className="border-l-4 border-l-primary">
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-base">{activity.activity}</CardTitle>
-                            <p className="text-sm text-muted-foreground">{activity.description}</p>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                            <div>
-                              <h5 className="text-sm font-medium mb-1">Deliverables</h5>
-                              <div className="flex flex-wrap gap-1">
-                                {activity.deliverables.map((d, j) => (
-                                  <Badge key={j} variant="secondary" className="text-xs">{d}</Badge>
-                                ))}
-                              </div>
-                            </div>
-                            <div>
-                              <h5 className="text-sm font-medium mb-1">Best Practices</h5>
-                              <ul className="space-y-1">
-                                {activity.bestPractices.map((bp, j) => (
-                                  <li key={j} className="text-xs flex items-center gap-1">
-                                    <CheckCircle className="w-3 h-3 text-success" />{bp}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div className="bg-accent/10 p-2 rounded text-xs">
-                              <span className="font-medium">Domain Example: </span>{activity.domainExample}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
+                    <ScrollArea className="h-[700px]">
+                      <div className="space-y-6">
+                        {enhancedTestingActivities.map((activity, i) => (
+                          <Collapsible key={i} open={expandedAgileItems.includes(`activity-${i}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`activity-${i}`) ? prev.filter(x => x !== `activity-${i}`) : [...prev, `activity-${i}`])}>
+                            <Card className="border-l-4 border-l-primary">
+                              <CollapsibleTrigger asChild>
+                                <CardHeader className="cursor-pointer hover:bg-muted/50">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <CardTitle className="text-lg flex items-center gap-2">
+                                        <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded text-sm">{i + 1}</span>
+                                        {activity.activity}
+                                      </CardTitle>
+                                      <p className="text-sm text-muted-foreground mt-1">{activity.description}</p>
+                                    </div>
+                                    {expandedAgileItems.includes(`activity-${i}`) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                  </div>
+                                </CardHeader>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <CardContent className="space-y-6">
+                                  {/* What It Is & Why It Matters */}
+                                  <div className="grid md:grid-cols-2 gap-4">
+                                    <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                                      <h5 className="font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
+                                        <HelpCircle className="w-4 h-4" /> What Is It?
+                                      </h5>
+                                      <p className="text-sm">{activity.whatItIs}</p>
+                                    </div>
+                                    <div className="bg-green-50 dark:bg-green-950/30 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                                      <h5 className="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-2">
+                                        <Target className="w-4 h-4" /> Why It Matters
+                                      </h5>
+                                      <p className="text-sm">{activity.whyItMatters}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Deliverables Section */}
+                                  <div>
+                                    <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                                      <FileText className="w-5 h-5 text-primary" />
+                                      Deliverables ({activity.deliverables.length})
+                                    </h4>
+                                    <div className="space-y-4">
+                                      {activity.deliverables.map((deliverable, j) => (
+                                        <Collapsible key={j} open={expandedAgileItems.includes(`del-${i}-${j}`)} onOpenChange={() => setExpandedAgileItems(prev => prev.includes(`del-${i}-${j}`) ? prev.filter(x => x !== `del-${i}-${j}`) : [...prev, `del-${i}-${j}`])}>
+                                          <Card className="bg-muted/30">
+                                            <CollapsibleTrigger asChild>
+                                              <CardHeader className="cursor-pointer hover:bg-muted/50 py-3">
+                                                <div className="flex items-center justify-between">
+                                                  <div className="flex items-center gap-3">
+                                                    <Badge variant="outline">{j + 1}</Badge>
+                                                    <div>
+                                                      <h5 className="font-medium">{deliverable.name}</h5>
+                                                      <p className="text-sm text-muted-foreground">{deliverable.description}</p>
+                                                    </div>
+                                                  </div>
+                                                  {expandedAgileItems.includes(`del-${i}-${j}`) ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                                </div>
+                                              </CardHeader>
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent>
+                                              <CardContent className="pt-0 space-y-4">
+                                                <div className="bg-primary/5 p-3 rounded border">
+                                                  <h6 className="text-sm font-medium mb-1">Purpose</h6>
+                                                  <p className="text-sm">{deliverable.purpose}</p>
+                                                </div>
+                                                <div>
+                                                  <h6 className="text-sm font-medium mb-2">Key Elements</h6>
+                                                  <div className="flex flex-wrap gap-2">
+                                                    {deliverable.keyElements.map((element, k) => (
+                                                      <Badge key={k} variant="secondary" className="text-xs">{element}</Badge>
+                                                    ))}
+                                                  </div>
+                                                </div>
+                                                {deliverable.sampleContent && (
+                                                  <div>
+                                                    <h6 className="text-sm font-medium mb-2">Sample Content</h6>
+                                                    <pre className="bg-background p-4 rounded-lg border text-xs overflow-x-auto whitespace-pre-wrap font-mono">{deliverable.sampleContent}</pre>
+                                                  </div>
+                                                )}
+                                              </CardContent>
+                                            </CollapsibleContent>
+                                          </Card>
+                                        </Collapsible>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Best Practices */}
+                                  <div>
+                                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                                      <CheckCircle className="w-5 h-5 text-success" />
+                                      Best Practices
+                                    </h4>
+                                    <div className="grid md:grid-cols-2 gap-2">
+                                      {activity.bestPractices.map((bp, j) => (
+                                        <div key={j} className="flex items-center gap-2 p-2 bg-success/10 rounded text-sm">
+                                          <CheckCircle className="w-4 h-4 text-success shrink-0" />
+                                          {bp}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Domain Example */}
+                                  <div className="bg-accent/10 p-4 rounded-lg border border-accent/20">
+                                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                                      <BookOpen className="w-5 h-5 text-accent-foreground" />
+                                      Real-World Example: {activity.domainExample.domain} - {activity.domainExample.scenario}
+                                    </h4>
+                                    <pre className="bg-background p-4 rounded-lg text-xs overflow-x-auto whitespace-pre-wrap font-mono border">{activity.domainExample.sampleDeliverable}</pre>
+                                  </div>
+                                </CardContent>
+                              </CollapsibleContent>
+                            </Card>
+                          </Collapsible>
+                        ))}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               </TabsContent>
