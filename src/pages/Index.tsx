@@ -1799,6 +1799,8 @@ const Index = () => {
                     </CardContent>
                   </Card>
                 </div>
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
           {/* Agile & Jira Tab */}
@@ -2401,8 +2403,6 @@ const Index = () => {
                 </Card>
               </TabsContent>
             </Tabs>
-          </TabsContent>
-        </Tabs>
           </TabsContent>
         </Tabs>
       </main>
