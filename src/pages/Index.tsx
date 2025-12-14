@@ -11,10 +11,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb, GitBranch, Users, PlayCircle, Settings, Briefcase, Layout, HelpCircle, CheckSquare } from "lucide-react";
+import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTriangle, FileText, Target, Shield, ChevronDown, ChevronUp, ClipboardList, Layers, FileCheck, TestTube, Bot, Cpu, Zap, Bug, Code, MessageSquare, Lightbulb, GitBranch, Users, PlayCircle, Settings, Briefcase, Layout, HelpCircle, CheckSquare, Presentation } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadGuide, downloadInterviewPrepGuide } from "@/utils/downloadGuide";
+import { downloadInterviewPrepPPT, downloadAgileJiraPPT } from "@/utils/pptDownload";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Index = () => {
@@ -1807,6 +1808,18 @@ const Index = () => {
 
           {/* Agile & Jira Tab */}
           <TabsContent value="agile-jira" className="space-y-6">
+            {/* Header with Download Button */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-2xl font-bold">Agile & Jira Training</h2>
+                <p className="text-muted-foreground">Complete guide to Agile methodology and Jira tool</p>
+              </div>
+              <Button onClick={downloadAgileJiraPPT} className="gap-2" variant="default">
+                <Presentation className="w-4 h-4" />
+                Download as PPT
+              </Button>
+            </div>
+            
             <Tabs value={agileTab} onValueChange={setAgileTab} className="space-y-6">
               <TabsList className="grid w-full max-w-4xl grid-cols-8 mx-auto">
                 <TabsTrigger value="basics">Basics</TabsTrigger>
@@ -2503,10 +2516,16 @@ const Index = () => {
                 <Badge variant="secondary" className="text-sm">{interviewCategories.length} Categories</Badge>
                 <Badge variant="secondary" className="text-sm">{interviewCategories.reduce((acc, c) => acc + c.questions.length, 0)} Questions</Badge>
               </div>
-              <Button onClick={downloadInterviewPrepGuide} className="mt-4 gap-2" variant="outline">
-                <Download className="w-4 h-4" />
-                Download Interview Prep Guide
-              </Button>
+              <div className="flex gap-3 mt-4">
+                <Button onClick={downloadInterviewPrepGuide} className="gap-2" variant="outline">
+                  <Download className="w-4 h-4" />
+                  Download as Markdown
+                </Button>
+                <Button onClick={downloadInterviewPrepPPT} className="gap-2" variant="default">
+                  <Presentation className="w-4 h-4" />
+                  Download as PPT
+                </Button>
+              </div>
             </div>
 
             {/* Interview Tips Card */}
