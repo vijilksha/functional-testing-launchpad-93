@@ -15,7 +15,7 @@ import { CheckCircle, ChevronRight, BookOpen, Download, Search, Filter, AlertTri
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { downloadGuide, downloadInterviewPrepGuide } from "@/utils/downloadGuide";
-import { downloadInterviewPrepPPT, downloadAgileJiraPPT } from "@/utils/pptDownload";
+import { downloadInterviewPrepPPT, downloadAgileJiraPPT, downloadSTLCAgilePPT } from "@/utils/pptDownload";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Index = () => {
@@ -1242,14 +1242,22 @@ const Index = () => {
           <TabsContent value="stlc-agile" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <GitBranch className="w-5 h-5 text-primary" />
-                  STLC with Agile Methodology - Hands-on Training
-                </CardTitle>
-                <p className="text-muted-foreground">
-                  Complete software testing lifecycle using Agile methodology. Learn to decompose features into user stories, 
-                  create test plans, write test cases, analyze automation candidates, and build regression/smoke test suites.
-                </p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <GitBranch className="w-5 h-5 text-primary" />
+                      STLC with Agile Methodology - Hands-on Training
+                    </CardTitle>
+                    <p className="text-muted-foreground mt-2">
+                      Complete software testing lifecycle using Agile methodology. Learn to decompose features into user stories, 
+                      create test plans, write test cases, analyze automation candidates, and build regression/smoke test suites.
+                    </p>
+                  </div>
+                  <Button onClick={downloadSTLCAgilePPT} className="gap-2" variant="default">
+                    <Presentation className="w-4 h-4" />
+                    Download as PPT
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2 mb-4">

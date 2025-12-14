@@ -1,7 +1,7 @@
 import PptxGenJS from "pptxgenjs";
 import { interviewCategories, interviewTips } from "@/data/interviewPrepData";
 import { agileBasics, jiraOverview, domainRequirements, handsOnPhases, agileTemplates, enhancedTestingActivities, interviewQuestions, traineeChecklists } from "@/data/agileJiraData";
-
+import { stlcAgileProjects } from "@/data/stlcAgileData";
 // Color scheme
 const COLORS = {
   primary: "3B82F6",
@@ -387,4 +387,221 @@ export const downloadAgileJiraPPT = async () => {
   endSlide.addText("Master Agile & Jira 🎯", { x: 0.5, y: 3.2, w: 9, h: 0.6, fontSize: 24, color: COLORS.background, align: "center" });
 
   await pptx.writeFile({ fileName: "Agile_Jira_Training_Guide.pptx" });
+};
+
+// Generate STLC Agile PPT - Complete coverage from Requirements to Regression
+export const downloadSTLCAgilePPT = async () => {
+  const pptx = new PptxGenJS();
+  pptx.author = "Functional Testing Training";
+  pptx.title = "STLC Agile Training - All Domains";
+  pptx.subject = "Complete STLC with Agile Methodology";
+
+  // Title Slide
+  addTitleSlide(pptx, "STLC with Agile Methodology", "Complete Training: Requirements to Regression Testing");
+
+  // Overview Slide
+  const overviewSlide = pptx.addSlide();
+  overviewSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+  overviewSlide.addText("Training Overview", { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 24, bold: true, color: COLORS.white });
+  
+  overviewSlide.addText([
+    { text: `Domains Covered: ${stlcAgileProjects.length} (E-Commerce, Banking, Telecom, Insurance)`, options: { bullet: true } },
+    { text: "Complete STLC lifecycle in Agile methodology", options: { bullet: true } },
+    { text: "From Requirements → User Stories → Test Plans → Test Cases", options: { bullet: true } },
+    { text: "Automation Analysis with real code examples", options: { bullet: true } },
+    { text: "Sprint Automation execution samples", options: { bullet: true } },
+    { text: "Regression & Smoke Testing strategies", options: { bullet: true } }
+  ], { x: 0.5, y: 1.2, w: 9, h: 4, fontSize: 16, color: COLORS.text });
+
+  // Iterate through each domain
+  stlcAgileProjects.forEach((project) => {
+    // Domain Section Header
+    addSectionSlide(pptx, `${project.domainIcon} ${project.domain} Domain`, project.feature);
+
+    // Requirement Document Slide
+    const reqSlide = pptx.addSlide();
+    reqSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+    reqSlide.addText(`📋 Requirements: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    reqSlide.addText(`Document: ${project.requirementDocument.title}`, { x: 0.5, y: 1, w: 9, h: 0.4, fontSize: 14, bold: true, color: COLORS.text });
+    reqSlide.addText(`Version: ${project.requirementDocument.version} | Date: ${project.requirementDocument.date}`, { x: 0.5, y: 1.4, w: 9, h: 0.3, fontSize: 11, color: COLORS.muted });
+    reqSlide.addText(project.requirementDocument.overview.substring(0, 300), { x: 0.5, y: 1.8, w: 9, h: 1, fontSize: 11, color: COLORS.text });
+
+    reqSlide.addText("Business Objectives:", { x: 0.5, y: 2.9, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.primaryDark });
+    reqSlide.addText(project.requirementDocument.businessObjectives.slice(0, 4).map(obj => ({ text: obj, options: { bullet: true } })), 
+      { x: 0.5, y: 3.2, w: 9, h: 2, fontSize: 10, color: COLORS.text });
+
+    // Functional Requirements Slide
+    const funcReqSlide = pptx.addSlide();
+    funcReqSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+    funcReqSlide.addText(`Functional Requirements: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    let yPos = 1;
+    project.requirementDocument.functionalRequirements.slice(0, 4).forEach((fr) => {
+      funcReqSlide.addText(`${fr.id}: ${fr.title}`, { x: 0.5, y: yPos, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.primaryDark });
+      funcReqSlide.addText(fr.description.substring(0, 150), { x: 0.5, y: yPos + 0.3, w: 9, h: 0.5, fontSize: 10, color: COLORS.text });
+      funcReqSlide.addShape("rect", { x: 8.5, y: yPos, w: 1, h: 0.25, fill: { color: fr.priority === "Must Have" ? COLORS.destructive : COLORS.warning }, rounding: 0.05 } as any);
+      funcReqSlide.addText(fr.priority, { x: 8.5, y: yPos, w: 1, h: 0.25, fontSize: 8, color: COLORS.white, align: "center" });
+      yPos += 1.1;
+    });
+
+    // User Stories Slide
+    const storySlide = pptx.addSlide();
+    storySlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.secondary } });
+    storySlide.addText(`📝 User Stories: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    yPos = 1;
+    project.userStories.slice(0, 3).forEach((story) => {
+      storySlide.addText(`${story.id}: ${story.title}`, { x: 0.5, y: yPos, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.primaryDark });
+      storySlide.addText(`As a ${story.asA}, I want ${story.iWant}, So that ${story.soThat}`, { x: 0.5, y: yPos + 0.35, w: 9, h: 0.5, fontSize: 10, color: COLORS.text });
+      storySlide.addShape("rect", { x: 8.5, y: yPos, w: 0.7, h: 0.25, fill: { color: story.priority === "High" ? COLORS.destructive : story.priority === "Medium" ? COLORS.warning : COLORS.success }, rounding: 0.05 } as any);
+      storySlide.addText(story.priority, { x: 8.5, y: yPos, w: 0.7, h: 0.25, fontSize: 8, color: COLORS.white, align: "center" });
+      yPos += 1.2;
+    });
+
+    // Test Plan Slide
+    const planSlide = pptx.addSlide();
+    planSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+    planSlide.addText(`📊 Test Plans: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    if (project.testPlans.length > 0) {
+      const plan = project.testPlans[0];
+      planSlide.addText(`Story: ${plan.userStoryId}`, { x: 0.5, y: 1, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.primaryDark });
+      planSlide.addText(`Objective: ${plan.objective}`, { x: 0.5, y: 1.35, w: 9, h: 0.5, fontSize: 11, color: COLORS.text });
+      
+      planSlide.addText("Test Types:", { x: 0.5, y: 1.9, w: 4, h: 0.3, fontSize: 11, bold: true, color: COLORS.text });
+      planSlide.addText(plan.testTypes.map(t => ({ text: t, options: { bullet: true } })), { x: 0.5, y: 2.2, w: 4, h: 1.5, fontSize: 10, color: COLORS.text });
+      
+      planSlide.addText("Risks:", { x: 5, y: 1.9, w: 4.5, h: 0.3, fontSize: 11, bold: true, color: COLORS.text });
+      planSlide.addText(plan.risks.slice(0, 3).map(r => ({ text: r, options: { bullet: true } })), { x: 5, y: 2.2, w: 4.5, h: 1.5, fontSize: 10, color: COLORS.text });
+    }
+
+    // Manual Test Cases Slide
+    const tcSlide = pptx.addSlide();
+    tcSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.secondary } });
+    tcSlide.addText(`✅ Test Cases: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    yPos = 1;
+    project.manualTestCases.slice(0, 3).forEach((tc) => {
+      tcSlide.addText(`${tc.id}: ${tc.title}`, { x: 0.5, y: yPos, w: 8, h: 0.3, fontSize: 11, bold: true, color: COLORS.primaryDark });
+      
+      const automationBadge = tc.automationCandidate ? "Auto ✓" : "Manual";
+      const badgeColor = tc.automationCandidate ? COLORS.success : COLORS.muted;
+      tcSlide.addShape("rect", { x: 8.5, y: yPos, w: 0.9, h: 0.25, fill: { color: badgeColor }, rounding: 0.05 } as any);
+      tcSlide.addText(automationBadge, { x: 8.5, y: yPos, w: 0.9, h: 0.25, fontSize: 8, color: COLORS.white, align: "center" });
+      
+      if (tc.steps.length > 0) {
+        tcSlide.addText(`Step 1: ${tc.steps[0].step.substring(0, 80)}`, { x: 0.5, y: yPos + 0.3, w: 9, h: 0.3, fontSize: 9, color: COLORS.text });
+        tcSlide.addText(`Expected: ${tc.steps[0].expectedResult.substring(0, 80)}`, { x: 0.5, y: yPos + 0.55, w: 9, h: 0.3, fontSize: 9, color: COLORS.muted, italic: true });
+      }
+      yPos += 1.1;
+    });
+
+    // Automation Analysis Slide
+    const autoSlide = pptx.addSlide();
+    autoSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: "7C3AED" } });
+    autoSlide.addText(`🤖 Automation Analysis: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    if (project.automationAnalysis.length > 0) {
+      const analysis = project.automationAnalysis[0];
+      autoSlide.addText(`Automation Coverage: ${analysis.automationPercentage}%`, { x: 0.5, y: 1, w: 9, h: 0.4, fontSize: 16, bold: true, color: COLORS.success });
+      autoSlide.addText("Recommended Tools:", { x: 0.5, y: 1.5, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.text });
+      autoSlide.addText(analysis.recommendedTools.map(t => ({ text: t, options: { bullet: true } })), { x: 0.5, y: 1.8, w: 9, h: 1, fontSize: 11, color: COLORS.text });
+      
+      autoSlide.addText("Test Case Analysis:", { x: 0.5, y: 2.9, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.text });
+      yPos = 3.2;
+      analysis.testCases.slice(0, 3).forEach((tc) => {
+        const statusColor = tc.automatable ? COLORS.success : COLORS.warning;
+        autoSlide.addShape("rect", { x: 0.5, y: yPos, w: 0.15, h: 0.15, fill: { color: statusColor } });
+        autoSlide.addText(`${tc.testCaseId}: ${tc.reason.substring(0, 60)}`, { x: 0.7, y: yPos - 0.05, w: 8.8, h: 0.3, fontSize: 10, color: COLORS.text });
+        yPos += 0.4;
+      });
+    }
+
+    // Sprint Automation Slide
+    if (project.sprintAutomation.length > 0) {
+      const sprintSlide = pptx.addSlide();
+      sprintSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+      sprintSlide.addText(`⚡ Sprint Automation: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+      
+      const sprint = project.sprintAutomation[0];
+      sprintSlide.addText(`Sprint ${sprint.sprintNumber} Goals:`, { x: 0.5, y: 1, w: 9, h: 0.3, fontSize: 14, bold: true, color: COLORS.primaryDark });
+      sprintSlide.addText(sprint.goals.map(g => ({ text: g, options: { bullet: true } })), { x: 0.5, y: 1.3, w: 9, h: 1.2, fontSize: 11, color: COLORS.text });
+      
+      sprintSlide.addText(`Metrics:`, { x: 0.5, y: 2.6, w: 9, h: 0.3, fontSize: 12, bold: true, color: COLORS.text });
+      sprintSlide.addText([
+        { text: `Total Tests: ${sprint.metrics.totalTests}`, options: { bullet: true } },
+        { text: `Automated: ${sprint.metrics.automated}`, options: { bullet: true } },
+        { text: `Coverage: ${sprint.metrics.coverage}%`, options: { bullet: true } }
+      ], { x: 0.5, y: 2.9, w: 9, h: 1, fontSize: 11, color: COLORS.text });
+      
+      // Code sample slide
+      if (sprint.automatedTests.length > 0) {
+        const codeSlide = pptx.addSlide();
+        codeSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: "1E293B" } });
+        codeSlide.addText(`💻 Automation Code: ${sprint.automatedTests[0].testName}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 18, bold: true, color: COLORS.white });
+        
+        codeSlide.addText(`Framework: ${sprint.automatedTests[0].framework} | Type: ${sprint.automatedTests[0].type}`, 
+          { x: 0.5, y: 1, w: 9, h: 0.3, fontSize: 11, color: COLORS.muted });
+        
+        codeSlide.addShape("rect", { x: 0.3, y: 1.4, w: 9.4, h: 4, fill: { color: "0F172A" }, rounding: 0.1 } as any);
+        const codeText = sprint.automatedTests[0].code.substring(0, 800);
+        codeSlide.addText(codeText, { x: 0.4, y: 1.5, w: 9.2, h: 3.8, fontSize: 8, color: "22C55E", fontFace: "Courier New" });
+      }
+    }
+
+    // Regression & Smoke Tests Slide
+    const regSlide = pptx.addSlide();
+    regSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.secondary } });
+    regSlide.addText(`🔄 Regression & Smoke: ${project.domain}`, { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 20, bold: true, color: COLORS.white });
+    
+    // Smoke Tests
+    regSlide.addText("Smoke Tests:", { x: 0.3, y: 1, w: 4.5, h: 0.3, fontSize: 13, bold: true, color: COLORS.success });
+    regSlide.addShape("rect", { x: 0.3, y: 1.3, w: 4.5, h: 2, fill: { color: "DCFCE7" }, rounding: 0.1 } as any);
+    yPos = 1.4;
+    project.smokeTests.tests.slice(0, 4).forEach((t) => {
+      regSlide.addText(`${t.priority} | ${t.name.substring(0, 30)}`, { x: 0.4, y: yPos, w: 4.3, h: 0.3, fontSize: 9, color: COLORS.text });
+      yPos += 0.4;
+    });
+    
+    // Regression Tests
+    regSlide.addText("Regression Tests:", { x: 5, y: 1, w: 4.5, h: 0.3, fontSize: 13, bold: true, color: COLORS.destructive });
+    regSlide.addShape("rect", { x: 5, y: 1.3, w: 4.7, h: 2, fill: { color: "FEE2E2" }, rounding: 0.1 } as any);
+    yPos = 1.4;
+    project.regressionTests.tests.slice(0, 4).forEach((t) => {
+      regSlide.addText(`${t.priority} | ${t.name.substring(0, 30)}`, { x: 5.1, y: yPos, w: 4.5, h: 0.3, fontSize: 9, color: COLORS.text });
+      yPos += 0.4;
+    });
+
+    regSlide.addText("Execution Strategy:", { x: 0.5, y: 3.5, w: 9, h: 0.3, fontSize: 11, bold: true, color: COLORS.text });
+    regSlide.addText(project.regressionTests.executionStrategy.substring(0, 200), { x: 0.5, y: 3.8, w: 9, h: 0.8, fontSize: 10, color: COLORS.muted });
+    
+    regSlide.addText("CI/CD Integration:", { x: 0.5, y: 4.6, w: 9, h: 0.3, fontSize: 11, bold: true, color: COLORS.text });
+    regSlide.addText(project.regressionTests.ciCdIntegration.substring(0, 150), { x: 0.5, y: 4.9, w: 9, h: 0.5, fontSize: 10, color: COLORS.muted });
+  });
+
+  // Summary Slide
+  const summarySlide = pptx.addSlide();
+  summarySlide.addShape("rect", { x: 0, y: 0, w: "100%", h: 0.8, fill: { color: COLORS.primary } });
+  summarySlide.addText("STLC Agile Workflow Summary", { x: 0.5, y: 0.15, w: 9, h: 0.5, fontSize: 24, bold: true, color: COLORS.white });
+  
+  summarySlide.addText([
+    { text: "1. Requirements Analysis → Understand business needs", options: { bullet: true } },
+    { text: "2. Feature Decomposition → Break into User Stories", options: { bullet: true } },
+    { text: "3. Test Planning → Define scope & approach per story", options: { bullet: true } },
+    { text: "4. Test Case Design → Create manual test cases", options: { bullet: true } },
+    { text: "5. Automation Analysis → Decide what to automate", options: { bullet: true } },
+    { text: "6. Sprint Automation → Implement automated tests", options: { bullet: true } },
+    { text: "7. Regression/Smoke Suites → Ongoing quality assurance", options: { bullet: true } }
+  ], { x: 0.5, y: 1.2, w: 9, h: 4, fontSize: 16, color: COLORS.text });
+
+  // End Slide
+  const endSlide = pptx.addSlide();
+  endSlide.addShape("rect", { x: 0, y: 0, w: "100%", h: "100%", fill: { color: COLORS.primary } });
+  endSlide.addText("STLC Agile Training Complete!", { x: 0.5, y: 2, w: 9, h: 1, fontSize: 36, bold: true, color: COLORS.white, align: "center" });
+  endSlide.addText("From Requirements to Regression 🚀", { x: 0.5, y: 3.2, w: 9, h: 0.6, fontSize: 22, color: COLORS.background, align: "center" });
+  endSlide.addText(`${stlcAgileProjects.length} Domains | Complete STLC Coverage`, 
+    { x: 0.5, y: 4.5, w: 9, h: 0.4, fontSize: 14, color: COLORS.background, align: "center" });
+
+  await pptx.writeFile({ fileName: "STLC_Agile_Complete_Training.pptx" });
 };
