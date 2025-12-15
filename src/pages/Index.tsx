@@ -92,6 +92,55 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {/* Uniqueness Banner */}
+        <div className="mb-8 relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border border-primary/20">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent)/0.1),transparent_40%)]" />
+          <div className="relative px-6 py-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold tracking-wide uppercase">
+                    What Makes Us Unique
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                  India's Most Comprehensive QA Training
+                </h2>
+                <p className="text-muted-foreground max-w-2xl">
+                  Built specifically for freshers with zero testing knowledge — from fundamentals to interview-ready in one structured program.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div className="p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+                  <div className="text-3xl font-bold text-primary">11</div>
+                  <div className="text-xs text-muted-foreground">Learning Modules</div>
+                </div>
+                <div className="p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+                  <div className="text-3xl font-bold text-primary">80+</div>
+                  <div className="text-xs text-muted-foreground">Test Cases</div>
+                </div>
+                <div className="p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+                  <div className="text-3xl font-bold text-primary">4</div>
+                  <div className="text-xs text-muted-foreground">Industry Domains</div>
+                </div>
+                <div className="p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+                  <div className="text-3xl font-bold text-primary">100%</div>
+                  <div className="text-xs text-muted-foreground">Interview Ready</div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {["Real-World Scenarios", "AI Testing Module", "Agile & Jira Practice", "Downloadable Guides", "Domain-Specific Training", "Interview Prep Kit"].map((feature) => (
+                <span key={feature} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border/50 text-sm text-foreground">
+                  <CheckCircle className="w-3.5 h-3.5 text-primary" />
+                  {feature}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <Tabs defaultValue="course" className="space-y-6">
           <TabsList className="grid w-full max-w-6xl grid-cols-9 mx-auto">
             <TabsTrigger value="course">Course</TabsTrigger>
