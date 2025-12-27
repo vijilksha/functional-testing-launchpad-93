@@ -2722,9 +2722,34 @@ const Index = () => {
                             {/* Follow-up Questions */}
                             <div className="bg-muted p-3 rounded">
                               <h5 className="font-semibold mb-2">🔄 Follow-up Questions to Prepare:</h5>
-                              <ul className="text-sm space-y-1">
-                                {q.followUpQuestions.map((fq, i) => <li key={i}>• {fq}</li>)}
-                              </ul>
+                              <div className="space-y-3">
+                                {q.followUpQuestions.map((fq, i) => (
+                                  typeof fq === 'string' ? (
+                                    <div key={i} className="text-sm">• {fq}</div>
+                                  ) : (
+                                    <Collapsible key={i}>
+                                      <CollapsibleTrigger className="w-full text-left">
+                                        <div className="flex items-center gap-2 p-2 bg-background rounded border hover:bg-muted/50 transition-all">
+                                          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                                          <span className="text-sm font-medium">{fq.question}</span>
+                                        </div>
+                                      </CollapsibleTrigger>
+                                      <CollapsibleContent>
+                                        <div className="ml-6 mt-2 space-y-3 p-3 border-l-2 border-primary/30">
+                                          <div>
+                                            <h6 className="text-xs font-semibold text-primary uppercase mb-1">Answer:</h6>
+                                            <pre className="text-sm whitespace-pre-wrap bg-background p-2 rounded border">{fq.answer}</pre>
+                                          </div>
+                                          <div>
+                                            <h6 className="text-xs font-semibold text-green-600 uppercase mb-1">Real-Time Example:</h6>
+                                            <pre className="text-xs bg-slate-900 text-green-400 p-3 rounded overflow-x-auto">{fq.realTimeExample}</pre>
+                                          </div>
+                                        </div>
+                                      </CollapsibleContent>
+                                    </Collapsible>
+                                  )
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </CollapsibleContent>

@@ -8,6 +8,12 @@ export interface InterviewCategory {
   questions: EnhancedQuestion[];
 }
 
+export interface FollowUpQuestion {
+  question: string;
+  answer: string;
+  realTimeExample: string;
+}
+
 export interface EnhancedQuestion {
   id: string;
   question: string;
@@ -25,7 +31,7 @@ export interface EnhancedQuestion {
   };
   tips: string[];
   commonMistakes: string[];
-  followUpQuestions: string[];
+  followUpQuestions: (string | FollowUpQuestion)[];
   difficulty: "Beginner" | "Intermediate" | "Advanced";
 }
 
@@ -113,9 +119,117 @@ Custom Fields:
           "Describing phases without real examples"
         ],
         followUpQuestions: [
-          "What are entry and exit criteria for Test Execution phase?",
-          "How do you handle STLC in Agile sprints?",
-          "What happens if requirements change during Test Case Development?"
+          {
+            question: "What are entry and exit criteria for Test Execution phase?",
+            answer: `**Entry Criteria for Test Execution:**
+- Test Plan approved
+- Test cases reviewed and approved
+- Test environment ready with correct build deployed
+- Test data prepared and validated
+- Required access/permissions granted
+
+**Exit Criteria for Test Execution:**
+- All planned test cases executed (95%+ execution rate)
+- All critical and high priority defects resolved and retested
+- Test summary report generated
+- Defect metrics within acceptable threshold
+- Sign-off from QA Lead/Manager`,
+            realTimeExample: `In our E-Commerce project, Sprint 8 Payment Gateway testing had these criteria:
+
+**Entry Criteria (All met before starting):**
+✅ Build 2.3.5 deployed to QA environment
+✅ 45 test cases approved in Zephyr
+✅ Stripe sandbox API credentials configured
+✅ Test accounts created with various card types
+
+**Exit Criteria (Checked before sign-off):**
+✅ 43/45 test cases executed (96%)
+✅ 2 cases blocked (third-party API issue - documented)
+✅ 0 Critical bugs open, 1 Medium deferred to next sprint
+✅ Test execution report shared with stakeholders`
+          },
+          {
+            question: "How do you handle STLC in Agile sprints?",
+            answer: `In Agile, STLC phases run within each sprint rather than sequentially across the project:
+
+**Sprint STLC Mapping:**
+1. **Requirement Analysis** - During Sprint Planning and Backlog Refinement
+2. **Test Planning** - First 1-2 days of sprint, lightweight mini test plans
+3. **Test Case Development** - Parallel with development, based on acceptance criteria
+4. **Environment Setup** - Continuous, often automated via CI/CD
+5. **Test Execution** - Continuous testing as features complete
+6. **Closure** - Sprint Review and Retrospective
+
+**Key Differences from Waterfall:**
+- Phases overlap significantly
+- Testing starts from Day 1
+- Testers collaborate with developers throughout
+- Automation is integrated from the start`,
+            realTimeExample: `Our Banking app sprint for "Account Statement Download":
+
+**Day 1-2 (Planning + Analysis):**
+- Attended Sprint Planning, clarified 3 acceptance criteria
+- Created 2-page mini test plan covering scope and risks
+
+**Day 3-6 (Test Development + Environment):**
+- Wrote 25 test cases while dev was coding
+- Automated 10 smoke tests using existing framework
+- Verified statement format templates in test environment
+
+**Day 7-12 (Continuous Execution):**
+- Started testing each completed sub-feature
+- Found 4 bugs - 3 fixed same day, 1 medium priority
+
+**Day 13-14 (Closure):**
+- Final regression run (automated)
+- Demo in Sprint Review with test metrics
+- Retro action: "Improve PDF generation test data"`
+          },
+          {
+            question: "What happens if requirements change during Test Case Development?",
+            answer: `Requirements changes in the middle of testing are common, especially in Agile. Here's how to handle them:
+
+**Immediate Steps:**
+1. Assess the impact on existing test cases
+2. Communicate with team about timeline implications
+3. Update/create new test cases for changed requirements
+4. Review test data validity
+5. Adjust test plan scope if needed
+
+**Best Practices:**
+- Maintain requirement traceability matrix
+- Version control test cases
+- Use modular test case design for easier updates
+- Flag impacted test cases immediately
+- Document change in test summary report
+
+**Impact Analysis Questions:**
+- Which test cases are affected?
+- Do we need new test data?
+- Is environment still valid?
+- Timeline impact?`,
+            realTimeExample: `Insurance Claims project - Mid-sprint requirement change:
+
+**Original Requirement:** Auto-approve claims under $500
+**Changed To:** Auto-approve claims under $300, with manager review for $300-$500
+
+**Our Response:**
+1. **Impact Analysis (2 hours):**
+   - 8 of 15 test cases affected
+   - Test data: 12 claim amounts needed adjustment
+   - New test cases needed: 5 (for manager review flow)
+
+2. **Actions Taken:**
+   - Updated 8 test cases (marked v2 in test management tool)
+   - Created 5 new test cases for manager approval workflow
+   - Refreshed test data with new boundary values ($299, $300, $301, $499, $500)
+   - Sprint extended by 1 day with stakeholder approval
+
+3. **Documentation:**
+   - Logged change in Jira under Epic
+   - Updated test plan "Scope Changes" section
+   - Added note in test summary report about mid-sprint change`
+          }
         ],
         difficulty: "Beginner"
       },
@@ -219,9 +333,138 @@ JIRA DASHBOARD GADGETS:
           "Missing entry/exit criteria"
         ],
         followUpQuestions: [
-          "How detailed should a test plan be in Agile?",
-          "Who approves the test plan?",
-          "How often do you update the test plan?"
+          {
+            question: "How detailed should a test plan be in Agile?",
+            answer: `In Agile, test plans should be lightweight and focused - typically 1-2 pages maximum per sprint or feature.
+
+**Key Characteristics:**
+- Focus on sprint-specific scope, not generic content
+- Include only what's unique to this feature/sprint
+- Skip sections that haven't changed from the strategy
+- Update iteratively as the sprint progresses
+
+**Essential Sections (Keep):**
+- Scope (In/Out)
+- Entry/Exit Criteria
+- Key Risks
+- Test Data needs
+
+**Optional Sections (Skip if unchanged):**
+- Team roles (defined at project level)
+- Tool details (in Test Strategy)
+- Standard processes`,
+            realTimeExample: `For our E-Commerce "Wishlist" feature sprint:
+
+**Lightweight Test Plan (1 page):**
+┌─────────────────────────────────────────┐
+│ SPRINT 10 - WISHLIST FEATURE TEST PLAN  │
+├─────────────────────────────────────────┤
+│ Stories: SHOP-201, SHOP-202, SHOP-203   │
+│                                         │
+│ IN SCOPE:                               │
+│ ✓ Add to wishlist from PDP              │
+│ ✓ View wishlist page                    │
+│ ✓ Remove from wishlist                  │
+│ ✓ Move to cart                          │
+│                                         │
+│ OUT OF SCOPE:                           │
+│ ✗ Share wishlist (Sprint 11)            │
+│ ✗ Multiple wishlists (backlog)          │
+│                                         │
+│ ENTRY: Stories in "Ready for Test"      │
+│ EXIT: 0 Critical bugs, 90% executed     │
+│                                         │
+│ RISKS: Third-party cart API latency     │
+└─────────────────────────────────────────┘
+
+Total: 1 page vs. 10+ pages in Waterfall!`
+          },
+          {
+            question: "Who approves the test plan?",
+            answer: `Test Plan approval depends on the organization structure and project methodology:
+
+**In Agile:**
+- Test Lead or QA Lead reviews and approves
+- Product Owner validates scope alignment
+- Scrum Master ensures it fits sprint goals
+- Often informal - discussed in Sprint Planning
+
+**In Traditional/Waterfall:**
+- QA Manager formally approves
+- Project Manager signs off
+- Client/Stakeholder approval for large projects
+- Change Control Board for modifications
+
+**Approval Levels:**
+- Sprint Test Plan: QA Lead + PO (lightweight)
+- Release Test Plan: QA Manager + PM
+- Master Test Strategy: QA Director + PMO`,
+            realTimeExample: `Banking Project Test Plan Approval Flow:
+
+**Sprint Level (Agile):**
+Day 1 Sprint Planning:
+- QA Lead presents 1-page test plan
+- PO confirms scope matches sprint goals
+- Scrum Master logs in Confluence
+- Verbal approval, no formal sign-off
+
+**Release Level:**
+Week before release:
+- QA Manager reviews consolidated test plan
+- Project Manager signs off on timeline
+- Compliance Officer verifies security testing included
+- Formal approval in Document Management System
+
+**Audit Trail:**
+- All approvals tracked in Confluence
+- Version history maintained
+- Digital signatures for compliance`
+          },
+          {
+            question: "How often do you update the test plan?",
+            answer: `Test Plan updates depend on the type and project methodology:
+
+**Sprint Test Plan (Agile):**
+- Created fresh each sprint
+- Updated if scope changes mid-sprint
+- Closed at sprint end with summary
+
+**Release Test Plan:**
+- Major update per release cycle
+- Minor updates for scope changes
+- Reviewed before each testing phase
+
+**Test Strategy:**
+- Updated quarterly or annually
+- Changed when tools/processes change
+- Reviewed for new project types
+
+**When to Update:**
+- New requirements added
+- Risk profile changes
+- Timeline shifts
+- Resource changes
+- After major incidents`,
+            realTimeExample: `Telecom Project Update Schedule:
+
+**Test Strategy:** Updated once per year
+- Last updated: January (added AI testing tools section)
+- Next review: December
+
+**Release Test Plan:** Updated per release (6 per year)
+- Release 2024.3: Updated when payment module added mid-cycle
+- Added 2 sections: Payment testing scope, PCI compliance checks
+
+**Sprint Test Plan:** Created/closed each sprint
+Sprint 15 Updates:
+- Day 1: Initial plan created
+- Day 5: Updated when Story TELE-305 descoped
+- Day 12: Added risk for API timeout discovered
+- Day 14: Closed with test summary, lessons learned
+
+All updates tracked in Confluence with version history:
+v1.0 → v1.1 (scope change) → v1.2 (final)`
+          }
         ],
         difficulty: "Beginner"
       },
@@ -306,9 +549,149 @@ TEST PLAN (Sprint Level):
           "Creating too detailed Strategy or too vague Plan"
         ],
         followUpQuestions: [
-          "Who creates the Test Strategy?",
-          "How often is Test Strategy updated?",
-          "Can you have a Test Plan without a Test Strategy?"
+          {
+            question: "Who creates the Test Strategy?",
+            answer: `Test Strategy is created by senior testing leadership:
+
+**Primary Authors:**
+- Test Manager / QA Manager
+- Test Architect (for large organizations)
+- QA Director (for enterprise-level)
+
+**Contributors:**
+- Senior Test Leads (domain expertise)
+- DevOps (CI/CD and environment strategy)
+- Architecture Team (technical constraints)
+- Security Team (security testing standards)
+
+**Reviewers & Approvers:**
+- Project Management Office (PMO)
+- Engineering Director
+- CTO (for critical products)
+
+The Test Strategy should be reviewed and updated periodically, typically annually or when major changes occur.`,
+            realTimeExample: `Insurance Company Test Strategy Creation:
+
+**Author:** QA Director (Sarah) with 15+ years experience
+
+**Contributors:**
+- Test Manager (Banking domain expertise)
+- Test Manager (Claims domain expertise)  
+- DevOps Lead (CI/CD pipeline standards)
+- InfoSec Lead (OWASP testing requirements)
+
+**Review Committee:**
+- VP of Engineering
+- Product Director
+- Compliance Officer
+
+**Timeline:**
+- Week 1-2: Draft by QA Director
+- Week 3: Review with contributors
+- Week 4: Leadership review and approval
+- Annual review every December
+
+Document stored in Confluence with restricted edit access.`
+          },
+          {
+            question: "How often is Test Strategy updated?",
+            answer: `Test Strategy updates are infrequent compared to Test Plans:
+
+**Regular Updates:**
+- Annual review (minimum)
+- Quarterly check for relevance
+
+**Trigger-Based Updates:**
+- New tools adopted (e.g., switching from Selenium to Playwright)
+- Major process changes (moving from Waterfall to Agile)
+- New testing types added (AI testing, accessibility)
+- Organizational restructuring
+- After major production incidents
+- New compliance requirements
+
+**What Typically Changes:**
+- Tool stack updates
+- Environment strategy
+- Automation policies
+- Security testing standards
+- Metrics and reporting requirements`,
+            realTimeExample: `E-Commerce Platform Strategy Updates (2024):
+
+**Scheduled Annual Review (January):**
+- Added AI-powered testing section (new tools)
+- Updated automation target: 60% → 75%
+- Revised environment strategy (cloud migration)
+
+**Unscheduled Update (March):**
+Trigger: GDPR audit finding
+- Added data privacy testing requirements
+- Included test data anonymization standards
+
+**Unscheduled Update (August):**
+Trigger: Mobile app launch
+- Added mobile testing strategy
+- Updated device/browser matrix
+- Added performance benchmarks for mobile
+
+**Version History:**
+v3.0 (Jan 2024) - Annual update
+v3.1 (Mar 2024) - GDPR compliance
+v3.2 (Aug 2024) - Mobile strategy`
+          },
+          {
+            question: "Can you have a Test Plan without a Test Strategy?",
+            answer: `Yes, but it's not ideal. Here's why:
+
+**Without Strategy:**
+- Each Test Plan reinvents the wheel
+- Inconsistent testing approaches across projects
+- No organizational standards
+- Higher risk of missing important aspects
+- More effort per Test Plan
+
+**With Strategy:**
+- Test Plans reference common standards
+- Consistent quality across projects
+- Faster Test Plan creation
+- Clear guidelines for testers
+- Reduced redundancy
+
+**When It Happens:**
+- Small companies without formal QA process
+- Startups in early stages
+- One-off projects
+- New QA teams still building processes
+
+**Recommendation:**
+Even a simple 1-page Test Strategy is better than none. It can grow over time.`,
+            realTimeExample: `Startup vs Enterprise Comparison:
+
+**Startup (No Strategy - Initially):**
+Project A: "We'll test on Chrome"
+Project B: "Let's test on all browsers"
+Project C: "What browsers should we test?"
+
+Result: Inconsistent, repeated discussions, wasted time
+
+**After Creating Simple Strategy:**
+All Projects: "Per our strategy, test on Chrome, Firefox, Safari. Mobile: iOS Safari, Android Chrome."
+
+Time saved: 2 hours per sprint on browser discussions!
+
+**Enterprise (With Strategy):**
+┌─────────────────────────────────────────┐
+│ TEST STRATEGY (Referenced by all plans) │
+├─────────────────────────────────────────┤
+│ • Browser Matrix: Defined               │
+│ • Automation: Selenium Grid             │
+│ • Environments: Dev → QA → Stage → Prod │
+│ • Defect Process: Jira with SLA         │
+└─────────────────────────────────────────┘
+
+TEST PLAN (Sprint 15):
+"Following the Test Strategy v3.2, this sprint will..."
+(No need to redefine standards)`
+          }
         ],
         difficulty: "Intermediate"
       }
@@ -433,9 +816,159 @@ TEST CASE JIRA FIELDS:
           "Combining multiple scenarios in one test case"
         ],
         followUpQuestions: [
-          "How do you handle test case maintenance?",
-          "What's the difference between test case and test scenario?",
-          "How many test cases per requirement is ideal?"
+          {
+            question: "How do you handle test case maintenance?",
+            answer: `Test case maintenance is critical for keeping your test suite relevant and efficient:
+
+**Regular Maintenance Activities:**
+- Review test cases after each release
+- Update steps when UI/workflow changes
+- Remove obsolete test cases
+- Consolidate redundant test cases
+- Update test data references
+
+**Best Practices:**
+- Version control test cases
+- Link test cases to requirements (traceability)
+- Use modular test case design
+- Schedule periodic reviews (quarterly)
+- Track test case effectiveness
+
+**Maintenance Triggers:**
+- Requirement changes
+- UI redesigns
+- Failed test case reviews
+- New feature additions
+- Defect patterns discovered`,
+            realTimeExample: `E-Commerce Project Maintenance Cycle:
+
+**Monthly Review (Sprint Planning):**
+- Reviewed 150 regression test cases
+- Found 12 obsolete (feature removed) → Archived
+- Found 8 outdated (UI changed) → Updated
+
+**Quarterly Deep Cleanup:**
+┌─────────────────────────────────────────┐
+│ Q3 2024 TEST CASE MAINTENANCE REPORT    │
+├─────────────────────────────────────────┤
+│ Total Test Cases: 450                   │
+│ Active: 420 (93%)                       │
+│ Archived: 30 (7%)                       │
+│                                         │
+│ Updated this quarter: 45                │
+│ New additions: 38                       │
+│ Consolidated (merged): 15               │
+│                                         │
+│ Pass Rate Impact: 92% → 95%             │
+│ (Fewer false failures after updates)   │
+└─────────────────────────────────────────┘`
+          },
+          {
+            question: "What's the difference between test case and test scenario?",
+            answer: `**Test Scenario:**
+- High-level description of what to test
+- Business-oriented, end-to-end flow
+- One line or brief description
+- Derived from requirements/user stories
+- Example: "Verify user can complete purchase"
+
+**Test Case:**
+- Detailed steps to execute
+- Specific inputs and expected outputs
+- Includes preconditions, test data
+- Multiple test cases per scenario
+- Example: "Purchase with valid credit card, qty=1"
+
+**Relationship:**
+Test Scenario → Multiple Test Cases
+
+**Hierarchy:**
+Requirement → Test Scenario → Test Cases → Test Steps`,
+            realTimeExample: `Banking Login Feature:
+
+**Test Scenario (1 line):**
+"Verify user login functionality"
+
+**Test Cases Derived (Multiple):**
+┌─────────────────────────────────────────┐
+│ SCENARIO: Verify user login             │
+├─────────────────────────────────────────┤
+│ TC-001: Login with valid credentials    │
+│ TC-002: Login with invalid password     │
+│ TC-003: Login with unregistered email   │
+│ TC-004: Login with empty fields         │
+│ TC-005: Login with locked account       │
+│ TC-006: Login after password reset      │
+│ TC-007: Login with "Remember Me"        │
+│ TC-008: Login timeout handling          │
+└─────────────────────────────────────────┘
+
+Each test case has:
+- Preconditions
+- Step-by-step instructions
+- Specific test data
+- Expected results`
+          },
+          {
+            question: "How many test cases per requirement is ideal?",
+            answer: `There's no fixed number - it depends on requirement complexity. Use risk-based approach:
+
+**General Guidelines:**
+- Simple requirement: 3-5 test cases
+- Medium complexity: 5-15 test cases
+- Complex requirement: 15-30+ test cases
+
+**Factors Affecting Count:**
+- Number of input fields
+- Business rules involved
+- Integration points
+- User roles/permissions
+- Error handling scenarios
+
+**Coverage Types Needed:**
+- Positive scenarios (happy path)
+- Negative scenarios (error handling)
+- Boundary conditions (BVA)
+- Edge cases
+- Security scenarios (if applicable)
+
+**Quality over Quantity:**
+- Focus on coverage, not count
+- Avoid redundant test cases
+- Each test case should add value`,
+            realTimeExample: `Password Reset Feature Analysis:
+
+**Requirement:** User should be able to reset password via email
+
+**Complexity Analysis:**
+- 1 input field (email)
+- 5 validation rules
+- 2 integration points (email service, database)
+- 3 error scenarios
+
+**Test Cases (12 total):**
+┌─────────────────────────────────────────┐
+│ POSITIVE (4):                           │
+│ • Valid email, link received            │
+│ • Reset with new valid password         │
+│ • Login with new password               │
+│ • Reset request while logged out        │
+├─────────────────────────────────────────┤
+│ NEGATIVE (5):                           │
+│ • Invalid email format                  │
+│ • Unregistered email                    │
+│ • Expired reset link                    │
+│ • Already used reset link               │
+│ • New password doesn't meet criteria    │
+├─────────────────────────────────────────┤
+│ EDGE CASES (3):                         │
+│ • Request multiple times rapidly        │
+│ • Very long email address               │
+│ • Reset during active session           │
+└─────────────────────────────────────────┘
+
+Coverage: 100% of scenarios with 12 test cases`
+          }
         ],
         difficulty: "Beginner"
       },
@@ -532,9 +1065,150 @@ JQL FOR TECHNIQUE COVERAGE:
           "Not considering negative/positive boundaries"
         ],
         followUpQuestions: [
-          "How many boundary values should you test?",
-          "What if there are multiple input fields?",
-          "How do you apply BVA to non-numeric fields?"
+          {
+            question: "How many boundary values should you test?",
+            answer: `The number of boundary values depends on the approach:
+
+**Two-Value Boundary Testing (Minimum):**
+- Test AT the boundary only
+- Example: For range 1-100, test: 1, 100
+- 2 values per boundary
+
+**Three-Value Boundary Testing (Recommended):**
+- Test AT, BELOW, and ABOVE boundary
+- Example: For range 1-100, test: 0, 1, 2, 99, 100, 101
+- 6 total values (3 per boundary)
+
+**Robust Boundary Testing:**
+- Include min-1, min, min+1, max-1, max, max+1
+- Plus nominal value in middle
+- 7 total values
+
+**Best Practice:**
+For critical fields, use three-value approach.
+For less critical, two-value may suffice.`,
+            realTimeExample: `Age Field Validation (18-65 allowed):
+
+**Two-Value Approach (4 tests):**
+- Lower boundary: 18 (valid)
+- Upper boundary: 65 (valid)
+- Below lower: 17 (invalid)
+- Above upper: 66 (invalid)
+
+**Three-Value Approach (6 tests - Recommended):**
+┌─────────────────────────────────────────┐
+│ VALUE │ EXPECTED    │ TYPE              │
+├───────┼─────────────┼───────────────────┤
+│ 17    │ Error msg   │ Below lower bound │
+│ 18    │ Accepted    │ AT lower bound    │
+│ 19    │ Accepted    │ Above lower bound │
+│ 64    │ Accepted    │ Below upper bound │
+│ 65    │ Accepted    │ AT upper bound    │
+│ 66    │ Error msg   │ Above upper bound │
+└─────────────────────────────────────────┘
+
+We used 6 tests in our Insurance project
+for the age field - caught 2 off-by-one bugs!`
+          },
+          {
+            question: "What if there are multiple input fields?",
+            answer: `For multiple input fields, use a combination approach:
+
+**Option 1: All Combinations (Exhaustive)**
+- Test every boundary of every field together
+- Very thorough but time-consuming
+- Use for critical, high-risk features
+
+**Option 2: One Field at a Time (Practical)**
+- Keep other fields at valid values
+- Test boundaries of one field
+- Repeat for each field
+- Most common approach
+
+**Option 3: Pairwise/Orthogonal (Optimal)**
+- Cover all pairs of boundary conditions
+- Uses mathematical techniques
+- Tools: PICT, AllPairs
+
+**Risk-Based Selection:**
+- Identify fields that interact
+- Focus on field combinations that matter
+- Document coverage decisions`,
+            realTimeExample: `Loan Application Form (3 fields):
+- Age: 25-65
+- Amount: $1,000-$500,000  
+- Term: 1-30 years
+
+**One at a Time Approach (18 tests):**
+┌─────────────────────────────────────────┐
+│ TEST │ AGE   │ AMOUNT    │ TERM │ TYPE  │
+├──────┼───────┼───────────┼──────┼───────┤
+│ 1    │ 24    │ $10,000   │ 5    │ Age-  │
+│ 2    │ 25    │ $10,000   │ 5    │ Age=  │
+│ 3    │ 26    │ $10,000   │ 5    │ Age+  │
+│ 4    │ 40    │ $999      │ 5    │ Amt-  │
+│ 5    │ 40    │ $1,000    │ 5    │ Amt=  │
+│ 6    │ 40    │ $1,001    │ 5    │ Amt+  │
+│ ...  │       │           │      │       │
+└─────────────────────────────────────────┘
+
+**High-Risk Combinations Added:**
+- Young age + Maximum amount + Long term
+- Elderly age + Minimum amount + Short term
+(These caught 1 calculation bug in our project)`
+          },
+          {
+            question: "How do you apply BVA to non-numeric fields?",
+            answer: `BVA applies to any field with boundaries, not just numbers:
+
+**String Length Boundaries:**
+- Password: min 8, max 20 characters
+- Test: 7 chars, 8 chars, 9 chars, 19 chars, 20 chars, 21 chars
+
+**Date Boundaries:**
+- Valid date range: Jan 1, 2020 - Dec 31, 2024
+- Test: Dec 31, 2019 | Jan 1, 2020 | Dec 31, 2024 | Jan 1, 2025
+
+**Dropdown/Selection:**
+- First option, last option
+- Empty selection if allowed
+
+**File Upload:**
+- Min file size, max file size
+- Allowed extensions at boundaries
+
+**Time-Based:**
+- Session timeout boundaries
+- Booking time slots`,
+            realTimeExample: `Username Field Validation:
+Requirement: 3-20 characters, alphanumeric only
+
+**String Length BVA:**
+┌─────────────────────────────────────────┐
+│ LENGTH │ VALUE              │ EXPECTED  │
+├────────┼────────────────────┼───────────┤
+│ 2      │ "ab"              │ Error     │
+│ 3      │ "abc"             │ Valid     │
+│ 4      │ "abcd"            │ Valid     │
+│ 19     │ "abcdefghij..."   │ Valid     │
+│ 20     │ "abcdefghijk..."  │ Valid     │
+│ 21     │ "abcdefghijkl..." │ Error     │
+└─────────────────────────────────────────┘
+
+**Date Field (Booking System):**
+Available dates: Today to 90 days ahead
+
+| DATE            | EXPECTED      |
+|-----------------|---------------|
+| Yesterday       | Error (past)  |
+| Today           | Valid         |
+| Tomorrow        | Valid         |
+| Day 89          | Valid         |
+| Day 90          | Valid         |
+| Day 91          | Error (too far)|
+
+Caught bug: System allowed day 91 bookings!`
+          }
         ],
         difficulty: "Intermediate"
       }
