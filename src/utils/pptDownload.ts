@@ -171,7 +171,10 @@ export const downloadInterviewPrepPPT = async () => {
         { x: 5.3, y: 1.5, w: 4.3, h: 1.6, fontSize: 10, color: COLORS.text });
 
       tipsSlide2.addText("🔄 Follow-up Questions:", { x: 0.5, y: 3.4, w: 9, h: 0.3, fontSize: 14, bold: true, color: COLORS.primaryDark });
-      tipsSlide2.addText(q.followUpQuestions.map(fq => ({ text: fq, options: { bullet: true } })), 
+      tipsSlide2.addText(q.followUpQuestions.map(fq => ({ 
+        text: typeof fq === 'string' ? fq : fq.question, 
+        options: { bullet: true } 
+      })), 
         { x: 0.5, y: 3.8, w: 9, h: 1.5, fontSize: 10, color: COLORS.text });
     });
   });
